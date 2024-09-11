@@ -1,22 +1,19 @@
-# Base image
-FROM node:14
+# Etapa 1: Compilación de la aplicación
+FROM node:16-alpine AS build
 
-# Set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm install
 
-# Copy the rest of the application files
-COPY . .
-
-# Build the frontend
+COPY . ./
 RUN npm run build
 
-# Use nginx to serve the frontend
+# Etapa 2: Servir la aplicación usando NGINX
 FROM nginx:alpine
-COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
 
-EXPOSE 80
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 5000
 CMD ["nginx", "-g", "daemon off;"]
