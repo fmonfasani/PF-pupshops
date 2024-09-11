@@ -32,5 +32,3 @@ jobs:
     # Construir el servicio frontend
     - name: Build frontend service
       run: docker-compose -f docker-compose.yml build frontend
-
-    # Autenticar y desplegar (puedes ajustar esto según lo que uses para desplegar)
