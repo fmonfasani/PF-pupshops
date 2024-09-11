@@ -10,25 +10,27 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Enable Debugging
+        run: echo "ACTIONS_RUNNER_DEBUG=true" >> $GITHUB_ENV
+        
+      - name: Checkout code
+        uses: actions/checkout@v2
 
     # Instalar Docker
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
     # Instalar Docker Compose
-    - name: Install Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
     # Construir el servicio backend
-    - name: Build backend service
-      run: docker-compose -f docker-compose.yml build backend
+      - name: Build backend service
+        run: docker-compose -f docker-compose.yml build backend
 
     # Construir el servicio frontend
-    - name: Build frontend service
-      run: docker-compose -f docker-compose.yml build frontend
+      - name: Build frontend service
+        run: docker-compose -f docker-compose.yml build frontend
