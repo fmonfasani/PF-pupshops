@@ -1,25 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { ProductsRepository } from './products.repository';
+
 
 
 @Injectable()
 export class ProductsService {
-  createProduct() {
+  constructor(private readonly productsRepository: ProductsRepository){}
+
+  
+  getAllProducts(page:number, limit:number) {
+    return this.productsRepository.getAllProducts(page, limit)
+  }
+  
+  getOneProduct(id: string) {
+    return this.productsRepository.getOneProduct(id)
+  }
+  
+  updateProduct(id: string, product) {
+    return this.productsRepository.updateProducts(id, product);
+  }
+  
+  deleteProduct(id: string) {
+    return this.productsRepository.deleteProducts(id);
+  }
+
+
+  addProduct() {
     return 'This action adds a new product';
-  }
-
-  findAllProducts() {
-    return `This action returns all products`;
-  }
-
-  findOneProduct(id: number) {
-    return `This action returns a #${id} product`;
-  }
-
-  updateProduct(id: number) {
-    return `This action updates a #${id} product`;
-  }
-
-  removeProduct(id: number) {
-    return `This action removes a #${id} product`;
   }
 }
