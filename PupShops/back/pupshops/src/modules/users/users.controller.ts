@@ -1,42 +1,84 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe,
+  Put,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
+  @HttpCode(200)
+  @ApiBearerAuth()
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  /* @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard) */
+  getUsers(@Query('page') page: number, @Query('limit') limit: number) {
+    console.log(`Page: ${page}, Limit: ${limit}`);
+    if (page && limit) {
+      return this.usersService.getUsers(page, limit);
+    }
+    return this.usersService.getUsers(1, 3);
+  }
+  @Get('/findUser')
+  async getUserByMail(@Body('email') email: string) {
+    const user = await this.usersService.getUserByEmail(email);
+    if (!user) {
+      throw new NotFoundException('No se encuentra el mail');
+    }
+    console.log(user);
+
+    return user;
   }
 
+  /*  @HttpCode(200)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async getUserById(@Param('id', ParseUUIDPipe) id: string) {
+    const user = await this.usersService.getUserById(id);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    return user;
+  } */
+
+  @HttpCode(200)
+  @ApiBearerAuth()
+  /* @UseGuards(AuthGuard) */
+  @Put(':id')
+  async updateUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() user: CreateUserDto,
+  ) {
+    const updatedUser = await this.usersService.updateUser(id, user);
+    if (!updatedUser) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    return updatedUser;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
+  @HttpCode(200)
+  @ApiBearerAuth()
+  /* @UseGuards(AuthGuard) */
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
+    const result = await this.usersService.deleteUser(id);
+    if (!result) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    return { message: 'Usuario eliminado con éxito' };
   }
 }

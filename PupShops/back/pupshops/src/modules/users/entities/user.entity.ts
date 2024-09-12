@@ -1,3 +1,4 @@
+import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
 import { Order } from 'src/modules/order/entities/order.entity';
 import {
   Column,
@@ -44,4 +45,8 @@ export class User {
   /* @OneToMany(() => Order, (order) => order.user)
   @JoinColumn({ name: 'orders_id' })
   orders: Order[]; */
+
+  /* @OneToMany(() => Appointment, (appointment) => appointment.user)
+  @JoinColumn({ name: 'appointments_id' })
+  appointments: Appointment[]; */
 }
