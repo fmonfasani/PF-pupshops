@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Categories } from "src/modules/categories/categories.entity";
+import { OrderDetail } from "src/modules/order/entities/order-detail.entity";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity({
@@ -38,8 +40,23 @@ export class Products{
     stock:number;
 
     @Column({
+        type: 'string',
+        length: 200,
+        nullable: false
+    })
+    brand:string;
+
+    @Column({
         type: 'text',
         default: 'http'
     })
     imgUrl: string;
+
+    @ManyToOne(() => Categories, (category) => category.products)
+    @JoinColumn({ name: 'category_id'})
+    category: Categories;
+
+    @ManyToMany(()=> Categories, (orderDetails)=> orderDetails.products)
+    orderDetails: OrderDetail[];
+
 }
