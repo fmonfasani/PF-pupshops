@@ -18,36 +18,32 @@ import { UpdateProductDto } from './dto/update-product.dto';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  
   @Get()
   findAllProducts(
-    @Query('page') page:number=1,
-    @Query('limit') limit:number=5
-  ){
-  if(page && limit) return this.productsService.getAllProducts(page, limit)
-    return this.productsService.getAllProducts(page, limit)
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 5,
+  ) {
+    if (page && limit) return this.productsService.getAllProducts(page, limit);
+    return this.productsService.getAllProducts(page, limit);
   }
 
   @Get('seeder')
-  addProducts(){
+  addProducts() {
     return this.productsService.addProduct();
   }
-  
+
   @Get(':id')
   findOneProduct(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.getOneProduct(id);
   }
-  
+
   @Put(':id')
-  updateProduct(@Param('id', ParseUUIDPipe) id: string, @Body() product){
-    return this.productsService.updateProduct(id,product);
+  updateProduct(@Param('id', ParseUUIDPipe) id: string, @Body() product) {
+    return this.productsService.updateProduct(id, product);
   }
-  
-  
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.deleteProduct(id);
   }
-
- 
 }

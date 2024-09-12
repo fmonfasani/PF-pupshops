@@ -42,9 +42,9 @@ export class User {
   @Column({ type: 'text' })
   address: string;
 
-  /* @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Order, (order) => order.user)
   @JoinColumn({ name: 'orders_id' })
-  orders: Order[]; */
+  orders: Order[];
 
   /* @OneToMany(() => Appointment, (appointment) => appointment.user)
   @JoinColumn({ name: 'appointments_id' })

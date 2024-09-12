@@ -13,4 +13,3 @@ import { Categories } from '../categories/categories.entity';
   providers: [ProductsService, ProductsRepository, CategoriesRepository],
 })
 export class ProductsModule {}
-
