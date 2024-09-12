@@ -15,12 +15,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Verificar que docker-compose.yml existe en la ubicación correcta
+    # Verificar la ubicación del archivo docker-compose.yml
     - name: Check for docker-compose.yml
-      run: ls -la
-      working-directory: ./PupShops # Ajusta esto si el archivo docker-compose.yml está en otro lugar
+      run: ls -la ./PupShops
 
-    # Instalar Docker Buildx para el build multi-plataforma
+    # Mostrar el contenido de docker-compose.yml
+    - name: Show docker-compose.yml content
+      run: cat ./PupShops/docker-compose.yml
+
+    # Instalar Docker Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
@@ -30,29 +33,10 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
-    # Verificar la instalación de Docker Compose
-    - name: Check Docker Compose version
-      run: docker-compose --version
-
-    # Verificar contenido del archivo docker-compose.yml
-    - name: Show docker-compose.yml content
-      run: cat docker-compose.yml
-      working-directory: ./PupShops # Ajusta esto si el archivo docker-compose.yml está en otro lugar
-
     # Construir el servicio backend
     - name: Build backend service
-      run: |
-        docker-compose -f docker-compose.yml build backend
-        docker-compose -f docker-compose.yml up -d backend
-      working-directory: ./PupShops # Ajusta esto si el archivo docker-compose.yml está en otro lugar
+      run: docker-compose -f ./PupShops/docker-compose.yml build backend
 
     # Construir el servicio frontend
     - name: Build frontend service
-      run: |
-        docker-compose -f docker-compose.yml build frontend
-        docker-compose -f docker-compose.yml up -d frontend
-      working-directory: ./PupShops # Ajusta esto si el archivo docker-compose.yml está en otro lugar
-
-    # Listar los contenedores en ejecución después del build
-    - name: List running containers
-      run: docker ps
+      run: docker-compose -f ./PupShops/docker-compose.yml build frontend
