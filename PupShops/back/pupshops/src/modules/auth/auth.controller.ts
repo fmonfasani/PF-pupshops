@@ -1,12 +1,4 @@
-/* eslint-disable no-unused-vars */
-import {
-  Controller,
-  Post,
-  Body,
-  HttpCode,
-  UseInterceptors,
-  Req,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, Req } from '@nestjs/common';
 
 import { plainToClass } from 'class-transformer';
 import { ApiTags } from '@nestjs/swagger';
@@ -20,7 +12,6 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('/signup')
   @HttpCode(201)
-  /* @UseInterceptors(DateAdderInterceptor) */
   async signUp(
     @Body() user: CreateUserDto,
     @Req() request: Request & { now: string },
