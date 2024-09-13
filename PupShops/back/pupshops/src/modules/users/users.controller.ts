@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   Put,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -65,7 +66,14 @@ export class UsersController {
   async updateUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() user: UpdateUserDto,
+    @Req() req: any,
   ) {
+    const currentUser = req.user;
+
+    if (!currentUser.isAdmin) {
+      delete user.isAdmin;
+    }
+
     const updatedUser = await this.usersService.updateUser(id, user);
     if (!updatedUser) {
       throw new NotFoundException('Usuario no encontrado');

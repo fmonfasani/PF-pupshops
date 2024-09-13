@@ -6,7 +6,9 @@ import {
   IsInt,
   Length,
   IsStrongPassword,
+  IsEmpty,
 } from 'class-validator';
+import { Column } from 'typeorm';
 
 export class CreateUserDto {
   @IsString()
@@ -99,4 +101,7 @@ export class CreateUserDto {
     example: 'Calle 123',
   })
   address: string;
+
+  @IsEmpty()
+  isAdmin: boolean;
 }
