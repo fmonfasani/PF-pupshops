@@ -1,9 +1,5 @@
-
 import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
 import { Orders } from 'src/modules/order/entities/order.entity';
-=======
-
-
 import {
   Column,
   Entity,
