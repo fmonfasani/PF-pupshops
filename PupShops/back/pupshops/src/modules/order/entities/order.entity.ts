@@ -2,11 +2,13 @@ import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderDetail } from './order-detail.entity';
+import { User } from 'src/modules/users/entities/user.entity';
 
 @Entity({
   name: 'orders',
@@ -26,7 +28,7 @@ export class Order {
   @OneToOne(() => OrderDetail, (orderDetail) => orderDetail.order)
   orderDetails: OrderDetail;
 
-  @ManyToOne(() => Users, (user) => user.orders)
+  @ManyToOne(() => User, (user) => user.orders)
   @JoinColumn({ name: 'user_id' })
-  user: Users;
+  user: User;
 }
