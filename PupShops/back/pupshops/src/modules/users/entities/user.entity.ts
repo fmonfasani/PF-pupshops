@@ -1,4 +1,9 @@
-import { Order } from 'src/modules/order/entities/order.entity';
+
+import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
+import { Orders } from 'src/modules/order/entities/order.entity';
+=======
+
+
 import {
   Column,
   Entity,
@@ -41,9 +46,9 @@ export class User {
   @Column({ type: 'text' })
   address: string;
 
-  @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Orders, (order) => order.user)
   @JoinColumn({ name: 'orders_id' })
-  orders: Order[];
+  orders: Orders[];
 
   /* @OneToMany(() => Appointment, (appointment) => appointment.user)
   @JoinColumn({ name: 'appointments_id' })
