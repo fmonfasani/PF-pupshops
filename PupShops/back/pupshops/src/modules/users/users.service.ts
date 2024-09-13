@@ -22,13 +22,20 @@ export class UsersService {
 
   async getUserByEmail(email: string): Promise<User> {
     console.log('Buscando usuario con email:', email);
-    const user = await this.usersRepository.findOne({ where: { email } }); // Añadido 'await'
+    const user = await this.usersRepository.findOne({ where: { email } });
     console.log('Usuario encontrado:', user);
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
     return user;
   }
+
+  async getEmailLogin(email: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ email });
+    console.log(`usuario encontrado ${user}`);
+    return user;
+  }
+
   async getUserById(id: string): Promise<Partial<User> | string> {
     const user = await this.usersRepository.findOne({
       where: { id },

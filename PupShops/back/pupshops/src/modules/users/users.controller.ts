@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/create-user.dto';
 import { Role } from '../auth/roles/roles.enum';
 import { AuthGuard } from '../auth/auth.guard';
 import { RolesGuard } from '../auth/roles/roles.guard';
