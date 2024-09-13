@@ -9,8 +9,8 @@ services:
     ports:
       - "5173:5173" # Mapea el puerto del contenedor al puerto local
     volumes:
-      - ./front/pupshops:/app # Sincroniza el código local con el contenedor
-    command: npm run dev # Comando para ejecutar Vite en modo desarrollo
+      - ./front:/app # Sincroniza el código local con el contenedor
+   command: npm run dev # Comando para ejecutar Vite en modo desarrollo
     networks:
       - pupshops-network
 
