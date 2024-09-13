@@ -1,5 +1,6 @@
-import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
-import { Order } from 'src/modules/order/entities/order.entity';
+import { Order } from '../../order/entities/order.entity';
+import { Location } from '../../locations/entities/location.entity';
+
 import {
   Column,
   Entity,
@@ -42,11 +43,10 @@ export class User {
   @Column({ type: 'text' })
   address: string;
 
-  /* @OneToMany(() => Order, (order) => order.user)
-  @JoinColumn({ name: 'orders_id' })
-  orders: Order[]; */
+  @OneToMany(() => Location, (location) => location.user)
+  locations: Location[];
 
-  /* @OneToMany(() => Appointment, (appointment) => appointment.user)
-  @JoinColumn({ name: 'appointments_id' })
-  appointments: Appointment[]; */
+  @OneToMany(() => Order, (order) => order.user)
+  @JoinColumn({ name: 'orders_id' })
+  orders: Order[];
 }
