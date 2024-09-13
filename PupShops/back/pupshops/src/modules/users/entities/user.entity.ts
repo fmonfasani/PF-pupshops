@@ -1,4 +1,3 @@
-import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
 import { Order } from 'src/modules/order/entities/order.entity';
 import {
   Column,
@@ -27,7 +26,7 @@ export class User {
   @Column({ type: 'varchar', length: 100, nullable: false })
   password: string;
 
-  @Column({ type: 'boolean', nullable: false })
+  @Column({ type: 'boolean', nullable: false, default: false })
   isAdmin: boolean;
 
   @Column({ type: 'bigint' })
@@ -42,7 +41,11 @@ export class User {
   @Column({ type: 'text' })
   address: string;
 
+<<<<<<< HEAD
+  /*  @OneToMany(() => Order, (order) => order.user)
+=======
   @OneToMany(() => Order, (order) => order.user)
+>>>>>>> 82de18135728514f96e9667ab1bff9ece2a06abb
   @JoinColumn({ name: 'orders_id' })
   orders: Order[];
 

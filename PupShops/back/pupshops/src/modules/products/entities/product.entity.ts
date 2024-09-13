@@ -45,7 +45,11 @@ export class Products {
   stock: number;
 
   @Column({
+<<<<<<< HEAD
+    /* type: 'string', */
+=======
     type: 'string',
+>>>>>>> 82de18135728514f96e9667ab1bff9ece2a06abb
     length: 200,
     nullable: false,
   })

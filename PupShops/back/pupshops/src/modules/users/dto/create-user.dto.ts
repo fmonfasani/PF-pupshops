@@ -67,11 +67,6 @@ export class CreateUserDto {
   })
   confirmPassword: string;
 
-  @ApiProperty()
-  @IsBoolean()
-  @IsEmpty()
-  isAdmin: boolean;
-
   @IsNotEmpty()
   @IsInt()
   @ApiProperty({
