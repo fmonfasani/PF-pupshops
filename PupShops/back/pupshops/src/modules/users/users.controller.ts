@@ -14,6 +14,10 @@ import {
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Role } from '../auth/roles/roles.enum';
+import { AuthGuard } from '../auth/auth.guard';
+import { RolesGuard } from '../auth/roles/roles.guard';
+import { Roles } from '../auth/roles/roles.decorator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -23,8 +27,8 @@ export class UsersController {
   @HttpCode(200)
   @ApiBearerAuth()
   @Get()
-  /* @Roles(Role.Admin)
-  @UseGuards(AuthGuard, RolesGuard) */
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   getUsers(@Query('page') page: number, @Query('limit') limit: number) {
     console.log(`Page: ${page}, Limit: ${limit}`);
     if (page && limit) {
@@ -43,7 +47,7 @@ export class UsersController {
     return user;
   }
 
-  /*  @HttpCode(200)
+  /* @HttpCode(200)
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get(':id')
@@ -57,7 +61,7 @@ export class UsersController {
 
   @HttpCode(200)
   @ApiBearerAuth()
-  /* @UseGuards(AuthGuard) */
+  @UseGuards(AuthGuard)
   @Put(':id')
   async updateUser(
     @Param('id', ParseUUIDPipe) id: string,
@@ -72,7 +76,7 @@ export class UsersController {
 
   @HttpCode(200)
   @ApiBearerAuth()
-  /* @UseGuards(AuthGuard) */
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     const result = await this.usersService.deleteUser(id);

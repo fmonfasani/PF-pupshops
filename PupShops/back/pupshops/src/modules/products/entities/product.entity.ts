@@ -1,62 +1,66 @@
-import { Categories } from "src/modules/categories/categories.entity";
-import { OrderDetail } from "src/modules/order/entities/order-detail.entity";
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-
+import { Categories } from 'src/modules/categories/categories.entity';
+import { OrderDetail } from 'src/modules/order/entities/order-detail.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({
-    name: 'products',
+  name: 'products',
 })
-export class Products{
-    @PrimaryGeneratedColumn('uuid')
-    id:string;
+export class Products {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
+  @Column({
+    type: 'varchar',
+    length: 100,
+    unique: true,
+    nullable: false,
+  })
+  name: string;
 
-    @Column({
-        type: 'varchar',
-        length: 100,
-        unique:true,
-        nullable:false,
-    })
-    name: string;
+  @Column({
+    type: 'text',
+    nullable: false,
+  })
+  description: string;
 
-    @Column({
-        type: 'text',
-        nullable: false,
-    })
-    description:string;
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: false,
+  })
+  price: number;
 
-    @Column({
-        type: 'decimal',
-        precision: 10,
-        scale:2,
-        nullable:false,
-    })
-    price:number;
+  @Column({
+    type: 'int',
+    nullable: false,
+  })
+  stock: number;
 
-    @Column({
-        type: 'int',
-        nullable:false
-    })
-    stock:number;
+  @Column({
+    /* type: 'string', */
+    length: 200,
+    nullable: false,
+  })
+  brand: string;
 
-    @Column({
-        type: 'string',
-        length: 200,
-        nullable: false
-    })
-    brand:string;
+  @Column({
+    type: 'text',
+    default: 'http',
+  })
+  imgUrl: string;
 
-    @Column({
-        type: 'text',
-        default: 'http'
-    })
-    imgUrl: string;
+  @ManyToOne(() => Categories, (category) => category.products)
+  @JoinColumn({ name: 'category_id' })
+  category: Categories;
 
-    @ManyToOne(() => Categories, (category) => category.products)
-    @JoinColumn({ name: 'category_id'})
-    category: Categories;
-
-    @ManyToMany(()=> Categories, (orderDetails)=> orderDetails.products)
-    orderDetails: OrderDetail[];
-
+  @ManyToMany(() => Categories, (orderDetails) => orderDetails.products)
+  orderDetails: OrderDetail[];
 }

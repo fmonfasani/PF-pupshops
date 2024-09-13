@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -39,8 +37,8 @@ export class UsersService {
     }
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
-  }
- */
+  } */
+
   async createUser(user: CreateUserDto): Promise<Partial<User>> {
     const newUser = await this.usersRepository.save(user);
     const { password, ...userWithoutPassword } = newUser;
