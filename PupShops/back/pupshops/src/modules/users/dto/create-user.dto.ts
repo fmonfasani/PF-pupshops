@@ -6,8 +6,6 @@ import {
   IsInt,
   Length,
   IsStrongPassword,
-  IsBoolean,
-  IsEmpty,
 } from 'class-validator';
 
 export class CreateUserDto {
