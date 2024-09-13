@@ -47,7 +47,7 @@ export class UsersController {
     return user;
   }
 
-  /* @HttpCode(200)
+  @HttpCode(200)
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get(':id')
@@ -57,7 +57,7 @@ export class UsersController {
       throw new NotFoundException('Usuario no encontrado');
     }
     return user;
-  } */
+  }
 
   @HttpCode(200)
   @ApiBearerAuth()

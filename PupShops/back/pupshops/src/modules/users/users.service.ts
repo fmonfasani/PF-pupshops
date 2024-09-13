@@ -25,7 +25,7 @@ export class UsersService {
     console.log('Usuario encontrado:', user);
     return user;
   }
-  /* async getUserById(id: string): Promise<Partial<User> | string> {
+  async getUserById(id: string): Promise<Partial<User> | string> {
     const user = await this.usersRepository.findOne({
       where: { id },
       relations: {
@@ -37,7 +37,7 @@ export class UsersService {
     }
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
-  } */
+  }
 
   async createUser(user: CreateUserDto): Promise<Partial<User>> {
     const newUser = await this.usersRepository.save(user);
