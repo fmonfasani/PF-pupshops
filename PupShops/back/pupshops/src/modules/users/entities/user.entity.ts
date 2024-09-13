@@ -1,5 +1,9 @@
+
 import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
 import { Orders } from 'src/modules/order/entities/order.entity';
+=======
+
+
 import {
   Column,
   Entity,
@@ -27,7 +31,7 @@ export class User {
   @Column({ type: 'varchar', length: 100, nullable: false })
   password: string;
 
-  @Column({ type: 'boolean', nullable: false })
+  @Column({ type: 'boolean', nullable: false, default: false })
   isAdmin: boolean;
 
   @Column({ type: 'bigint' })

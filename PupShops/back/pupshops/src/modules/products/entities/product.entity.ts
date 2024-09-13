@@ -45,8 +45,10 @@ export class Products{
   stock:number;
 
   @Column({
-      type: 'text',
+type: 'text',
       default: 'http'
+
+
   })
   imgUrl:string;
 

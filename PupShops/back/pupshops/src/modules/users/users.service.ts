@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -21,13 +20,23 @@ export class UsersService {
     return users.map(({ password, ...user }) => user);
   }
 
-  async getUserByEmail(email: string): Promise<Partial<User>> {
+  async getUserByEmail(email: string): Promise<User> {
     console.log('Buscando usuario con email:', email);
-    const user = this.usersRepository.findOneBy({ email });
+    const user = await this.usersRepository.findOne({ where: { email } });
     console.log('Usuario encontrado:', user);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
     return user;
   }
-  /* async getUserById(id: string): Promise<Partial<User> | string> {
+
+  async getEmailLogin(email: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ email });
+    console.log(`usuario encontrado ${user}`);
+    return user;
+  }
+
+  async getUserById(id: string): Promise<Partial<User> | string> {
     const user = await this.usersRepository.findOne({
       where: { id },
       relations: {
@@ -40,16 +49,13 @@ export class UsersService {
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
- */
+
   async createUser(user: CreateUserDto): Promise<Partial<User>> {
     const newUser = await this.usersRepository.save(user);
     const { password, ...userWithoutPassword } = newUser;
     return userWithoutPassword;
   }
-  async updateUser(
-    id: string,
-    user: Partial<CreateUserDto>,
-  ): Promise<Partial<User>> {
+  async updateUser(id: string, user: UpdateUserDto): Promise<Partial<User>> {
     const { confirmPassword, ...userWithoutConfirmPassword } = user;
 
     await this.usersRepository.update(id, userWithoutConfirmPassword);
