@@ -18,6 +18,7 @@ import { Role } from '../auth/roles/roles.enum';
 import { AuthGuard } from '../auth/auth.guard';
 import { RolesGuard } from '../auth/roles/roles.guard';
 import { Roles } from '../auth/roles/roles.decorator';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -36,14 +37,13 @@ export class UsersController {
     }
     return this.usersService.getUsers(1, 3);
   }
+  @HttpCode(200)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('/findUser')
-  async getUserByMail(@Body('email') email: string) {
+  async getUserByMail(@Query('email') email: string) {
     const user = await this.usersService.getUserByEmail(email);
-    if (!user) {
-      throw new NotFoundException('No se encuentra el mail');
-    }
     console.log(user);
-
     return user;
   }
 
@@ -65,7 +65,7 @@ export class UsersController {
   @Put(':id')
   async updateUser(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() user: CreateUserDto,
+    @Body() user: UpdateUserDto,
   ) {
     const updatedUser = await this.usersService.updateUser(id, user);
     if (!updatedUser) {
