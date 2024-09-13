@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async signUp(user: CreateUserDto) {
-    const findUser = await this.usersService.getUserByEmail(user.email);
+    const findUser = await this.usersService.getEmailLogin(user.email);
     if (findUser) {
       throw new BadRequestException('Email existente');
     }
@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   async signIn(login: LoginUserDto) {
-    const findUser = await this.usersService.getUserByEmail(login.email);
+    const findUser = await this.usersService.getEmailLogin(login.email);
     console.log('Usuario encontrado:', findUser);
     if (!findUser) {
       throw new BadRequestException('Email y/o contraseña incorrectos');
