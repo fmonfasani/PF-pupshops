@@ -6,7 +6,7 @@ import typeormConfig from './config/typeorm';
 import { ProductsModule } from './modules/products/products.module';
 import { OrderModule } from './modules/order/order.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm'
 
 @Module({
   imports: [
@@ -24,6 +24,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     OrderModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}
