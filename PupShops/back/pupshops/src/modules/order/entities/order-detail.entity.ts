@@ -8,12 +8,12 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Order } from './order.entity';
+import { Orders } from './order.entity';
 
 @Entity({
-  name: 'orderDetails',
+  name: 'orderdetails',
 })
-export class OrderDetail {
+export class OrderDetails {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -23,6 +23,10 @@ export class OrderDetail {
     scale: 2,
   })
   price: number;
+
+  @OneToOne(() => Orders, (order) => order.orderDetails)
+  @JoinColumn({ name: 'order_id' })
+  order: Orders;
 
   @ManyToMany(() => Products)
   @JoinTable({
@@ -37,8 +41,4 @@ export class OrderDetail {
     },
   })
   products: Products[];
-
-  @OneToOne(() => Order, (order) => order.orderDetails)
-  @JoinColumn({ name: 'order_id' })
-  order: Order;
 }

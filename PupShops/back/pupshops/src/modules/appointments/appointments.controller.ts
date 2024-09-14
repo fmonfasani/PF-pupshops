@@ -10,6 +10,8 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { User } from '../users/entities/user.entity';
+import { Appointment } from './entities/appointment.entity';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -17,18 +19,38 @@ export class AppointmentsController {
 
   @Post()
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
+    const user: Partial<User> = { id: 'user-id-123' };
     return this.appointmentsService.create(createAppointmentDto);
   }
 
+  @Get()
+  async findAll(): Promise<Appointment[]> {
+    return this.appointmentsService.findAll();
+  }
+
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: string, @Body('status') status: string) {
+    return this.appointmentsService.updateStatus(id, status);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.appointmentsService.remove(id);
+  }
+}
+
+/*
   @Get()
   findAll() {
     return this.appointmentsService.findAll();
   }
 
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.appointmentsService.findOne(+id);
   }
+    
 
   @Patch(':id')
   update(
@@ -42,4 +64,4 @@ export class AppointmentsController {
   remove(@Param('id') id: string) {
     return this.appointmentsService.remove(+id);
   }
-}
+    */

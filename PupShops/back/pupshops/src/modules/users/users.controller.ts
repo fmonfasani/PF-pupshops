@@ -9,11 +9,16 @@ import {
   ParseUUIDPipe,
   Put,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Role } from '../auth/roles/roles.enum';
+import { AuthGuard } from '../auth/auth.guard';
+import { RolesGuard } from '../auth/roles/roles.guard';
+import { Roles } from '../auth/roles/roles.decorator';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -23,8 +28,8 @@ export class UsersController {
   @HttpCode(200)
   @ApiBearerAuth()
   @Get()
-  /* @Roles(Role.Admin)
-  @UseGuards(AuthGuard, RolesGuard) */
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   getUsers(@Query('page') page: number, @Query('limit') limit: number) {
     console.log(`Page: ${page}, Limit: ${limit}`);
     if (page && limit) {
@@ -32,18 +37,17 @@ export class UsersController {
     }
     return this.usersService.getUsers(1, 3);
   }
+  @HttpCode(200)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('/findUser')
-  async getUserByMail(@Body('email') email: string) {
+  async getUserByMail(@Query('email') email: string) {
     const user = await this.usersService.getUserByEmail(email);
-    if (!user) {
-      throw new NotFoundException('No se encuentra el mail');
-    }
     console.log(user);
-
     return user;
   }
 
-  /*  @HttpCode(200)
+  @HttpCode(200)
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get(':id')
@@ -53,16 +57,23 @@ export class UsersController {
       throw new NotFoundException('Usuario no encontrado');
     }
     return user;
-  } */
+  }
 
   @HttpCode(200)
   @ApiBearerAuth()
-  /* @UseGuards(AuthGuard) */
+  @UseGuards(AuthGuard)
   @Put(':id')
   async updateUser(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() user: CreateUserDto,
+    @Body() user: UpdateUserDto,
+    @Req() req: any,
   ) {
+    const currentUser = req.user;
+
+    if (!currentUser.isAdmin) {
+      delete user.isAdmin;
+    }
+
     const updatedUser = await this.usersService.updateUser(id, user);
     if (!updatedUser) {
       throw new NotFoundException('Usuario no encontrado');
@@ -72,7 +83,7 @@ export class UsersController {
 
   @HttpCode(200)
   @ApiBearerAuth()
-  /* @UseGuards(AuthGuard) */
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     const result = await this.usersService.deleteUser(id);
