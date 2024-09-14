@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import pups from "PF-pupshopsPupShops\frontpublicpups.png";
+import pups from "/public/pups.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
