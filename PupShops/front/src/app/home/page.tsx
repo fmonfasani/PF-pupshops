@@ -1,12 +1,14 @@
 import Banner from "@/components/Banner/Banner";
+import CardList from "@/components/CardList/CardList";
+import Navbar from "@/components/Navbar/Narbar";
 import React from "react";
 
 export default function HomeContainer() {
   return (
     <div>
-      <h1>NAVBAR</h1>
+      <Navbar />
       <Banner />
-      <h1>CARDS PRODUCTS</h1>
+      <CardList />
       <h1>FOOTER</h1>
     </div>
   );
