@@ -1,17 +1,20 @@
 "use client"
 import {ButtonForms, ButtonRedirectUser} from '@/components/Buttons/ButtonsForms'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useRouter } from 'next/navigation'
 import { validateLogin } from '@/utils/validationLogin'
 import { useState } from 'react'
+import { UserContext } from '@/context/userContext'
+import { ILoginClientProps } from '@/Interfaces/interfaces'
 
 
 
-///Agregar validaciones
+///Agregar validaciones con back
 ///Corroborar con back que las propiedades e login sean "email" u "password"
 //Agregar contexto de user
-export default function LoginUser() {
- const router = useRouter()
+export default function LoginUser({ setToken }: ILoginClientProps) {
+ const router = useRouter();
+ const { signIn } = useContext(UserContext);
  const [userData, setUserData] = useState({
     email: "",
     password: ""
@@ -30,18 +33,36 @@ export default function LoginUser() {
     router.push("/userDashboard/register");
 }
 
- const onSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+   
+  const { formIsValid, errors } = validateLogin(userData);
 
-    const {formIsValid, errors} = validateLogin(userData);
-
-    if(formIsValid) {
-        const credentials = {
-            email: userData.email,
-            password: userData.password
+  if (formIsValid) {
+    const credentials = {
+      email: userData.email,
+      password: userData.password
+    };
+    
+    try {
+      const success = await signIn(credentials); 
+               
+      if (success) {
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        if (token) {
+          setToken(token); 
+          router.push("/home");
         }
+      } else {
+        alert("Usuario inválido");
+      }
+    } catch(error) {
+      setErrors(errors);
     }
-}
+  } else {
+    setErrors(errors); 
+  }
+};
 
   return (
     <section className="bg-gray-100 font-sans">
