@@ -1,6 +1,6 @@
 import Banner from "@/components/Banner/Banner";
 import CardList from "@/components/CardList/CardList";
-import Navbar from "@/components/Navbar/Narbar";
+import Navbar from "@/components/Navbar/Navbar";
 import React from "react";
 
 export default function HomeContainer() {

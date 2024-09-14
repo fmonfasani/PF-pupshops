@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ButtonForms, ButtonRedirectUser } from '@/components/Buttons/ButtonsForms';
 import { validationRegister } from '@/utils/validationRegister';
 import { IUserRegister } from '@/Interfaces/interfaces';
+import { UserContext } from '@/context/userContext';
 
 type Country = "Argentina" | "Chile" | "Colombia" | "México";
 
@@ -14,31 +15,44 @@ const cities: Record<Country, string[]> = {
     México: ["Ciudad de México", "Guadalajara", "Monterrey", "Puebla", "Cancún"]
 };
 
+const isValidCountry = (country: string): country is Country => {
+    return ["Argentina", "Chile", "Colombia", "México"].includes(country);
+};
+
 export default function RegisterUser() {
     const router = useRouter();
+    const { signUp } = useContext(UserContext);
     const [userRegister, setUserRegister] = useState<IUserRegister>({
         name: "",
         lastname: "",
         email: "",
         password: "",
-        confirmpassword: "",
-        country: "" as Country,
+        country: "",
         city: "",
         address: "",
         phone: "",
     });
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [submissionError, setSubmissionError] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setUserRegister(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-        setErrors(validationRegister({
-            ...userRegister,
-            [name]: value
-        }));
+
+        setUserRegister(prevState => {
+            const updatedState = { ...prevState, [name]: value };
+            const newErrors = validationRegister(updatedState, confirmPassword).errors;
+            setErrors(newErrors);
+            return updatedState;
+        });
+
+        if (name === "password") {
+            setUserRegister(prevState => ({ ...prevState, password: value }));
+        } else if (name === "confirmPassword") {
+            setConfirmPassword(value);
+            const newErrors = validationRegister(userRegister, value).errors;
+            setErrors(newErrors);
+        }
     };
 
     const handleRegisterRedirect = () => {
@@ -47,26 +61,40 @@ export default function RegisterUser() {
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const validationErrors = validationRegister(userRegister);
+        
+        const user = {
+            name: userRegister.name,
+            lastname: userRegister.lastname,
+            email: userRegister.email,
+            password: userRegister.password,
+            address: userRegister.address,
+            phone: userRegister.phone,
+            country: userRegister.country,
+            city: userRegister.city,
+        };
 
-        if (Object.keys(validationErrors).length === 0) {
-            const userRegisterData = {
-                name: userRegister.name,
-                lastname: userRegister.lastname,
-                email: userRegister.email,
-                password: userRegister.password,
-                address: userRegister.address,
-                phone: userRegister.phone,
-                country: userRegister.country,
-                city: userRegister.city,
-            };
-    
-            // Agregar la lógica para enviar userRegisterData al servidor.
-            //Agregar confirmacion al usuario de registro exitoso
-    
-            router.push('/userDashboard/login');
-        } else {
-            setErrors(validationErrors);
+        try {
+            const success = await signUp(user);
+            if (success) {
+                alert("Registro exitoso");
+                setUserRegister({
+                    name: "",
+                    lastname: "",
+                    email: "",
+                    password: "",
+                    address: "",
+                    phone: "",
+                    country: "",
+                    city: ""
+                });
+                setConfirmPassword('');
+                router.push("/home");
+            } else {
+                setSubmissionError("Hubo un error en el registro. Inténtalo de nuevo.");
+            }
+        } catch (error) {
+            console.error("Error durante el registro:", error);
+            setSubmissionError("Hubo un error en el registro. Inténtalo de nuevo.");
         }
     };
 
@@ -83,8 +111,8 @@ export default function RegisterUser() {
                                 Regístrate hoy mismo, podrás acceder a promociones especiales y conocer las últimas novedades de nuestra tienda.
                             </p>
                         </div>
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
+                            <div className="md:col-span-1 lg:col-span-1">
                                 <label htmlFor="name" className="sr-only">Nombre</label>
                                 <input
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
@@ -96,7 +124,7 @@ export default function RegisterUser() {
                                 />
                                 {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
                             </div>
-                            <div>
+                            <div className="md:col-span-1 lg:col-span-1">
                                 <label htmlFor="lastname" className="sr-only">Apellido</label>
                                 <input
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
@@ -108,7 +136,7 @@ export default function RegisterUser() {
                                 />
                                 {errors.lastname && <span className="text-red-500 text-sm">{errors.lastname}</span>}
                             </div>
-                            <div>
+                            <div className="md:col-span-1 lg:col-span-1">
                                 <label htmlFor="email" className="sr-only">Email</label>
                                 <input
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
@@ -120,7 +148,7 @@ export default function RegisterUser() {
                                 />
                                 {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
                             </div>
-                            <div>
+                            <div className="md:col-span-1 lg:col-span-1">
                                 <label htmlFor="phone" className="sr-only">Celular</label>
                                 <input
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
@@ -132,7 +160,7 @@ export default function RegisterUser() {
                                 />
                                 {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
                             </div>
-                            <div>
+                            <div className="md:col-span-2 lg:col-span-2">
                                 <label htmlFor="address" className="sr-only">Dirección</label>
                                 <input
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
@@ -144,7 +172,7 @@ export default function RegisterUser() {
                                 />
                                 {errors.address && <span className="text-red-500 text-sm">{errors.address}</span>}
                             </div>
-                            <div>
+                            <div className="md:col-span-1 lg:col-span-1">
                                 <label htmlFor="password" className="sr-only">Contraseña</label>
                                 <input
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
@@ -156,45 +184,55 @@ export default function RegisterUser() {
                                 />
                                 {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
                             </div>
-                            <div>
-                                <label htmlFor="country" className="block text-sm font-medium text-gray-700">País</label>
-                                <select
-                                    id="country"
-                                    name="country"
+                            <div className="md:col-span-1 lg:col-span-1">
+                                <label htmlFor="confirmPassword" className="sr-only">Confirmar Contraseña</label>
+                                <input
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
-                                    value={userRegister.country}
+                                    name="confirmPassword"
+                                    type="password"
+                                    value={confirmPassword}
                                     onChange={handleChange}
-                                >
-                                    <option value="">Selecciona un país</option>
-                                    {Object.keys(cities).map((country) => (
-                                        <option key={country} value={country}>{country}</option>
-                                    ))}
-                                </select>
+                                    placeholder="Confirmar Contraseña"
+                                />
+                                {errors.confirmPassword && <span className="text-red-500 text-sm">{errors.confirmPassword}</span>}
                             </div>
-                            <div>
-                                <label htmlFor="city" className="block text-sm font-medium text-gray-700">Ciudad</label>
-                                <select
-                                    id="city"
-                                    name="city"
-                                    className="w-full rounded-lg border border-gray-200 p-3 text-sm"
-                                    value={userRegister.city}
-                                    onChange={handleChange}
-                                    disabled={!userRegister.country}
-                                >
-                                    <option value="">Selecciona una ciudad</option>
-                                    {userRegister.country && Object.prototype.hasOwnProperty.call(cities, userRegister.country) &&
-                                        cities[userRegister.country as Country]?.map(city => (
-                                            <option key={city} value={city}>{city}</option>
-                                        ))
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <ButtonForms text='Registrarme' disabled={Object.keys(errors).length > 0} type='submit' />
-                        <ButtonRedirectUser text="¿Ya posees una cuenta? Haz clic aquí para ingresar" onClick={handleRegisterRedirect} />
-                    </form>
+                        <div className="md:col-span-1 lg:col-span-1">
+                        <label htmlFor="country" className="block text-sm font-medium text-gray-700">País</label>
+                        <select
+                            id="country"
+                            name="country"
+                            className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                            value={userRegister.country}
+                            onChange={handleChange}
+                        >
+                            <option value="">Selecciona un país</option>
+                            {Object.keys(cities).map((country) => (
+                                <option key={country} value={country}>{country}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="md:col-span-1 lg:col-span-1">
+                        <label htmlFor="city" className="block text-sm font-medium text-gray-700">Ciudad</label>
+                        <select
+                            id="city"
+                            name="city"
+                            className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                            value={userRegister.city}
+                            onChange={handleChange}
+                            disabled={!userRegister.country || !isValidCountry(userRegister.country)}
+                        >
+                            <option value="">Selecciona una ciudad</option>
+                            {isValidCountry(userRegister.country) && cities[userRegister.country]?.map(city => (
+                                <option key={city} value={city}>{city}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
-            </div>
-        </section>
-    );
+                <ButtonForms text='Registrarme' disabled={Object.keys(errors).length > 0} type='submit' />
+                <ButtonRedirectUser text="¿Ya posees una cuenta? Haz clic aquí para ingresar" onClick={handleRegisterRedirect} />
+            </form>
+        </div>
+    </div>
+</section>
+)
 }
