@@ -1,17 +1,20 @@
 "use client"
 import {ButtonForms, ButtonRedirectUser} from '@/components/Buttons/ButtonsForms'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useRouter } from 'next/navigation'
 import { validateLogin } from '@/utils/validationLogin'
 import { useState } from 'react'
-import { error } from 'console'
+import { UserContext } from '@/context/userContext'
+import { ILoginClientProps } from '@/Interfaces/interfaces'
 
 
-///Agregar validaciones
+
+///Agregar validaciones con back
 ///Corroborar con back que las propiedades e login sean "email" u "password"
 //Agregar contexto de user
-export default function LoginUser() {
- const router = useRouter()
+export default function LoginUser({ setToken }: ILoginClientProps) {
+ const router = useRouter();
+ const { signIn } = useContext(UserContext);
  const [userData, setUserData] = useState({
     email: "",
     password: ""
@@ -30,25 +33,44 @@ export default function LoginUser() {
     router.push("/userDashboard/register");
 }
 
- const onSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+   
+  const { formIsValid, errors } = validateLogin(userData);
 
-    const {formIsValid, errors} = validateLogin(userData);
-
-    if(formIsValid) {
-        const credentials = {
-            email: userData.email,
-            password: userData.password
+  if (formIsValid) {
+    const credentials = {
+      email: userData.email,
+      password: userData.password
+    };
+    
+    try {
+      const success = await signIn(credentials); 
+               
+      if (success) {
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        if (token) {
+          setToken(token); 
+          router.push("/home");
         }
+      } else {
+        alert("Usuario inválido");
+      }
+    } catch(error) {
+      setErrors(errors);
     }
-}
+  } else {
+    setErrors(errors); 
+  }
+};
 
   return (
+    <section className="bg-gray-100 font-sans">
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-lg">
-        <h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">¡Bienvenido de vuelta a tu tienda de mascotas!</h1>
+        <div className="mx-auto max-w-lg px-4 rounded-lg shadow-lg bg-white">
+        <h1 className="text-center text-2xl pt-6 font-bold text-blue-950 sm:text-3xl">¡Bienvenido de vuelta a tu tienda de mascotas!</h1>
         <p className="mx-auto mt-4 max-w-md text-center text-gray-500">Inicia sesión para explorar productos y ofertas exclusivas</p>
-        <form onSubmit={onSubmit} className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+        <form onSubmit={onSubmit} className="mb-0 mt-6 space-y-4  rounded-lg p-4  sm:p-6 lg:p-8">
            <div>
             <label htmlFor='email' className="sr-only"></label>
             <div className="relative">
@@ -58,7 +80,7 @@ export default function LoginUser() {
             value={userData.email}
             onChange={handleChange}
             placeholder='Email' 
-            className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"/>
+            className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"/>
              <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +109,7 @@ export default function LoginUser() {
             value={userData.password}
             onChange={handleChange}
             placeholder='Contraseña' 
-            className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"/>
+            className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"/>
             <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -118,5 +140,6 @@ export default function LoginUser() {
         </form>
     </div>
     </div>
+    </section>
   )
 }
