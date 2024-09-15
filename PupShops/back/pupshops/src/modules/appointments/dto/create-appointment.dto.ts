@@ -21,15 +21,15 @@ export class CreateAppointmentDto {
   @IsUUID()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'ID del servicio (peluquería, baño o veterinaria)',
-    example: 'uuid-del-servicio',
+    description: 'ID del servicio en formato UUID', //UUID del Servicio
+    example: 'a9117bf4-1cf7-43d3-a07c-4de1df18252b',
   })
   service: string;
   @IsUUID()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'ID del usuario',
-    example: 'uuid-del-usuario',
+    description: 'ID del usuario en formato UUID', //UUID del usuario
+    example: 'fe165c21-92bb-4066-bc98-2f0bfa999944',
   })
   userId: string;
 }

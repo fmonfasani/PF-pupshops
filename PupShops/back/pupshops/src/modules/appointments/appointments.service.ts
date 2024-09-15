@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, LessThanOrEqual, MoreThan, Repository } from 'typeorm';
 import { Appointment } from './entities/appointment.entity';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { User } from '../../modules/users/entities/user.entity';
@@ -18,9 +18,61 @@ export class AppointmentsService {
     private readonly serviceRepository: Repository<Service>,
   ) {}
 
-  async create(
-    createAppointmentDto: CreateAppointmentDto,
-  ): Promise<Appointment> {
+  async create(createAppointmentDto: CreateAppointmentDto): Promise<{
+    message: string;
+    appointmentId: string;
+    serviceId: string;
+    serviceName: string;
+    userId: string;
+    userName: string;
+  }> {
+    // Validaciones
+
+    const appointmentDateAux = new Date(createAppointmentDto.appointmentDate);
+
+    // Validar si la fecha es mayor a la fecha actual
+    // Validar si la fecha es futura
+    const currentDate = new Date();
+    if (appointmentDateAux <= currentDate) {
+      throw new BadRequestException(
+        'Los turnos solo pueden agendarse en fechas futuras',
+      );
+    }
+
+    // Validar si la fecha es lunes a viernes
+    const dayOfWeek = appointmentDateAux.getDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      throw new BadRequestException(
+        'Los turnos solo pueden agendarse de lunes a viernes',
+      );
+    }
+
+    // Validar si la hora está entre las 8:00 AM y las 6:00 PM
+    const hour = appointmentDateAux.getHours();
+    if (hour < 8 || hour >= 18) {
+      throw new BadRequestException(
+        'Los turnos solo pueden agendarse entre las 8:00 AM y las 6:00 PM',
+      );
+    }
+
+    const serviceAux = await this.serviceRepository.findOneBy({
+      id: createAppointmentDto.service,
+    });
+    if (!serviceAux) {
+      throw new Error('Servicio no encontrado');
+    }
+
+    // Validar si hay otro turno en el mismo horario para el mismo servicio
+    const isAvailable = await this.checkAppointmentAvailability(
+      appointmentDateAux,
+      createAppointmentDto.service,
+    );
+    if (!isAvailable) {
+      throw new BadRequestException(
+        `El turno que quiere reservar para el servicio de ${serviceAux.name} no está disponible para ese horario.`,
+      );
+    }
+
     // Buscar el usuario en la base de datos usando el userId del DTO
     const user = await this.userRepository.findOneBy({
       id: createAppointmentDto.userId,
@@ -40,13 +92,34 @@ export class AppointmentsService {
     // Crear la cita (appointment)
     const appointment = this.appointmentRepository.create({
       appointmentDate: createAppointmentDto.appointmentDate,
-      status: AppointmentStatus.RESERVED, // Usa el enum en lugar del string
-      user: user, // Relaciona correctamente el usuario
-      service: service, // Relaciona correctamente el servicio
+      status: AppointmentStatus.RESERVED,
+      user: user,
+      service: service,
     });
+    const savedappointment = await this.appointmentRepository.save(appointment);
 
-    // Guardar la cita en la base de datos
-    return await this.appointmentRepository.save(appointment);
+    const appointmentDate = new Date(savedappointment.appointmentDate);
+    const formattedDate = appointmentDate.toLocaleDateString('es-ES', {
+      timeZone: 'UTC',
+    }); // Fecha formateada en UTC
+    const formattedTime = appointmentDate.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'UTC',
+    }); // Hora formateada en UTC
+
+    // Crear mensaje dinámico
+    const message = `${user.name} ha reservado un turno de ${service.name} a las ${formattedTime} con fecha ${formattedDate} exitosamente!`;
+
+    return {
+      message,
+      appointmentId: appointment.id, // Devuelve el ID del appointment
+      serviceId: service.id, // Devuelve el ID del servicio
+      userId: user.id, // Devuelve el ID del usuario
+      serviceName: service.name, // Devuelve el nombre del servicio
+      userName: user.name, // Devuelve el nombre del usuario
+    };
   }
 
   async findAll(): Promise<Appointment[]> {
@@ -58,70 +131,76 @@ export class AppointmentsService {
   async updateStatus(id: string, status: string): Promise<Appointment> {
     const appointment = await this.appointmentRepository.findOne({
       where: { id },
+      relations: ['user', 'service'], // Incluye relaciones para devolver datos completos
     });
 
-    if (appointment) {
-      // Convertir la cadena en un valor válido del enum AppointmentStatus
-      if (status === 'reserved' || status === 'canceled') {
-        appointment.status = status as AppointmentStatus; // Asignar el valor del enum
-        return this.appointmentRepository.save(appointment);
-      } else {
-        throw new Error('Estado no válido'); // Manejar valores no válidos
-      }
+    if (!appointment) {
+      throw new Error('Turno no encontrado');
     }
 
-    return null;
+    // Convertir el estado a un valor válido del enum AppointmentStatus
+    if (status === 'reserved' || status === 'canceled') {
+      appointment.status = status as AppointmentStatus; // Asigna el valor del enum
+    } else {
+      throw new Error('Estado no válido');
+    }
+
+    return await this.appointmentRepository.save(appointment); // Guarda el turno con el nuevo estado
   }
 
   async remove(id: string): Promise<void> {
-    await this.appointmentRepository.delete(id);
-  }
-}
+    const appointment = await this.appointmentRepository.findOne({
+      where: { id },
+    });
 
-/*
-  async findAll(): Promise<Appointment[]> {
-    return await this.appointmentRepository.find({ relations: ['user', 'service'] });
-  }
-
-  async updateStatus(id: string, status: string): Promise<Appointment> {
-    const appointment = await this.appointmentRepository.findOneBy({ id });
-    if (appointment) {
-      appointment.status = status;
-      return this.appointmentRepository.save(appointment);
+    if (!appointment) {
+      throw new Error('Turno no encontrado');
     }
-    return null;
+
+    await this.appointmentRepository.delete(id); // Elimina el turno
   }
 
-  async remove(id: string): Promise<void> {
-    await this.appointmentRepository.delete(id);
+  async getUserAppointments(userId: string) {
+    const currentDate = new Date();
+
+    // Turnos agendados (futuros)
+    const scheduledAppointments = await this.appointmentRepository.find({
+      where: {
+        user: { id: userId },
+        appointmentDate: MoreThan(currentDate),
+      },
+      relations: ['service'],
+    });
+
+    // Turnos históricos (pasados)
+    const historicalAppointments = await this.appointmentRepository.find({
+      where: {
+        user: { id: userId },
+        appointmentDate: LessThanOrEqual(currentDate),
+      },
+      relations: ['service'],
+    });
+
+    return {
+      scheduledAppointments,
+      historicalAppointments,
+    };
+  }
+
+  // Método para verificar disponibilidad de turnos
+  async checkAppointmentAvailability(date: Date, serviceId: string) {
+    const startTime = new Date(date);
+    const endTime = new Date(date);
+    endTime.setHours(startTime.getHours() + 1);
+
+    // Verificar si hay citas agendadas para el mismo servicio en el mismo horario
+    const existingAppointments = await this.appointmentRepository.find({
+      where: {
+        appointmentDate: Between(startTime, endTime),
+        service: { id: serviceId }, // Filtro por servicio
+      },
+    });
+
+    return existingAppointments.length === 0;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-  findAll() {
-    return `This action returns all appointments`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} appointment`;
-  }
-
-  update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
-    return `This action updates a #${id} appointment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} appointment`;
-  }
-}
-*/
