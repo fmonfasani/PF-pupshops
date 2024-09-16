@@ -1,3 +1,4 @@
+"use client"
 import LoginUser from '@/components/Forms/FormsUser/LoginUser'
 import React from 'react'
 
