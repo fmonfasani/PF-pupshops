@@ -1,4 +1,4 @@
-import { Products } from 'src/modules/products/entities/product.entity';
+import { Products } from '../../products/entities/product.entity';
 import {
   Column,
   Entity,

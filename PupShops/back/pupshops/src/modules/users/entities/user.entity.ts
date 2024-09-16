@@ -1,5 +1,6 @@
-import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
-import { Orders } from 'src/modules/order/entities/order.entity';
+import { Orders } from '../../order/entities/order.entity';
+import { Location } from '../../locations/entities/location.entity';
+
 import {
   Column,
   Entity,
@@ -7,6 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Appointment } from '../../appointments/entities/appointment.entity';
 
 @Entity({
   name: 'users',
@@ -42,11 +44,13 @@ export class User {
   @Column({ type: 'text' })
   address: string;
 
+  @OneToMany(() => Appointment, (appointment) => appointment.user)
+  appointments: Appointment[];
+
+  @OneToMany(() => Location, (location) => location.user)
+  locations: Location[];
+
   @OneToMany(() => Orders, (order) => order.user)
   @JoinColumn({ name: 'orders_id' })
   orders: Orders[];
-
-  @OneToMany(() => Appointment, (appointment) => appointment.user)
-  @JoinColumn({ name: 'appointments_id' })
-  appointments: Appointment[];
 }

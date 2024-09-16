@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderDetails } from './order-detail.entity';
-import { User } from 'src/modules/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity({

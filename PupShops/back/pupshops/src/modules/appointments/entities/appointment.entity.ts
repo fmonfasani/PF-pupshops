@@ -1,12 +1,33 @@
-import { User } from 'src/modules/users/entities/user.entity';
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+// src/appointment/entities/appointment.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
+import { Service } from '../../service/entities/services.entity';
 
-@Entity({ name: 'Appointments' })
+export enum AppointmentStatus {
+  RESERVED = 'reserved',
+  CANCELED = 'canceled',
+}
+
+@Entity('appointments')
 export class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ type: 'timestamp' })
+  appointmentDate: Date;
+
+  @Column({
+    type: 'enum',
+    enum: AppointmentStatus,
+    default: AppointmentStatus.RESERVED,
+  })
+  status: AppointmentStatus;
+
   @ManyToOne(() => User, (user) => user.appointments)
-  @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => Service, (service) => service.appointments, {
+    nullable: true,
+  })
+  service?: Service;
 }
