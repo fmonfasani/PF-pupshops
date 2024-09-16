@@ -1,31 +1,34 @@
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OrderDetail } from './order-detail.entity';
+import { OrderDetails } from './order-detail.entity';
 import { User } from '../../users/entities/user.entity';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity({
   name: 'orders',
 })
-export class Order {
+export class Orders {
   @ApiHideProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ApiProperty({
-    description: 'Debe ser una fecha tipo dd/mm/yy',
-    example: '11/09/2024',
+    description: 'Debe ser una fecha de tipo dd/mm/yy',
+    example: '27/08/2024',
   })
   @Column()
   date: Date;
 
-  @OneToOne(() => OrderDetail, (orderDetail) => orderDetail.order)
-  orderDetails: OrderDetail;
+  @OneToOne(() => OrderDetails, (orderDetail) => orderDetail.order)
+  orderDetails: OrderDetails;
+
   @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 }

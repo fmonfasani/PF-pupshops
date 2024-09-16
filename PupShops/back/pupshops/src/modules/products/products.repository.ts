@@ -1,60 +1,58 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Products } from "./entities/product.entity";
-import { Repository } from "typeorm";
-import { Categories } from "../categories/categories.entity";
-
-
-
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Products } from './entities/product.entity';
+import { Repository } from 'typeorm';
+import { Categories } from '../categories/categories.entity';
 
 @Injectable()
-export class ProductsRepository{
-    constructor(
-        @InjectRepository(Products) private productsRepository: Repository<Products>,
-        @InjectRepository(Categories) private categoriesRepository: Repository<Categories>)
-    {}
+export class ProductsRepository {
+  constructor(
+    @InjectRepository(Products)
+    private productsRepository: Repository<Products>,
+    @InjectRepository(Categories)
+    private categoriesRepository: Repository<Categories>,
+  ) {}
 
-    async getAllProducts(page: number, limit: number):Promise<Products[]>{
-        let products = await this.productsRepository.find({
-            relations:{
-                category: true,
-            },
-        });
-        const start = (page - 1)*limit;
-        const end = start + limit;
-        products = products.slice(start, end);
+  async getAllProducts(page: number, limit: number): Promise<Products[]> {
+    let products = await this.productsRepository.find({
+      relations: {
+        category: true,
+      },
+    });
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    products = products.slice(start, end);
 
-        return products;
+    return products;
+  }
+
+  async getOneProduct(id: string): Promise<Products> {
+    const product = await this.productsRepository.findOneBy({ id });
+
+    if (!product) {
+      throw new NotFoundException(`Producto con id ${id} no encontrado`);
     }
 
-    async getOneProduct(id:string):Promise<Products>{
-        const product = await this.productsRepository.findOneBy({id})
+    return product;
+  }
 
-        if(!product){
-            throw new NotFoundException(`Producto con id ${id} no encontrado`)
-        }
+  async updateProducts(id: string, product: Products) {
+    await this.productsRepository.update(id, product);
+    const updateProduct = await this.productsRepository.findOneBy({ id });
+    return updateProduct;
+  }
 
-        return product;
+  async deleteProducts(id: string): Promise<void> {
+    const product = await this.productsRepository.findOneBy({ id });
+
+    if (!product) {
+      throw new NotFoundException(`Producto con id ${id} no encontrado`);
     }
 
-    
-    async updateProducts(id:string, product:Products){
-        await this.productsRepository.update(id,product);
-        const updateProduct = await this.productsRepository.findOneBy({id})
-        return updateProduct;
-    }
-    
-    async deleteProducts(id:string):Promise<void>{
-        const product = await this.productsRepository.findOneBy({id})
+    await this.productsRepository.delete(id);
+  }
 
-        if(!product){
-            throw new NotFoundException(`Producto con id ${id} no encontrado`)
-        }
-
-        await this.productsRepository.delete(id);
-    }
-
-    /*
+  /*
     async addProducts(){
         const categories = await this.categoriesRepository.find();
 
