@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Service } from './entities/services.entity';
 import { CreateServiceDto } from './dto/create-service.dto';
+import * as mercadopago from 'mercadopago';
 
 @Injectable()
 export class ServicesService {

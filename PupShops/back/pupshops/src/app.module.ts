@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import typeOrmConfig from './config/typeorm';
 import { ServicesModule } from './modules/service/services.module';
 import { AppointmentModule } from './modules/appointments/appointments.module';
+import { PaymentModule } from './modules/payments/payment.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AppointmentModule } from './modules/appointments/appointments.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
+    PaymentModule,
     AppointmentModule,
     ServicesModule,
     UsersModule,
@@ -35,6 +37,7 @@ import { AppointmentModule } from './modules/appointments/appointments.module';
       },
       secret: process.env.JWT_SECRET,
     }),
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
