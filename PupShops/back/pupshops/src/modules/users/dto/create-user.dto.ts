@@ -6,9 +6,9 @@ import {
   IsInt,
   Length,
   IsStrongPassword,
-  IsBoolean,
   IsEmpty,
 } from 'class-validator';
+import { Column } from 'typeorm';
 
 export class CreateUserDto {
   @IsString()
@@ -67,11 +67,6 @@ export class CreateUserDto {
   })
   confirmPassword: string;
 
-  @ApiProperty()
-  @IsBoolean()
-  @IsEmpty()
-  isAdmin: boolean;
-
   @IsNotEmpty()
   @IsInt()
   @ApiProperty({
@@ -106,4 +101,7 @@ export class CreateUserDto {
     example: 'Calle 123',
   })
   address: string;
+
+  @IsEmpty()
+  isAdmin: boolean;
 }

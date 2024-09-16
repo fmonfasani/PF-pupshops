@@ -1,5 +1,3 @@
-import { Categories } from '../../categories/categories.entity';
-import { OrderDetail } from '../../order/entities/order-detail.entity';
 import {
   Column,
   Entity,
@@ -8,6 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Categories } from '../../categories/categories.entity';
+import { OrderDetails } from '../../order/entities/order-detail.entity';
 
 @Entity({
   name: 'products',
@@ -18,7 +18,7 @@ export class Products {
 
   @Column({
     type: 'varchar',
-    length: 100,
+    length: 50,
     unique: true,
     nullable: false,
   })
@@ -44,9 +44,6 @@ export class Products {
   })
   stock: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  brand: string;
-
   @Column({
     type: 'text',
     default: 'http',
@@ -57,6 +54,6 @@ export class Products {
   @JoinColumn({ name: 'category_id' })
   category: Categories;
 
-  @ManyToMany(() => Categories, (orderDetails) => orderDetails.products)
-  orderDetails: OrderDetail[];
+  @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
+  orderDetails: OrderDetails[];
 }

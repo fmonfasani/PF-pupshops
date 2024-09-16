@@ -1,4 +1,4 @@
-import { Order } from '../../order/entities/order.entity';
+import { Orders } from '../../order/entities/order.entity';
 import { Location } from '../../locations/entities/location.entity';
 
 import {
@@ -8,9 +8,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Appointment } from '../../appointments/entities/appointment.entity';
 
 @Entity({
-  name: 'USERS',
+  name: 'users',
 })
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -28,7 +29,7 @@ export class User {
   @Column({ type: 'varchar', length: 100, nullable: false })
   password: string;
 
-  @Column({ type: 'boolean', nullable: false })
+  @Column({ type: 'boolean', nullable: false, default: false })
   isAdmin: boolean;
 
   @Column({ type: 'bigint' })
@@ -43,10 +44,13 @@ export class User {
   @Column({ type: 'text' })
   address: string;
 
+  @OneToMany(() => Appointment, (appointment) => appointment.user)
+  appointments: Appointment[];
+
   @OneToMany(() => Location, (location) => location.user)
   locations: Location[];
 
-  @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Orders, (order) => order.user)
   @JoinColumn({ name: 'orders_id' })
-  orders: Order[];
+  orders: Orders[];
 }
