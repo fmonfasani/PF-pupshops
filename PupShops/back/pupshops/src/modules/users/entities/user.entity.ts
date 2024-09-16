@@ -46,7 +46,7 @@ export class User {
   @JoinColumn({ name: 'orders_id' })
   orders: Orders[];
 
-  /* @OneToMany(() => Appointment, (appointment) => appointment.user)
+  @OneToMany(() => Appointment, (appointment) => appointment.user)
   @JoinColumn({ name: 'appointments_id' })
-  appointments: Appointment[]; */
+  appointments: Appointment[];
 }
