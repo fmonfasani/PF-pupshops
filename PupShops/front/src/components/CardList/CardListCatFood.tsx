@@ -1,16 +1,16 @@
 import React from "react";
 import Link from "next/link";
-import products from "../../helpers/products";
+import productsFC from "../../helpers/productsFC";
 
-export default function CardList() {
+export default function CardListCatFood() {
   return (
     <div className="bg-pink-100/80 py-12 px-4 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
-        Nuestros Productos para Mascotas
+        Nuestras marcas de comida para gatos preferidas
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {products.map((card) => (
+        {productsFC.map((card) => (
           <div
             key={card.id}
             className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 flex flex-col"
