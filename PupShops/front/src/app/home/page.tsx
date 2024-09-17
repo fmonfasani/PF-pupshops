@@ -7,7 +7,6 @@ export default function HomeContainer() {
     <div>
       <Banner />
       <CardList />
-      <h1>FOOTER</h1>
     </div>
   );
 }
