@@ -34,10 +34,14 @@ export default function Navbar() {
     <header className="bg-white shadow-md mt-3 fixed top-0 left-0 w-full z-50">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
+
+        <Link href="#" className="block text-teal-600">
+
         <div
           onClick={() => router.push("/")}
           className="block text-teal-600 cursor-pointer"
         >
+
           <div className="p-3">
             <Image alt="logo" src={pups} width={100} height={100} />
           </div>
