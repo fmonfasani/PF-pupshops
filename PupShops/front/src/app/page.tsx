@@ -1,10 +1,9 @@
-import Image from "next/image";
-import HomeContainer from "./home/page";
+import Landing from "@/components/Landing/Landing";
 
 export default function Home() {
   return (
     <div>
-      <HomeContainer />
+      <Landing />
     </div>
   );
 }
