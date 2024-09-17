@@ -10,9 +10,13 @@ export const fetchRegisterUser = async (user: IUserRegister) => {
         },
         body: JSON.stringify(user),
       });
-      const data = await response.json();
-      return data;
-}
+      
+  if (!response.ok) {
+    throw new Error("Error en el registro. Por favor, verifica los datos.");
+  }
+
+  return response.json();
+};
 
 
 export const fetchLoginUser = async (credentials: ILoginUser) => {

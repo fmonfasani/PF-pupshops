@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 import { ButtonForms, ButtonRedirectUser } from '@/components/Buttons/ButtonsForms';
 import { validationRegister } from '@/utils/validationRegister';
 import { IUserRegister } from '@/Interfaces/interfaces';
-import { UserContext } from '@/context/userContext';
+import { fetchRegisterUser } from '@/utils/fetchUser';
+
 
 type Country = "Argentina" | "Chile" | "Colombia" | "México";
 
@@ -21,7 +22,6 @@ const isValidCountry = (country: string): country is Country => {
 
 export default function RegisterUser() {
     const router = useRouter();
-    const { signUp } = useContext(UserContext);
     const [userRegister, setUserRegister] = useState<IUserRegister>({
         name: "",
         lastname: "",
@@ -32,27 +32,23 @@ export default function RegisterUser() {
         address: "",
         phone: "",
     });
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [submissionError, setSubmissionError] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
+        
+        const updatedUser = { ...userRegister, [name]: value };
+        setUserRegister(updatedUser);
+        
+        setErrors(validationRegister(updatedUser, confirmPassword));
+    };
 
-        setUserRegister(prevState => {
-            const updatedState = { ...prevState, [name]: value };
-            const newErrors = validationRegister(updatedState, confirmPassword).errors;
-            setErrors(newErrors);
-            return updatedState;
-        });
-
-        if (name === "password") {
-            setUserRegister(prevState => ({ ...prevState, password: value }));
-        } else if (name === "confirmPassword") {
-            setConfirmPassword(value);
-            const newErrors = validationRegister(userRegister, value).errors;
-            setErrors(newErrors);
-        }
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newConfirmPassword = e.target.value;
+        setConfirmPassword(newConfirmPassword);
+        
+        setErrors(validationRegister(userRegister, newConfirmPassword));
     };
 
     const handleRegisterRedirect = () => {
@@ -62,7 +58,7 @@ export default function RegisterUser() {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        const user = {
+        const user: IUserRegister = {
             name: userRegister.name,
             lastname: userRegister.lastname,
             email: userRegister.email,
@@ -74,29 +70,24 @@ export default function RegisterUser() {
         };
 
         try {
-            const success = await signUp(user);
-            if (success) {
-                alert("Registro exitoso");
-                setUserRegister({
-                    name: "",
-                    lastname: "",
-                    email: "",
-                    password: "",
-                    address: "",
-                    phone: "",
-                    country: "",
-                    city: ""
-                });
-                setConfirmPassword('');
-                router.push("/home");
-            } else {
-                setSubmissionError("Hubo un error en el registro. Inténtalo de nuevo.");
-            }
-        } catch (error) {
+            await fetchRegisterUser(user);
+            alert("Registro exitoso");
+            setUserRegister({
+              name: "",
+              lastname: "",
+              email: "",
+              password: "",
+              address: "",
+              phone: "",
+              country: "",
+              city: ""
+            });
+            router.push("/home");
+          } catch (error) {
             console.error("Error durante el registro:", error);
-            setSubmissionError("Hubo un error en el registro. Inténtalo de nuevo.");
-        }
-    };
+            alert(error instanceof Error ? error.message : "Error desconocido.");
+          }
+        };
 
     return (
         <section className="bg-gray-100">
@@ -191,7 +182,7 @@ export default function RegisterUser() {
                                     name="confirmPassword"
                                     type="password"
                                     value={confirmPassword}
-                                    onChange={handleChange}
+                                    onChange={handleConfirmPasswordChange}
                                     placeholder="Confirmar Contraseña"
                                 />
                                 {errors.confirmPassword && <span className="text-red-500 text-sm">{errors.confirmPassword}</span>}
