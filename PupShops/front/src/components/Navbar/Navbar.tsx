@@ -4,11 +4,12 @@ import { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdSearch } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
-import Link from "next/link";
-import pups from "../../../public/pups.png";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+import pups from "../../../public/pups.png";
 
 export default function Navbar() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -33,14 +34,16 @@ export default function Navbar() {
     <header className="bg-white shadow-md mt-3 fixed top-0 left-0 w-full z-50">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="#" className="block text-teal-600">
+        <div
+          onClick={() => router.push("/")}
+          className="block text-teal-600 cursor-pointer"
+        >
           <div className="p-3">
             <Image alt="logo" src={pups} width={100} height={100} />
           </div>
-        </Link>
+        </div>
 
         <div className="flex items-center flex-1 justify-between space-x-12">
-          {" "}
           {/* Aumenta el espacio aquí */}
           {/* Barra de búsqueda en escritorio */}
           <div className="hidden md:flex items-center flex-1 relative">
@@ -65,30 +68,30 @@ export default function Navbar() {
               </button>
               {isProductsOpen && (
                 <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg scale-100 transition-transform duration-300 ease-in-out transform hover:scale-105">
-                  <Link
-                    href="#"
+                  <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    onClick={() => router.push("/balanceados")}
                   >
                     Balanceados
-                  </Link>
-                  <Link
-                    href="#"
+                  </button>
+                  <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    onClick={() => router.push("/accesorios")}
                   >
                     Accesorios
-                  </Link>
-                  <Link
-                    href="#"
+                  </button>
+                  <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    onClick={() => router.push("/ropa")}
                   >
                     Ropa
-                  </Link>
-                  <Link
-                    href="#"
+                  </button>
+                  <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    onClick={() => router.push("/collares")}
                   >
                     Collares
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>
@@ -101,33 +104,33 @@ export default function Navbar() {
               </button>
               {isServicesOpen && (
                 <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg scale-100 transition-transform duration-300 ease-in-out transform hover:scale-105">
-                  <Link
-                    href="#"
+                  <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    onClick={() => router.push("/turno-peluqueria")}
                   >
                     Turno para Peluquería
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>
-            <Link
-              href="#"
+            <button
               className="text-gray-500 transition hover:text-gray-500/75"
+              onClick={() => router.push("/quienes-somos")}
             >
               Quienes Somos
-            </Link>
-            <Link
-              href="#"
+            </button>
+            <button
               className="text-gray-500 transition hover:text-gray-500/75"
+              onClick={() => router.push("/contacto")}
             >
               Contacto
-            </Link>
-            <Link
-              href="#"
+            </button>
+            <button
               className="text-gray-500 transition hover:text-gray-500/75"
+              onClick={() => router.push("/carro")}
             >
               Carro
-            </Link>
+            </button>
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
@@ -137,10 +140,16 @@ export default function Navbar() {
               </button>
               {isProfileOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg scale-100 transition-transform duration-300 ease-in-out transform hover:scale-105">
-                  <button className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() => router.push("/userDashboard/register")}
+                  >
                     Registrarse
                   </button>
-                  <button className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() => router.push("/userDashboard/login")}
+                  >
                     Iniciar sesión
                   </button>
                 </div>
@@ -215,27 +224,24 @@ export default function Navbar() {
               </button>
               {isProductsOpen && (
                 <div className="pl-4 bg-white">
-                  <Link
-                    href="#"
+                  <button
                     className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                    onClick={toggleMenu}
+                    onClick={() => router.push("/balanceados")}
                   >
                     Balanceados
-                  </Link>
-                  <Link
-                    href="#"
+                  </button>
+                  <button
                     className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                    onClick={toggleMenu}
+                    onClick={() => router.push("/accesorios")}
                   >
                     Accesorios
-                  </Link>
-                  <Link
-                    href="#"
+                  </button>
+                  <button
                     className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                    onClick={toggleMenu}
+                    onClick={() => router.push("/ropa")}
                   >
                     Ropa
-                  </Link>
+                  </button>
                 </div>
               )}
               <button
@@ -246,36 +252,32 @@ export default function Navbar() {
               </button>
               {isServicesOpen && (
                 <div className="pl-4 bg-white">
-                  <Link
-                    href="#"
+                  <button
                     className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                    onClick={toggleMenu}
+                    onClick={() => router.push("/turno-peluqueria")}
                   >
                     Turno para Peluquería
-                  </Link>
+                  </button>
                 </div>
               )}
-              <Link
-                href="#"
-                className="py-3 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                onClick={toggleMenu}
+              <button
+                className="py-3 text-gray-700 hover:bg-gray-100 rounded-md text-center w-full"
+                onClick={() => router.push("/quienes-somos")}
               >
                 Quienes Somos
-              </Link>
-              <Link
-                href="#"
-                className="py-3 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                onClick={toggleMenu}
+              </button>
+              <button
+                className="py-3 text-gray-700 hover:bg-gray-100 rounded-md text-center w-full"
+                onClick={() => router.push("/contacto")}
               >
                 Contacto
-              </Link>
-              <Link
-                href="#"
-                className="py-3 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                onClick={toggleMenu}
+              </button>
+              <button
+                className="py-3 text-gray-700 hover:bg-gray-100 rounded-md text-center w-full"
+                onClick={() => router.push("/carro")}
               >
                 Carro
-              </Link>
+              </button>
               <button
                 className="py-3 text-gray-700 hover:bg-gray-100 rounded-md text-center w-full"
                 onClick={() => handleMenuClick(setIsProfileOpen)}
@@ -285,14 +287,14 @@ export default function Navbar() {
               {isProfileOpen && (
                 <div className="pl-4 bg-white">
                   <button
-                    className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md w-full text-center"
-                    onClick={toggleMenu}
+                    className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                    onClick={() => router.push("/userDashboard/register")}
                   >
                     Registrarse
                   </button>
                   <button
-                    className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md w-full text-center"
-                    onClick={toggleMenu}
+                    className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                    onClick={() => router.push("/userDashboard/login")}
                   >
                     Iniciar sesión
                   </button>
