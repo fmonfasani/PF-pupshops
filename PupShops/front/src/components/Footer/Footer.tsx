@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-white">
       <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
-
+        {/* Logo e íconos de redes sociales visibles en todas las versiones */}
         <div className="flex flex-col items-center justify-center sm:flex-row sm:justify-between">
           <div className="text-teal-600 flex flex-col items-center justify-center text-center sm:flex-row">
             {/* Logo */}
@@ -45,8 +45,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Sección de Con quien trabajamos y contacto */}
-        <div className="grid grid-cols-1 gap-8 border-t border-gray-100 pt-8 sm:grid-cols-2 lg:grid-cols-3 lg:pt-16">
+        {/* Sección de Con quien trabajamos y contacto, solo visible en pantallas más grandes */}
+        <div className="hidden sm:grid grid-cols-1 gap-8 border-t border-gray-100 pt-8 sm:grid-cols-2 lg:grid-cols-3 lg:pt-16">
           {/* Con quien trabajamos */}
           <div>
             <p className="font-medium text-gray-900">Principales Marcas</p>
@@ -105,7 +105,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="text-xs text-gray-500">
+        <p className="hidden sm:block text-xs text-gray-500">
           &copy; {new Date().getFullYear()} Tu Empresa. Todos los derechos
           reservados.
         </p>
