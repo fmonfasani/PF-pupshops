@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-export default function Banner() {
+export default function Landing() {
   return (
     <section className="relative bg-[url(https://images.pexels.com/photos/2607544/pexels-photo-2607544.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)] bg-cover bg-center bg-no-repeat">
       <div className="absolute inset-0 bg-pink-100/80 sm:bg-transparent sm:from-pink-100/95 sm:to-pink-100/25 sm:bg-gradient-to-r"></div>
@@ -23,7 +23,7 @@ export default function Banner() {
 
           <div className="mt-8 flex flex-wrap gap-4 text-center">
             <Link
-              href="#"
+              href="/home"
               className="block w-full rounded-full bg-purple-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-purple-700 focus:outline-none focus:ring focus:ring-purple-300 sm:w-auto transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
             >
               Shop Now

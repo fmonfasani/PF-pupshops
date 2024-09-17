@@ -1,67 +1,57 @@
-"use client"
-import {ButtonForms, ButtonRedirectUser} from '@/components/Buttons/ButtonsForms'
-import React, { useContext } from 'react'
-import { useRouter } from 'next/navigation'
-import { validateLogin } from '@/utils/validationLogin'
-import { useState } from 'react'
-import { UserContext } from '@/context/userContext'
-import { ILoginClientProps } from '@/Interfaces/interfaces'
-
+"use client";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ButtonForms, ButtonRedirectUser } from '@/components/Buttons/ButtonsForms';
+import { validateLogin } from '@/utils/validationLogin';
+import { fetchLoginUser } from '@/utils/fetchUser';
+import { ILoginUser } from '@/Interfaces/interfaces';
 
 
 ///Agregar validaciones con back
 ///Corroborar con back que las propiedades e login sean "email" u "password"
 //Agregar contexto de user
-export default function LoginUser({ setToken }: ILoginClientProps) {
- const router = useRouter();
- const { signIn } = useContext(UserContext);
- const [userData, setUserData] = useState({
+export default function LoginUser() {
+  const router = useRouter();
+  const [userData, setUserData] = useState<ILoginUser>({
     email: "",
     password: ""
   });
- const [errors, setErrors] = useState({} as { [key: string]: string });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+    const { formIsValid, errors: validationErrors } = validateLogin({ ...userData, [name]: value });
+    setErrors(validationErrors);
+  };
 
- const handleChange= (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target;
-    setUserData({...userData, [name]: value});
-    const {formIsValid,errors} = validateLogin({ ...userData, [name]: value});
-    setErrors(errors);
- };
-
- const handleRegisterRedirect = () => {
+  const handleRegisterRedirect = () => {
     router.push("/userDashboard/register");
-}
+  };
 
-const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-   
-  const { formIsValid, errors } = validateLogin(userData);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  if (formIsValid) {
-    const credentials = {
-      email: userData.email,
-      password: userData.password
-    };
-    
-    try {
-      const success = await signIn(credentials); 
-               
-      if (success) {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-        if (token) {
-          setToken(token); 
-          router.push("/home");
+    // Valida los datos del formulario
+    const { formIsValid, errors: validationErrors } = validateLogin(userData);
+
+    if (formIsValid) {
+        try {
+            const success = await fetchLoginUser(userData);
+
+            if (success) {
+                alert("Login exitoso");
+                router.push("/home");
+            } else {
+                setErrors({ ...errors, general: "Usuario inválido" });
+            }
+        } catch (error) {
+            console.error("Error durante el login:", error);
+            setErrors({ ...errors, general: "Error durante el login" });
         }
-      } else {
-        alert("Usuario inválido");
-      }
-    } catch(error) {
-      setErrors(errors);
+    } else {
+        setErrors(validationErrors); 
     }
-  } else {
-    setErrors(errors); 
-  }
 };
 
   return (

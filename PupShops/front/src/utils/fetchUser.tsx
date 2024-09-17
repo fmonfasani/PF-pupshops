@@ -3,20 +3,24 @@ import { ILoginUser, IUserRegister } from "@/Interfaces/interfaces";
 
 //Cambiar rutas segun back
 export const fetchRegisterUser = async (user: IUserRegister) => {
-    const response = await fetch(`/users/register`, {
+    const response = await fetch(`https://localhost:3000/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(user),
       });
-      const data = await response.json();
-      return data;
-}
+      
+  if (!response.ok) {
+    throw new Error("Error en el registro. Por favor, verifica los datos.");
+  }
+
+  return response.json();
+};
 
 
 export const fetchLoginUser = async (credentials: ILoginUser) => {
-    const response = await fetch(`/users/login`, {
+    const response = await fetch(`http://localhost:3000/auth/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
