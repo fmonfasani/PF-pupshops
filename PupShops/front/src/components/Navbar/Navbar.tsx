@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdSearch } from "react-icons/md";
