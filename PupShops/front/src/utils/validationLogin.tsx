@@ -4,21 +4,20 @@ export const validateLogin = (userData: ILoginUser) => {
   const errors: { email?: string; password?: string } = {};
   let formIsValid = true;
 
-  if (!userData.email) {
-    formIsValid = false;
-    errors.email = "El campo email es obligatorio";
-  } else if (!/\S+@\S+\.\S+/.test(userData.email)) {
-    formIsValid = false;
-    errors.email = "Por favor ingrese un email válido.";
+// Validar email
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!userData.email) {
+  errors.email = "Debes ingresar un correo electrónico";
+}
+
+  // Validar contraseña
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  if (!userData.password) {
+    errors.password = "Debes ingresar una contraseña";
+  } else if (!passwordRegex.test(userData.password)) {
+    errors.password = "La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial";
   }
 
-  if (!userData.password) {
-    formIsValid = false;
-    errors.password = "La contraseña es obligatoria";
-  } else if (userData.password.length < 6) {
-    formIsValid = false;
-    errors.password = "La contraseña debe tener al menos 6 caracteres.";
-  }
 
   return { formIsValid, errors };
 };
