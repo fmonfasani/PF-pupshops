@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Products } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { Categories } from '../categories/categories.entity';
+import * as data from "../../utils/archivo.json";
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Injectable()
 export class ProductsRepository {
@@ -52,32 +54,56 @@ export class ProductsRepository {
     await this.productsRepository.delete(id);
   }
 
-  /*
-    async addProducts(){
-        const categories = await this.categoriesRepository.find();
-
-        data?.map(async(element)=>{
-            const category = categories.find(
-                (category) => category.name === element.category,
-            );
-            const product = new Products();
-
-            product.name = element.name;
-            product.description = element.description;
-            product.price = element.price;
-            product.imgUrl = element.imgUrl;
-            product.stock = element.stock;
-            product.category= category;
-
-            await this.productsRepository
-            .createQueryBuilder()
-            .insert()
-            .into(Products)
-            .values(product)
-            .orUpdate(['description', 'price', 'imgUrl', 'stock'], ['name'])
-            .execute();
-        });
-        return 'Productos Agregados'
+  async addProducts() {
+    if (!Array.isArray(data['default'])) {
+      throw new Error('El archivo JSON no contiene un array válido de productos.');
     }
-    */
+
+    const categories = await this.categoriesRepository.find();
+
+    for (const element of data['default']) {
+      const category = categories.find(
+        (category) => category.name === element.category,
+      );
+
+      if (!category) {
+        throw new NotFoundException(`Categoría ${element.category} no encontrada`);
+      }
+
+      const product = this.productsRepository.create({
+        name: element.name,
+        description: element.description,
+        price: element.price,
+        imgUrl: element.imgUrl,
+        stock: element.stock,
+        category: category,
+        waist: element.waist ? element.waist.toString() : null, 
+        weight: element.weight,
+      });
+
+      await this.productsRepository.save(product);
+    }
+
+    return 'Productos Agregados';
+  }
+
+  async createProduct(createProductDto: CreateProductDto): Promise<Products> {
+    const category = await this.categoriesRepository.findOne({
+      where: { name: createProductDto.category },
+    });
+
+    if (!category) {
+      throw new NotFoundException(`Categoría ${createProductDto.category} no encontrada`);
+    }
+
+    const product = this.productsRepository.create({
+      ...createProductDto,
+      category,
+      waist: createProductDto.waist ? createProductDto.waist.toString() : null, 
+    });
+
+    return this.productsRepository.save(product);
+  }
 }
+
+

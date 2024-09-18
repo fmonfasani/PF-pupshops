@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import typeOrmConfig from './config/typeorm';
 import { ServicesModule } from './modules/service/services.module';
 import { AppointmentModule } from './modules/appointments/appointments.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AppointmentModule } from './modules/appointments/appointments.module';
     }),
 
     AppointmentModule,
+    CategoriesModule,
     ServicesModule,
     UsersModule,
     ProductsModule,
