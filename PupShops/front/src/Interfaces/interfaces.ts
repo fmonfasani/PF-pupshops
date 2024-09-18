@@ -7,7 +7,7 @@ export interface IUser {
     country: string;
     city: string;
     address: string;
-    phone: string;
+    phone: number;
   //  orders?: IOrderResponse[];
 }
 
@@ -26,10 +26,11 @@ export interface IUserRegister {
     lastname: string;
     email: string;
     password: string;
+    confirmPassword:string;
     country: string;
     city: string;
     address: string;
-    phone: string;
+    phone: number;
   }
 
 export interface IButtonProps {

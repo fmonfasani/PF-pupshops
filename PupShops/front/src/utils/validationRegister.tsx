@@ -1,6 +1,6 @@
 import { IUserRegister } from "@/Interfaces/interfaces";
 
-export const validationRegister = (userRegister: IUserRegister, confirmPassword: string) => {
+export const validationRegister = (userRegister: IUserRegister) => {
   let errors: { [key: string]: string } = {};
 
   // Validar nombre
@@ -31,12 +31,13 @@ export const validationRegister = (userRegister: IUserRegister, confirmPassword:
     errors.password = "La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial";
   }
 
-  // Validar confirmar contraseña
-  if (!confirmPassword) {
-    errors.confirmPassword = "Debes confirmar la contraseña";
-  } else if (confirmPassword !== userRegister.password) {
-    errors.confirmPassword = "Las contraseñas no coinciden";
-  }
+// Validar confirmar contraseña
+if (!userRegister.confirmPassword) {
+  errors.confirmPassword = "Debes confirmar la contraseña";
+} else if (userRegister.confirmPassword !== userRegister.password) {
+  errors.confirmPassword = "Las contraseñas no coinciden";
+}
+
 
   // Validar dirección
   if (!userRegister.address) {
@@ -45,12 +46,20 @@ export const validationRegister = (userRegister: IUserRegister, confirmPassword:
     errors.address = "La dirección debe tener hasta 80 caracteres";
   }
 
-   // Validar teléfono
-   if (!userRegister.phone) {
-    errors.phone = "Debes ingresar un número";
-  } else if (!Number.isInteger(userRegister.phone)) {
-    errors.phone = "El código de área debe ser un número entero";
+  
+// Validar teléfono
+if (!userRegister.phone) {
+  errors.phone = "Debes ingresar un número de teléfono";
+} else {
+  const phoneString = userRegister.phone.toString();
+  if (phoneString.length < 10) {
+    errors.phone = "El número de teléfono debe tener al menos 10 dígitos.";
+  } else if (phoneString.length > 15) {
+    errors.phone = "El número de teléfono no puede tener más de 15 dígitos.";
   }
+}
+
+
 
   // Validar país
   if (!userRegister.country) {
