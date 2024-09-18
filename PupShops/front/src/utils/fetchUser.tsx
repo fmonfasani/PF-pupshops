@@ -1,7 +1,5 @@
 import { ILoginUser, IUserRegister } from "@/Interfaces/interfaces";
 
-
-//Cambiar rutas segun back
 export const fetchRegisterUser = async (user: IUserRegister) => {
     const response = await fetch(`https://localhost:3000/auth/signup`, {
         method: "POST",

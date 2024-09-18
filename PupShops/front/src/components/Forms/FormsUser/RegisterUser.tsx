@@ -30,7 +30,7 @@ export default function RegisterUser() {
         country: "",
         city: "",
         address: "",
-        phone: "",
+        phone: 0,
     });
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -38,7 +38,10 @@ export default function RegisterUser() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         
-        const updatedUser = { ...userRegister, [name]: value };
+        const updatedUser = {
+            ...userRegister,
+            [name]: value 
+        };
         setUserRegister(updatedUser);
         
         setErrors(validationRegister(updatedUser, confirmPassword));
@@ -64,7 +67,7 @@ export default function RegisterUser() {
             email: userRegister.email,
             password: userRegister.password,
             address: userRegister.address,
-            phone: userRegister.phone,
+            phone: Number(userRegister.phone),
             country: userRegister.country,
             city: userRegister.city,
         };
@@ -78,7 +81,7 @@ export default function RegisterUser() {
               email: "",
               password: "",
               address: "",
-              phone: "",
+              phone: 0,
               country: "",
               city: ""
             });
@@ -144,7 +147,7 @@ export default function RegisterUser() {
                                 <input
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                                     name="phone"
-                                    type="tel"
+                                    type="number"
                                     value={userRegister.phone}
                                     onChange={handleChange}
                                     placeholder="Celular"
