@@ -1,3 +1,84 @@
+## Resumen de Ramas
+
+1. Estructura de Ramas
+
+Ramas principales:
+
+- main: Rama principal, donde se encuentra el código que está en producción o en una versión estable.
+- develop: Rama de desarrollo, donde se realizan las integraciones de los cambios de backend y frontend antes de ser fusionados en main.
+- back: Rama para todos los desarrolladores del backend.
+- front: Rama para todos los desarrolladores del frontend.
+  Ramas de características (features):
+  Cada miembro del equipo debe crear ramas individuales basadas en features o tareas específicas dentro de su respectivo ámbito (backend o frontend).
+  Ejemplos:
+- Backend: back/feature-login, back/feature-auth, back/feature-payments
+- Frontend: front/feature-ui-login, front/feature-dashboard, front/feature-cart
+
+2. Proceso de Creación de Ramas
+
+# Cambia a la rama de tu área (backend o frontend)
+
+git checkout back # Para backend
+git checkout front # Para frontend
+
+# Actualiza tu rama (recomiendo actualizar constantemente)
+
+git pull origin back # o front
+
+# Crea una nueva rama para la feature
+
+git checkout -b back/feature-nombre-feature # Para backend
+git checkout -b front/feature-nombre-feature # Para frontend
+
+3. Hacer Cambios y Push
+
+- Agregar y confirmar los cambios:
+
+git add .
+git commit -m "Descripción clara de los cambios"
+
+- Hacer push a tu rama remota:
+
+git push origin back/feature-nombre-feature # Para backend
+git push origin front/feature-nombre-feature # Para frontend
+
+4. Proceso de Pull Request y Merge
+   Una vez que hayas completado tu feature:
+   Revisar y probar tu feature: Asegúrate de que todos los cambios funcionan correctamente y que has probado la funcionalidad.
+
+Actualizar tu rama: Antes de hacer un pull request, asegúrate de que tu rama esté actualizada con la rama de tu entorno (back o front).
+
+git checkout back # o front
+git pull origin back # o front
+git checkout back/feature-nombre-feature # o front/feature-nombre-feature
+git merge back # o front
+
+Resolver conflictos (si es necesario): Si hay conflictos, resuélvelos en tu rama.
+
+Hacer un pull request: Crea un pull request para fusionar tu rama feature en la rama principal de desarrollo back o front.
+
+Backend: Fusionar tu feature en back
+Frontend: Fusionar tu feature en front
+Revisión del pull request: Otro miembro del equipo revisa el pull request, verifica los cambios y aprueba.
+
+Hacer el merge: Una vez aprobado el pull request, puedes hacer el merge en back o front.
+
+5. Integración en develop y main
+   Integración en develop:
+
+Una vez que las ramas back y front estén listas y aprobadas, se puede hacer un pull request para fusionar ambos en la rama develop.
+Hacer tests completos y revisiones de las integraciones antes de fusionar en main.
+Integración en main:
+
+## Cuando las funcionalidades hayan sido probadas en develop y estén listas para ser lanzadas, haz el merge final en main.
+
+6. Mejores Prácticas
+
+- Commit frecuentes: Es recomendable hacer commits con frecuencia y con mensajes claros.
+- Mantener tu rama actualizada: Cada desarrollador debe hacer un git pull constante de back o front para evitar grandes conflictos al momento de hacer merge.
+- Revisiones de código: Cada pull request debe ser revisado por otro miembro del equipo antes de hacer merge.
+- Documentación: Mantener documentados los cambios y el estado del desarrollo, ya sea en un archivo README.md o en un tablero de trabajo (Trello, Jira, etc.).
+
 ## Uso de git para features (ramas de funciones especificas)
 
 1. <git status> chequear el estado

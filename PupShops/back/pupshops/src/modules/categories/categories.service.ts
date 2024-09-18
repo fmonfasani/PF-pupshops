@@ -9,9 +9,9 @@ export class CategoriesService {
     return this.categoriesRepository.getCategories();
   }
 
-  /*
-    addCategories(){
+  
+  addCategories(){
         return this.categoriesRepository.addCategories();
     }
-    */
+    
 }

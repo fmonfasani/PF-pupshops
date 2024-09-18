@@ -29,10 +29,12 @@ export class ProductsController {
     return this.productsService.getAllProducts(page, limit);
   }
 
+  
   @Get('seeder')
   addProducts() {
     return this.productsService.addProduct();
   }
+  
 
   @Get(':id')
   findOneProduct(@Param('id', ParseUUIDPipe) id: string) {
@@ -48,4 +50,11 @@ export class ProductsController {
   remove(@Param('id') id: string) {
     return this.productsService.deleteProduct(id);
   }
+
+  
+  @Post()
+  async createProduct(@Body() createProductDto: CreateProductDto) {
+    return this.productsService.createProduct(createProductDto);
+  }
+  
 }
