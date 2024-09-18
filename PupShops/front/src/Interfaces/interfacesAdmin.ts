@@ -15,3 +15,7 @@ export interface IUploadProduct {
     weight:string;
 
 }
+
+export interface IUploadProductComponentProps {
+  onPreview?: (product: IUploadProduct) => void;
+}
