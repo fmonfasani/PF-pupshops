@@ -31,11 +31,24 @@ export const validateProduct = (productData: IUploadProduct) => {
     errors.price = "El precio debe ser mayor a 0";
   }
 
+   // Validar price
+   if (productData.price === undefined || productData.price === null) {
+    errors.price = "Debes ingresar un precio";
+  } else if (productData.price <= 0) {
+    errors.price = "El precio debe ser mayor a 0";
+  }
+
   // Validar stock
-  if (productData.stock === undefined || productData.stock === null) {
-    errors.stock = "Debes ingresar el stock";
-  } else if (!Number.isInteger(productData.stock) || productData.stock < 0) {
-    errors.stock = "El stock debe ser un número entero positivo";
+  const stockString = productData.stock?.toString().trim(); // Convertir a cadena y eliminar espacios en blanco
+  if (stockString === "" || stockString === "0") {
+    errors.stock = "Debes ingresar un número de stock mayor a 0";
+  } else {
+    const stockNumber = Number(stockString); // Convertir a número
+    if (!Number.isInteger(stockNumber)) {
+      errors.stock = "El stock debe ser un número entero";
+    } else if (stockNumber < 1) {
+      errors.stock = "El stock debe ser un número entero mayor o igual a 1";
+    }
   }
 
   // Validar URL de imagen

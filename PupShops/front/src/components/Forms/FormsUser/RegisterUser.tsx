@@ -10,7 +10,7 @@ import { fetchRegisterUser } from '@/utils/fetchUser';
 type Country = "Argentina" | "Chile" | "Colombia" | "México";
 
 const cities: Record<Country, string[]> = {
-    Argentina: ["Buenos Aires", "Córdoba", "Rosario", "Santa Fe"],
+    Argentina: ["Buenos Aires", "Córdoba", "Rosario", "Santa Fe", "Tafi viejo"],
     Chile: ["Santiago", "Valparaíso", "Concepción", "La Serena", "Temuco"],
     Colombia: ["Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena"],
     México: ["Ciudad de México", "Guadalajara", "Monterrey", "Puebla", "Cancún"]
@@ -27,12 +27,13 @@ export default function RegisterUser() {
         lastname: "",
         email: "",
         password: "",
+        confirmPassword:"",
         country: "",
         city: "",
         address: "",
         phone: 0,
     });
-    const [confirmPassword, setConfirmPassword] = useState("");
+
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -44,15 +45,10 @@ export default function RegisterUser() {
         };
         setUserRegister(updatedUser);
         
-        setErrors(validationRegister(updatedUser, confirmPassword));
+        setErrors(validationRegister(updatedUser));
     };
 
-    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newConfirmPassword = e.target.value;
-        setConfirmPassword(newConfirmPassword);
-        
-        setErrors(validationRegister(userRegister, newConfirmPassword));
-    };
+   
 
     const handleRegisterRedirect = () => {
         router.push("/userDashboard/login");
@@ -66,12 +62,13 @@ export default function RegisterUser() {
             lastname: userRegister.lastname,
             email: userRegister.email,
             password: userRegister.password,
+            confirmPassword: userRegister.confirmPassword,
             address: userRegister.address,
             phone: Number(userRegister.phone),
             country: userRegister.country,
             city: userRegister.city,
         };
-
+        console.log('User que se está enviando:', user);
         try {
             await fetchRegisterUser(user);
             alert("Registro exitoso");
@@ -80,6 +77,7 @@ export default function RegisterUser() {
               lastname: "",
               email: "",
               password: "",
+              confirmPassword:"",
               address: "",
               phone: 0,
               country: "",
@@ -184,8 +182,8 @@ export default function RegisterUser() {
                                     className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                                     name="confirmPassword"
                                     type="password"
-                                    value={confirmPassword}
-                                    onChange={handleConfirmPasswordChange}
+                                    value={userRegister.confirmPassword}
+                                    onChange={handleChange}
                                     placeholder="Confirmar Contraseña"
                                 />
                                 {errors.confirmPassword && <span className="text-red-500 text-sm">{errors.confirmPassword}</span>}
@@ -195,7 +193,7 @@ export default function RegisterUser() {
                         <select
                             id="country"
                             name="country"
-                            className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                            className="w-full rounded-lg border border-gray-200 p-3 text-sm hover:cursor-pointer"
                             value={userRegister.country}
                             onChange={handleChange}
                         >
@@ -210,7 +208,7 @@ export default function RegisterUser() {
                         <select
                             id="city"
                             name="city"
-                            className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                            className="w-full rounded-lg border border-gray-200 p-3 text-sm hover:cursor-pointer"
                             value={userRegister.city}
                             onChange={handleChange}
                             disabled={!userRegister.country || !isValidCountry(userRegister.country)}

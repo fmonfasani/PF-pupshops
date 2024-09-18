@@ -1,6 +1,6 @@
 import { IUserRegister } from "@/Interfaces/interfaces";
 
-export const validationRegister = (userRegister: IUserRegister, confirmPassword: string) => {
+export const validationRegister = (userRegister: IUserRegister) => {
   let errors: { [key: string]: string } = {};
 
   // Validar nombre
@@ -31,12 +31,13 @@ export const validationRegister = (userRegister: IUserRegister, confirmPassword:
     errors.password = "La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial";
   }
 
-  // Validar confirmar contraseña
-  if (!confirmPassword) {
-    errors.confirmPassword = "Debes confirmar la contraseña";
-  } else if (confirmPassword !== userRegister.password) {
-    errors.confirmPassword = "Las contraseñas no coinciden";
-  }
+// Validar confirmar contraseña
+if (!userRegister.confirmPassword) {
+  errors.confirmPassword = "Debes confirmar la contraseña";
+} else if (userRegister.confirmPassword !== userRegister.password) {
+  errors.confirmPassword = "Las contraseñas no coinciden";
+}
+
 
   // Validar dirección
   if (!userRegister.address) {

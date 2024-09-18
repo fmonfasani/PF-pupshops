@@ -58,7 +58,7 @@ export default function UploadProductComponent() {
       waist: dataProduct.waist,
       weight: dataProduct.weight
     };
-
+    console.log('Producto que se está enviando:', product);
     try {
       await fetchUploadProduct(product);
       alert("Carga de producto exitosa");
