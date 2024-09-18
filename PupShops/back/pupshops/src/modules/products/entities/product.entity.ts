@@ -50,6 +50,20 @@ export class Products {
   })
   imgUrl: string;
 
+  @Column({
+    type: 'varchar', 
+    length: 10,
+    nullable: true,
+  })
+  waist: string;
+  
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  weight: string;
+
   @ManyToOne(() => Categories, (category) => category.products)
   @JoinColumn({ name: 'category_id' })
   category: Categories;
@@ -57,3 +71,5 @@ export class Products {
   @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
   orderDetails: OrderDetails[];
 }
+
+

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Categories } from './categories.entity';
 import { Repository } from 'typeorm';
+import * as data from '../../utils/archivo.json'
 
 @Injectable()
 export class CategoriesRepository {
@@ -14,9 +15,11 @@ export class CategoriesRepository {
     return await this.categoriesRepository.find();
   }
 
-  /*
+  
     async addCategories(){
-        data?.map(async (element)=>{
+
+      
+        data['default'].map(async (element)=>{
             await this.categoriesRepository
 
             .createQueryBuilder()
@@ -28,5 +31,5 @@ export class CategoriesRepository {
         });
         return 'Categorias Agregadas'
     }
-    */
+    
 }
