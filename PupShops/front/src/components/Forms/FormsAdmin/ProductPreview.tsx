@@ -2,30 +2,49 @@
 import React from 'react';
 import { IUploadProduct } from '@/Interfaces/interfacesAdmin';
 
-interface ProductPreviewProps {
-  product: IUploadProduct;
-}
 
-const ProductPreview: React.FC<ProductPreviewProps> = ({ product }) => {
+const ProductPreview: React.FC<{ product: IUploadProduct }> = ({ product }) => {
   return (
-    <div className="mt-6 p-4 border border-gray-200 rounded-lg shadow-lg bg-white">
-      <h2 className="text-xl font-semibold text-blue-950">Vista Previa</h2>
-      <div className="mt-4">
-        <p className="text-gray-800"><strong>Nombre:</strong> {product.name}</p>
-        <p className="text-gray-800"><strong>Descripción:</strong> {product.description}</p>
-        <p className="text-gray-800"><strong>Precio:</strong> ${product.price}</p>
-        <p className="text-gray-800"><strong>Stock:</strong> {product.stock}</p>
-        <p className="text-gray-800"><strong>Categoría:</strong> {product.category?.name}</p>
-        <p className="text-gray-800"><strong>Waist:</strong> {product.waist}</p>
-        <p className="text-gray-800"><strong>Weight:</strong> {product.weight}</p>
-        {product.imgUrl && (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 flex flex-col">
+        {/* Imagen del producto */}
+        <div className="relative overflow-hidden h-80">
           <img
             src={product.imgUrl}
             alt={product.name}
-            className="mt-4 w-12 h-12 object-cover"
-            style={{ width: '50px', height: '50px' }} 
+            className="w-full h-full object-cover transform transition duration-300 scale-100 group-hover:scale-95"
           />
-        )}
+        </div>
+
+        {/* Detalles del producto */}
+        <div className="p-4 flex-grow flex flex-col justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-purple-600 mb-2">
+              {product.name}
+            </h2>
+            <p className="text-gray-600 mb-4 text-sm">{product.description}</p>
+            <p className="text-gray-600 mb-4 text-sm">Precio: ${product.price}</p>
+            <p className="text-gray-600 mb-4 text-sm">Stock: {product.stock}</p>
+            <p className="text-gray-600 mb-4 text-sm">Waist: {product.waist}</p>
+            <p className="text-gray-600 mb-4 text-sm">Weight: {product.weight}</p>
+          </div>
+
+          {/* Enlaces de acción */}
+          <div className="mt-auto">
+            <a
+              href="#"
+              className="block w-full text-center rounded-full bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-purple-700 focus:outline-none focus:ring focus:ring-purple-300 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 mb-2"
+            >
+              Más Información
+            </a>
+            <a
+              href="#"
+              className="block w-full text-center rounded-full bg-pink-500 px-4 py-2 text-sm font-medium text-white shadow hover:bg-pink-600 focus:outline-none focus:ring focus:ring-pink-300 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+            >
+              Comprar ahora
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
