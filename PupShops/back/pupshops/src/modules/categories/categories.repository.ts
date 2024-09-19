@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Categories } from './categories.entity';
 import { Repository } from 'typeorm';
-import * as data from '../../utils/archivo.json'
+import * as data from '../../utils/categories.json';
 
 @Injectable()
 export class CategoriesRepository {
@@ -15,21 +15,44 @@ export class CategoriesRepository {
     return await this.categoriesRepository.find();
   }
 
-  
-    async addCategories(){
+  async addCategories() {
+    data.default.default.forEach(async (element) => {
 
+      const parentCategory = await this.categoriesRepository.findOne({
+        where: { name : element.parentName}
+      })
       
-        data['default'].map(async (element)=>{
-            await this.categoriesRepository
+      let parentId = null
 
-            .createQueryBuilder()
-            .insert()
-            .into(Categories)
-            .values({name: element.category})
-            .orIgnore()
-            .execute();
-        });
-        return 'Categorias Agregadas'
-    }
-    
+      if(parentCategory){
+        parentId = parentCategory.id
+        
+      }
+
+
+      await this.categoriesRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Categories)
+        .values({
+          name: element.name,
+          parent: parentId,
+        })
+        .orIgnore()
+        .execute();
+    });
+    return 'Categorías Agregadas';
+  }
+
+  async getParentCategories() {
+    return await this.categoriesRepository.find({
+      where: { parent: null },
+    });
+  }
+
+  async getChildCategories(parentId: string) {
+    return await this.categoriesRepository.find({
+      where: { parent: { id: parentId } },
+    });
+  }
 }
