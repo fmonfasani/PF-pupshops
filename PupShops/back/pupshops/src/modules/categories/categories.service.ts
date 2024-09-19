@@ -9,9 +9,15 @@ export class CategoriesService {
     return this.categoriesRepository.getCategories();
   }
 
-  
-  addCategories(){
-        return this.categoriesRepository.addCategories();
-    }
-    
+  addCategories() {
+    return this.categoriesRepository.addCategories();
+  }
+
+  getParentCategories() {
+    return this.categoriesRepository.getParentCategories();
+  }
+
+  getChildCategories(parentId: string) {
+    return this.categoriesRepository.getChildCategories(parentId);
+  }
 }

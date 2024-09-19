@@ -1,53 +1,42 @@
 [
     {
-      "name": "Royal Canin",
-      "description": "Alimento para perros adultos de raza pequeña",
-      "price": 45.99,
-      "stock": 12,
-      "category": "alimento",
-      "waist": null,
-      "weight": "3kg",
-      "imgUrl": "https://www.google.com/url?sa=i&url=https%3A%2F%2Froyalcanin.com"
+      "name": "Pelota para Gato",
+      "description": "Pelota interactiva para gatos",
+      "price": 10.99,
+      "stock": 100,
+      "imgUrl": "https://example.com/pelota_gato.jpg",
+      "categoryName": "Juguetes de Gato"
     },
     {
-      "name": "Kong Classic",
-      "description": "Juguete mordedor para perros",
+      "name": "Cama para Perro",
+      "description": "Cama grande y cómoda para perros",
+      "price": 50.00,
+      "stock": 50,
+      "imgUrl": "https://example.com/cama_perro.jpg",
+      "categoryName": "Accesorios para Perro"
+    },
+    {
+      "name": "Correa de Perro",
+      "description": "Correa resistente para perros de gran tamaño",
       "price": 15.50,
-      "stock": 25,
-      "category": "juguetes",
-      "waist": null,
-      "weight": "200g",
-      "imgUrl": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fkongcompany.com"
+      "stock": 75,
+      "imgUrl": "https://example.com/correa_perro.jpg",
+      "categoryName": "Accesorios para Perro"
     },
     {
-      "name": "Collar Reflectante",
-      "description": "Collar para perros con material reflectante",
-      "price": 12.00,
-      "stock": 30,
-      "category": "accesorios",
-      "waist": "M",
-      "weight": "100g",
-      "imgUrl": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcollars.com"
+      "name": "Ratón de Juguete para Gato",
+      "description": "Juguete en forma de ratón para gatos",
+      "price": 5.99,
+      "stock": 200,
+      "imgUrl": "https://example.com/raton_gato.jpg",
+      "categoryName": "Juguetes de Gato"
     },
     {
-      "name": "Arena Sanitaria Silica",
-      "description": "Arena para gatos con control de olores",
-      "price": 22.99,
-      "stock": 20,
-      "category": "higiene",
-      "waist": null,
-      "weight": "4kg",
-      "imgUrl": "https://www.google.com/url?sa=i&url=https%3A%2F%2Farenacats.com"
-    },
-    {
-      "name": "Cama Redonda",
-      "description": "Cama suave para perros y gatos",
-      "price": 25.00,
-      "stock": 15,
-      "category": "accesorios",
-      "waist": "L",
-      "weight": "1.5kg",
-      "imgUrl": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcamaspets.com"
+      "name": "Collar Luminoso para Perro",
+      "description": "Collar LED para perros para uso nocturno",
+      "price": 12.99,
+      "stock": 60,
+      "imgUrl": "https://example.com/collar_led.jpg",
+      "categoryName": "Accesorios para Perro"
     }
   ]
-  

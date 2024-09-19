@@ -1,0 +1,26 @@
+{
+    "default": [
+      {
+        "name": "Gato",
+        "parentName": null
+      },
+      {
+        "name": "Juguetes de Gato",
+        "parentName": "Gato"
+      },
+      {
+        "name": "Perro",
+        "parentName": null
+        
+      },
+      {
+        "name": "Juguetes de Perro",
+        "parentName": "Perro"
+      },
+      {
+        "name": "Accesorios para Perro",
+        "parentName": "Perro"
+      }
+    ]
+  }
+  
