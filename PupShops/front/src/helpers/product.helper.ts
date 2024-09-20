@@ -1,7 +1,7 @@
 const APIURL = process.env.NEXT_PUBLIC_API_URL;
 
 
-=======
+
 export const getAllProducts = async (page: number = 1, limit: number = 10) => {
 
   try {
