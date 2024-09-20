@@ -1,13 +1,6 @@
 /* eslint-disable prettier/prettier */
-import {
-  IsNotEmpty,
-  IsDate,
-  IsEnum,
-  IsDateString,
-  IsUUID,
-} from 'class-validator';
+import { IsNotEmpty, IsDateString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { AppointmentStatus } from '../entities/appointment.entity';
 
 export class CreateAppointmentDto {
   @IsDateString()
@@ -24,7 +17,7 @@ export class CreateAppointmentDto {
     description: 'ID del servicio en formato UUID', //UUID del Servicio
     example: 'a9117bf4-1cf7-43d3-a07c-4de1df18252b',
   })
-  service: string;
+  serviceName: string;
   @IsUUID()
   @IsNotEmpty()
   @ApiProperty({
