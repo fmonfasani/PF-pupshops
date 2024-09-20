@@ -1,33 +1,55 @@
-name: CI/CD Pipeline
+name: Build and Deploy to Render
 
 on:
   push:
     branches:
       - main
       - develop
-      - deploy
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      # Paso para hacer checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    # Instalar Docker Buildx
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      # Paso para configurar Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    # Instalar Docker Compose
-    - name: Install Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
+      # Iniciar sesión en Docker Hub (usa secretos configurados en GitHub)
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-    - name: Build backend service
-      run: docker-compose -f PupShops/docker-compose.yml build backend
+      # Construir la imagen Docker del backend
+      - name: Build Backend Image
+        run: docker build -f ./back/pupshops/Dockerfile -t your-backend-image-name .
 
-    - name: Build frontend service
-      run: docker-compose -f PupShops/docker-compose.yml build frontend
+      # Construir la imagen Docker del frontend
+      - name: Build Frontend Image
+        run: docker build -f ./front/Dockerfile -t your-frontend-image-name .
+
+      # Empujar la imagen del backend a Docker Hub
+      - name: Push Backend Image
+        run: docker push your-backend-image-name
+
+      # Empujar la imagen del frontend a Docker Hub
+      - name: Push Frontend Image
+        run: docker push your-frontend-image-name
+
+      # Desplegar a Render (backend)
+      - name: Deploy Backend to Render
+        run: |
+          curl -X POST https://api.render.com/deploy/srv-xxxxxxxxx \
+          -H 'Authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
+          -d ''
+          
+      # Desplegar a Render (frontend)
+      - name: Deploy Frontend to Render
+        run: |
+          curl -X POST https://api.render.com/deploy/srv-yyyyyyyyy \
+          -H 'Authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
+          -d ''
 
