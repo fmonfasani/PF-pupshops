@@ -12,6 +12,9 @@ import typeOrmConfig from './config/typeorm';
 import { ServicesModule } from './modules/service/services.module';
 import { AppointmentModule } from './modules/appointments/appointments.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { WebhookModule } from './modules/webhook/webhook.module';
+import { Payment } from 'mercadopago';
+import { PaymentsModule } from './modules/payments/Payment.module';
 
 @Module({
   imports: [
@@ -23,7 +26,8 @@ import { CategoriesModule } from './modules/categories/categories.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
-
+    PaymentsModule,
+    WebhookModule,
     AppointmentModule,
     CategoriesModule,
     ServicesModule,
