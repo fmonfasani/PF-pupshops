@@ -15,6 +15,7 @@ interface IProduct {
     id: string;
     name: string;
   };
+
 }
 
 const ProductsPage = () => {
@@ -36,6 +37,7 @@ const ProductsPage = () => {
 
     fetchProducts();
   }, []);
+
 
   const handleAddToCart = (productId: string) => {
     console.log(`Producto ${productId} añadido al carrito`);
@@ -98,6 +100,7 @@ const ProductsPage = () => {
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );
