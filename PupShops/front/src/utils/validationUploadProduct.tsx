@@ -11,7 +11,7 @@ export const validateProduct = (productData: IUploadProduct) => {
     waist?: string;
     weight?: string;
   } = {};
-  
+
   // Validar name
   if (!productData.name) {
     errors.name = "Debes ingresar un nombre para el producto";
@@ -31,25 +31,12 @@ export const validateProduct = (productData: IUploadProduct) => {
     errors.price = "El precio debe ser mayor a 0";
   }
 
-   // Validar price
-   if (productData.price === undefined || productData.price === null) {
-    errors.price = "Debes ingresar un precio";
-  } else if (productData.price <= 0) {
-    errors.price = "El precio debe ser mayor a 0";
-  }
-
   // Validar stock
-  const stockString = productData.stock?.toString().trim(); // Convertir a cadena y eliminar espacios en blanco
-  if (stockString === "" || stockString === "0") {
-    errors.stock = "Debes ingresar un número de stock mayor a 0";
-  } else {
-    const stockNumber = Number(stockString); // Convertir a número
-    if (!Number.isInteger(stockNumber)) {
-      errors.stock = "El stock debe ser un número entero";
-    } else if (stockNumber < 1) {
-      errors.stock = "El stock debe ser un número entero mayor o igual a 1";
-    }
-  }
+  if (productData.stock === undefined || productData.stock === null) {
+    errors.stock = "Debes ingresar un número de stock";
+  } else if (productData.stock <= 0) {
+    errors.stock = "El stock debe ser mayor a 0";
+  } 
 
   // Validar URL de imagen
   const urlRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
@@ -59,20 +46,20 @@ export const validateProduct = (productData: IUploadProduct) => {
     errors.imgUrl = "Debes ingresar una URL válida";
   }
 
-   // Validar categoría
-   if (!productData.category) {
+  // Validar categoría
+  if (!productData.categoryName) {
     errors.category = "Debes seleccionar una categoría para el producto";
   }
 
   // Validar waist
   if (productData.waist === undefined || productData.waist === null) {
     errors.waist = "Debes ingresar un valor para el talle";
-  } else if (productData.waist < 0) {
-    errors.waist = "El talle no puede ser un valor negativo";
+  } else if (productData.waist.trim() === '') {
+    errors.waist = "El talle no puede estar vacío";
   }
 
   // Validar peso (weight)
-  if (!productData.weight) {
+  if (productData.weight === undefined || productData.weight === null || productData.weight.trim() === '') {
     errors.weight = "Debes ingresar un valor para el peso";
   }
 

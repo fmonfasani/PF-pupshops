@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -22,7 +23,15 @@ export class Categories {
   })
   name: string;
 
+  @ManyToOne(() => Categories, (category) => category.children, { nullable: true })
+  @JoinColumn({ name: 'parentId' })
+  parent: Categories;
+
+  @OneToMany(() => Categories, (category) => category.parent)
+  children: Categories[];
+
   @OneToMany(() => Products, (product) => product.category)
   @JoinColumn()
   products: Products[];
 }
+

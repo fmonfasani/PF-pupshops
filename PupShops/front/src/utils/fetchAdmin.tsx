@@ -2,7 +2,7 @@ import { IUploadProduct } from "@/Interfaces/interfacesAdmin";
 
 //Cargar  productos
 export const fetchUploadProduct = async (product:IUploadProduct) => {
-    const response = await fetch(`https://localhost:3000/auth/signup`, {
+    const response = await fetch(`https://localhost:3001/products/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

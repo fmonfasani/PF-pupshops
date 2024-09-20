@@ -63,11 +63,11 @@ export class ProductsRepository {
 
     for (const element of data['default']) {
       const category = categories.find(
-        (category) => category.name === element.category,
+        (category) => category.name === element.categoryName,
       );
 
       if (!category) {
-        throw new NotFoundException(`Categoría ${element.category} no encontrada`);
+        throw new NotFoundException(`Categoría ${element.categoryName} no encontrada`);
       }
 
       const product = this.productsRepository.create({

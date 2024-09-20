@@ -19,14 +19,8 @@ export default function Navbar() {
   const [isAccesoriosOpen, setIsAccesoriosOpen] = useState(false);
   const [isRopaOpen, setIsRopaOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
-
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleSearch = () => setIsSearchOpen((prev) => !prev);
   const handleMenuClick = (
     setter: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
@@ -47,7 +41,6 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center flex-1 justify-between space-x-12">
-          {/* Aumenta el espacio aquí */}
           {/* Barra de búsqueda en escritorio */}
           <div className="hidden md:flex items-center flex-1 relative">
             <input
@@ -70,7 +63,8 @@ export default function Navbar() {
                 Productos
               </button>
               {isProductsOpen && (
-                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg scale-100 transition-transform duration-300 ease-in-out transform hover:scale-105">
+                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
+                  {/* Submenú de Balanceados */}
                   <div className="relative group">
                     <button
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
@@ -82,19 +76,24 @@ export default function Navbar() {
                       <div className="pl-4 bg-white">
                         <button
                           className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                          onClick={() => router.push("/balanceados/perros")}
+                          onClick={() =>
+                            router.push("/Categorias/Balanceados/Perro")
+                          }
                         >
                           Perros
                         </button>
                         <button
                           className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                          onClick={() => router.push("/balanceados/gatos")}
+                          onClick={() =>
+                            router.push("/Categorias/Balanceados/Gato")
+                          }
                         >
                           Gatos
                         </button>
                       </div>
                     )}
                   </div>
+                  {/* Submenú de Accesorios */}
                   <div className="relative group">
                     <button
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
@@ -119,6 +118,7 @@ export default function Navbar() {
                       </div>
                     )}
                   </div>
+                  {/* Submenú de Ropa */}
                   <div className="relative group">
                     <button
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
@@ -146,6 +146,7 @@ export default function Navbar() {
                 </div>
               )}
             </div>
+            {/* Otros enlaces */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
@@ -154,7 +155,7 @@ export default function Navbar() {
                 Peluquería
               </button>
               {isServicesOpen && (
-                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg scale-100 transition-transform duration-300 ease-in-out transform hover:scale-105">
+                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                     onClick={() => router.push("/turno-peluqueria")}
@@ -190,7 +191,7 @@ export default function Navbar() {
                 Perfil
               </button>
               {isProfileOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg scale-100 transition-transform duration-300 ease-in-out transform hover:scale-105">
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                     onClick={() => router.push("/userDashboard/register")}
@@ -246,10 +247,7 @@ export default function Navbar() {
             >
               <IoClose className="w-6 h-6" />
             </button>
-            <button
-              className="absolute right-2 top-2.5 bg-blue-500 text-white p-2 rounded-md"
-              onClick={() => console.log("Ir")}
-            >
+            <button className="absolute right-2 top-2.5 bg-blue-500 text-white p-2 rounded-md">
               Ir
             </button>
           </div>
@@ -282,6 +280,7 @@ export default function Navbar() {
                 </button>
                 {isProductsOpen && (
                   <div className="pl-4 bg-white">
+                    {/* Submenú de Balanceados */}
                     <div className="relative group">
                       <button
                         className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
@@ -299,16 +298,19 @@ export default function Navbar() {
                           </button>
                           <button
                             className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                            onClick={() => router.push("/balanceados/gatos")}
+                            onClick={() =>
+                              router.push("/Categorias/Balanceados/catFood")
+                            }
                           >
                             Gatos
                           </button>
                         </div>
                       )}
                     </div>
+                    {/* Submenú de Accesorios */}
                     <div className="relative group">
                       <button
-                        className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                         onClick={() => handleMenuClick(setIsAccesoriosOpen)}
                       >
                         Accesorios
@@ -330,9 +332,10 @@ export default function Navbar() {
                         </div>
                       )}
                     </div>
+                    {/* Submenú de Ropa */}
                     <div className="relative group">
                       <button
-                        className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                         onClick={() => handleMenuClick(setIsRopaOpen)}
                       >
                         Ropa
@@ -357,12 +360,24 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-              <button
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                onClick={() => router.push("/turno-peluqueria")}
-              >
-                Turno para Peluquería
-              </button>
+              <div className="relative group">
+                <button
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={() => handleMenuClick(setIsServicesOpen)}
+                >
+                  Peluquería
+                </button>
+                {isServicesOpen && (
+                  <div className="pl-4 bg-white">
+                    <button
+                      className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                      onClick={() => router.push("/turno-peluqueria")}
+                    >
+                      Turno para Peluquería
+                    </button>
+                  </div>
+                )}
+              </div>
               <button
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 onClick={() => router.push("/quienes-somos")}
@@ -381,7 +396,7 @@ export default function Navbar() {
               >
                 Carro
               </button>
-              <div className="relative group mt-4">
+              <div className="relative group">
                 <button
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                   onClick={() => handleMenuClick(setIsProfileOpen)}
