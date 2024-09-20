@@ -6,8 +6,8 @@ import { validateProduct } from '@/utils/validationUploadProduct';
 import React, { useState } from 'react';
 
 const categories = [
-  { name: 'Perro', subcategories: ['Alimento para perros', 'Ropa para perros', 'Juguetes para perros'] },
-  { name: 'Gato', subcategories: ['Alimento para gatos', 'Ropa para gatos', 'Juguetes para gatos'] }
+  { name: 'Perro', subcategories: ['Alimento para perros', 'Accesorios para Perro', 'Juguetes de Perro'] },
+  { name: 'Gato', subcategories: ['Alimento para gatos', 'Accesorios para gatos', 'Juguetes de Gato'] }
 ];
 
 const sizes = ['Pequeña', 'Mediana', 'Grande'];
@@ -26,26 +26,40 @@ export default function UploadProductComponent() {
   });
 
   const [selectedMainCategory, setSelectedMainCategory] = useState<string>(''); 
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>(''); 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    const updatedValue = name === 'price' || name === 'stock' ? Number(value) : value;
     const updatedProduct = {
       ...dataProduct,
-      [name]: value
+      [name]: updatedValue
     };
     setDataProduct(updatedProduct);
     setErrors(validateProduct(updatedProduct));
   };
+  
 
   const handleMainCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = e.target.value;
     setSelectedMainCategory(selectedCategory);
+    setSelectedSubCategory('');  // Reset subcategory when main category changes
     setDataProduct(prevData => ({
       ...prevData,
-      categoryName: '', 
+      categoryName: '',  // Reset categoryName for backend submission
     }));
     console.log('Categoría principal seleccionada:', selectedCategory);
+  };
+
+  const handleSubCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSubCategory = e.target.value;
+    setSelectedSubCategory(selectedSubCategory);
+    setDataProduct(prevData => ({
+      ...prevData,
+      categoryName: selectedSubCategory // Set subcategory for backend
+    }));
+    console.log('Subcategoría seleccionada:', selectedSubCategory);
   };
 
   const handleSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -68,9 +82,10 @@ export default function UploadProductComponent() {
     e.preventDefault();
 
     const product: IUploadProduct = {
-      ...dataProduct
+      ...dataProduct,
+      price: Number(dataProduct.price), // Asegurar que price sea un número
+      stock: Number(dataProduct.stock), // Asegurar que stock sea un número
     };
-
     console.log('Producto que se está enviando:', product);
     console.log('Errores actuales:', errors);
     try {
@@ -139,6 +154,29 @@ export default function UploadProductComponent() {
               </div>
             </div>
 
+            {selectedMainCategory && (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div>
+                  <label htmlFor='subcategory' className="block text-sm font-medium text-gray-700">Subcategoría</label>
+                  <select
+                    id='subcategory'
+                    value={selectedSubCategory}
+                    onChange={handleSubCategoryChange}
+                    className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm hover:cursor-pointer"
+                  >
+                    <option value="">Selecciona una subcategoría</option>
+                    {categories
+                      .find(category => category.name === selectedMainCategory)
+                      ?.subcategories.map(subcategory => (
+                        <option key={subcategory} value={subcategory}>
+                          {subcategory}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div>
                 <label htmlFor='stock' className="block text-sm font-medium text-gray-700">Stock</label>
@@ -203,6 +241,19 @@ export default function UploadProductComponent() {
                 />
                 {errors.imgUrl && <span className="text-red-500 text-sm">{errors.imgUrl}</span>}
               </div>
+            </div>
+            <div>
+              <label htmlFor='price' className="block text-sm font-medium text-gray-700">Precio</label>
+              <input
+                id='price'
+                name='price'
+                type='number'
+                value={dataProduct.price}
+                onChange={handleChange}
+                placeholder='Precio del producto'
+                className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm"
+              />
+              {errors.price && <span className="text-red-500 text-sm">{errors.price}</span>}
             </div>
 
             <ButtonForms text='Cargar producto' disabled={Object.keys(errors).length > 0} type='submit' />
