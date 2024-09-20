@@ -18,7 +18,10 @@ export class AppointmentsService {
     private readonly serviceRepository: Repository<Service>,
   ) {}
 
-  async create(createAppointmentDto: CreateAppointmentDto): Promise<{
+  async create(
+    createAppointmentDto: CreateAppointmentDto,
+    user: any,
+  ): Promise<{
     message: string;
     appointmentId: string;
     serviceId: string;
@@ -26,12 +29,9 @@ export class AppointmentsService {
     userId: string;
     userName: string;
   }> {
-    // Validaciones
-
     const appointmentDateAux = new Date(createAppointmentDto.appointmentDate);
 
     // Validar si la fecha es mayor a la fecha actual
-    // Validar si la fecha es futura
     const currentDate = new Date();
     if (appointmentDateAux <= currentDate) {
       throw new BadRequestException(
@@ -55,73 +55,58 @@ export class AppointmentsService {
       );
     }
 
-    const serviceAux = await this.serviceRepository.findOneBy({
-      id: createAppointmentDto.service,
+    // Buscar el servicio en la base de datos usando el nombre del servicio
+    const service = await this.serviceRepository.findOne({
+      where: { name: createAppointmentDto.serviceName },
     });
-    if (!serviceAux) {
-      throw new Error('Servicio no encontrado');
+
+    if (!service) {
+      throw new BadRequestException('Servicio no encontrado');
     }
 
     // Validar si hay otro turno en el mismo horario para el mismo servicio
     const isAvailable = await this.checkAppointmentAvailability(
       appointmentDateAux,
-      createAppointmentDto.service,
+      service.id,
     );
     if (!isAvailable) {
       throw new BadRequestException(
-        `El turno que quiere reservar para el servicio de ${serviceAux.name} no está disponible para ese horario.`,
+        `El turno que quiere reservar para el servicio de ${service.name} no está disponible para ese horario.`,
       );
     }
 
-    // Buscar el usuario en la base de datos usando el userId del DTO
-    const user = await this.userRepository.findOneBy({
-      id: createAppointmentDto.userId,
-    });
-    if (!user) {
-      throw new Error('Usuario no encontrado');
-    }
-
-    // Buscar el servicio en la base de datos usando el serviceId del DTO
-    const service = await this.serviceRepository.findOneBy({
-      id: createAppointmentDto.service,
-    });
-    if (!service) {
-      throw new Error('Servicio no encontrado');
-    }
-
-    // Crear la cita (appointment)
+    // Crear el turno asociado al usuario autenticado
     const appointment = this.appointmentRepository.create({
       appointmentDate: createAppointmentDto.appointmentDate,
       status: AppointmentStatus.RESERVED,
-      user: user,
-      service: service,
+      user: { id: user.userId }, // Asociar el turno al usuario logueado
+      service,
     });
-    const savedappointment = await this.appointmentRepository.save(appointment);
 
-    const appointmentDate = new Date(savedappointment.appointmentDate);
+    const savedAppointment = await this.appointmentRepository.save(appointment);
+
+    const appointmentDate = new Date(savedAppointment.appointmentDate);
     const formattedDate = appointmentDate.toLocaleDateString('es-ES', {
       timeZone: 'UTC',
-    }); // Fecha formateada en UTC
+    });
     const formattedTime = appointmentDate.toLocaleTimeString('es-ES', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
       timeZone: 'UTC',
-    }); // Hora formateada en UTC
+    });
 
-    // Crear mensaje dinámico
     const message = `${user.name} ha reservado un turno de ${service.name} a las ${formattedTime} con fecha ${formattedDate} exitosamente!`;
 
     return {
       message,
       appointmentId: appointment.id, // Devuelve el ID del appointment
       serviceId: service.id, // Devuelve el ID del servicio
-      userId: user.id, // Devuelve el ID del usuario
+      userId: user.userId, // Devuelve el ID del usuario autenticado
       serviceName: service.name, // Devuelve el nombre del servicio
-      userName: user.name, // Devuelve el nombre del usuario
+      userName: user.name, // Devuelve el nombre del usuario autenticado
     };
   }
-
   async findAll(): Promise<Appointment[]> {
     return await this.appointmentRepository.find({
       relations: ['user', 'service'],
