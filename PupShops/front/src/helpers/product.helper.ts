@@ -1,6 +1,9 @@
 const APIURL = process.env.NEXT_PUBLIC_API_URL;
 
-export const getAllProducts = async (page: number = 1, limit: number = 5) => {
+
+=======
+export const getAllProducts = async (page: number = 1, limit: number = 10) => {
+
   try {
     const res = await fetch(`${APIURL}/products?page=${page}&limit=${limit}`);
     if (!res.ok) {
