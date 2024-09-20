@@ -1,42 +1,42 @@
 [
-    {
-      "name": "Pelota para Gato",
-      "description": "Pelota interactiva para gatos",
-      "price": 10.99,
-      "stock": 100,
-      "imgUrl": "https://example.com/pelota_gato.jpg",
-      "categoryName": "Juguetes de Gato"
-    },
-    {
-      "name": "Cama para Perro",
-      "description": "Cama grande y cómoda para perros",
-      "price": 50.00,
-      "stock": 50,
-      "imgUrl": "https://example.com/cama_perro.jpg",
-      "categoryName": "Accesorios para Perro"
-    },
-    {
-      "name": "Correa de Perro",
-      "description": "Correa resistente para perros de gran tamaño",
-      "price": 15.50,
-      "stock": 75,
-      "imgUrl": "https://example.com/correa_perro.jpg",
-      "categoryName": "Accesorios para Perro"
-    },
-    {
-      "name": "Ratón de Juguete para Gato",
-      "description": "Juguete en forma de ratón para gatos",
-      "price": 5.99,
-      "stock": 200,
-      "imgUrl": "https://example.com/raton_gato.jpg",
-      "categoryName": "Juguetes de Gato"
-    },
-    {
-      "name": "Collar Luminoso para Perro",
-      "description": "Collar LED para perros para uso nocturno",
-      "price": 12.99,
-      "stock": 60,
-      "imgUrl": "https://example.com/collar_led.jpg",
-      "categoryName": "Accesorios para Perro"
-    }
-  ]
+  {
+    "name": "Pelota para Gato",
+    "description": "Pelota interactiva para gatos",
+    "price": 10.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_820093-MLU70119372746_062023-O.webp",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Cama para Perro",
+    "description": "Cama grande y cómoda para perros",
+    "price": 50.0,
+    "stock": 50,
+    "imgUrl": "https://petoutlet.com.co/wp-content/uploads/2021/08/19061-Cama-Economica-Para-Perros-OKAL-petoutlet.com_.co-2-1.jpg",
+    "categoryName": "Accesorios para Perro"
+  },
+  {
+    "name": "Correa de Perro",
+    "description": "Correa resistente para perros de gran tamaño",
+    "price": 15.5,
+    "stock": 75,
+    "imgUrl": "https://carulla.vtexassets.com/arquivos/ids/16620143/juego-de-collar-y-correa-para-perros.jpg?v=638573527277230000",
+    "categoryName": "Accesorios para Perro"
+  },
+  {
+    "name": "Ratón de Juguete para Gato",
+    "description": "Juguete en forma de ratón para gatos",
+    "price": 5.99,
+    "stock": 200,
+    "imgUrl": "https://panamericana.vtexassets.com/arquivos/ids/489404/juguete-para-gato-x3-ratones-7701016384636.jpg?v=638155513557170000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Collar Luminoso para Perro",
+    "description": "Collar LED para perros para uso nocturno",
+    "price": 12.99,
+    "stock": 60,
+    "imgUrl": "https://caravanaexpert.com/wp-content/uploads/2023/05/71CXaaURP6L._AC_SX679_-450x450.jpg",
+    "categoryName": "Accesorios para Perro"
+  }
+]
