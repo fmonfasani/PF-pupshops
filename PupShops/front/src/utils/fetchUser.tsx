@@ -1,7 +1,9 @@
 import { ILoginUser, IUserRegister } from "@/Interfaces/interfaces";
 
+
+
 export const fetchRegisterUser = async (user: IUserRegister) => {
-    const response = await fetch(`http://localhost:3001/auth/signup`, {
+    const response = await fetch(`http://localhost:3000/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -18,7 +20,7 @@ export const fetchRegisterUser = async (user: IUserRegister) => {
 
 
 export const fetchLoginUser = async (credentials: ILoginUser) => {
-    const response = await fetch(`http://localhost:3001/auth/signin`, {
+    const response = await fetch(`http://localhost:3000/auth/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

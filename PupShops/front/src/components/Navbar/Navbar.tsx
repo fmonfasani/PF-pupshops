@@ -167,13 +167,13 @@ export default function Navbar() {
             </div>
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/quienes-somos")}
+              onClick={() => router.push("/aboutUs")}
             >
               Quienes Somos
             </button>
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/contacto")}
+              onClick={() => router.push("/contact")}
             >
               Contacto
             </button>
@@ -380,13 +380,13 @@ export default function Navbar() {
               </div>
               <button
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                onClick={() => router.push("/quienes-somos")}
+                onClick={() => router.push("/aboutUs")}
               >
                 Quienes Somos
               </button>
               <button
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                onClick={() => router.push("/contacto")}
+                onClick={() => router.push("/contact")}
               >
                 Contacto
               </button>

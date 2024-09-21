@@ -1,8 +1,10 @@
 import { IUploadProduct } from "@/Interfaces/interfacesAdmin";
 
+
+
 //Cargar  productos
 export const fetchUploadProduct = async (product:IUploadProduct) => {
-    const response = await fetch(`https://localhost:3001/products/`, {
+    const response = await fetch(`http://localhost:3000/products/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -11,7 +13,7 @@ export const fetchUploadProduct = async (product:IUploadProduct) => {
       });
       
   if (!response.ok) {
-    throw new Error("Error al cargar producto. Por favor, verifica los datos.");
+    throw new Error("Error al cargar producto. Por favor, verifica los datos o si el producti ya existe.");
   }
 
   return response.json();

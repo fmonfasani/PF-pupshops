@@ -4,14 +4,16 @@ import { IUploadProduct } from '@/Interfaces/interfacesAdmin';
 import { fetchUploadProduct } from '@/utils/fetchAdmin';
 import { validateProduct } from '@/utils/validationUploadProduct';
 import React, { useState } from 'react';
+import { NotificationError } from '@/components/Notifications/NotificationError';
+import { NotificationUploadProduct } from '@/components/Notifications/NotificationUploadProduct';
 
 const categories = [
-  { name: 'Perro', subcategories: ['Alimento para perros', 'Ropa para perros', 'Juguetes para perros'] },
-  { name: 'Gato', subcategories: ['Alimento para gatos', 'Ropa para gatos', 'Juguetes para gatos'] }
+  { name: 'Perro', subcategories: ['Alimento para perros', 'Accesorios para Perro', 'Juguetes de Perro'] },
+  { name: 'Gato', subcategories: ['Alimento para gatos', 'Accesorios para gatos', 'Juguetes de Gato'] }
 ];
 
 const sizes = ['Pequeña', 'Mediana', 'Grande'];
-const weights = ['2kg', '7kg', '15kg'];
+const weights = ['sin especificar','2kg', '7kg', '15kg'];
 
 export default function UploadProductComponent() {
   const [dataProduct, setDataProduct] = useState<IUploadProduct>({
@@ -26,26 +28,44 @@ export default function UploadProductComponent() {
   });
 
   const [selectedMainCategory, setSelectedMainCategory] = useState<string>(''); 
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>(''); 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    const updatedValue = name === 'price' || name === 'stock' ? Number(value) : value;
     const updatedProduct = {
       ...dataProduct,
-      [name]: value
+      [name]: updatedValue
     };
     setDataProduct(updatedProduct);
     setErrors(validateProduct(updatedProduct));
   };
+  
 
   const handleMainCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = e.target.value;
     setSelectedMainCategory(selectedCategory);
+    setSelectedSubCategory('');  
     setDataProduct(prevData => ({
       ...prevData,
       categoryName: '', 
     }));
     console.log('Categoría principal seleccionada:', selectedCategory);
+  };
+
+  const handleSubCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSubCategory = e.target.value;
+    setSelectedSubCategory(selectedSubCategory);
+    setDataProduct(prevData => ({
+      ...prevData,
+      categoryName: selectedSubCategory 
+    }));
+    console.log('Subcategoría seleccionada:', selectedSubCategory);
   };
 
   const handleSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,22 +86,39 @@ export default function UploadProductComponent() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const product: IUploadProduct = {
-      ...dataProduct
-    };
-
-    console.log('Producto que se está enviando:', product);
-    console.log('Errores actuales:', errors);
-    try {
-      await fetchUploadProduct(product);
-      console.log('Carga de producto exitosa');
-      alert("Carga de producto exitosa");
-    } catch (error) {
-      console.error("Error durante el registro:", error);
-      alert(error instanceof Error ? error.message : "Error desconocido.");
+  
+    const validationErrors = validateProduct(dataProduct);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
     }
-  };    
+  
+    const product: IUploadProduct = {
+      ...dataProduct,
+      price: Number(dataProduct.price), 
+      stock: Number(dataProduct.stock),
+    };
+    console.log('Producto que se está enviando:', product);
+    
+    try {
+      const success = await fetchUploadProduct(product);
+      if (success) {
+        setNotificationMessage(`Carga de producto exitosa`);
+        setShowNotification(true);
+        setTimeout(() => {
+            setShowNotification(false);
+        }, 3000);
+      } else {
+        setErrors({ ...errors, general: "Error al cargar productos" });
+      }
+    } catch (error) {
+      console.error("Error al cargar productos:", error);
+      setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
+      setShowErrorNotification(true); 
+      setTimeout(() => setShowErrorNotification(false), 3000); 
+    }
+  };
+  
 
   return (
     <section className="bg-gray-100 font-sans">
@@ -106,7 +143,7 @@ export default function UploadProductComponent() {
                 />
                 {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
               </div>
-
+  
               <div>
                 <label htmlFor='description' className="block text-sm font-medium text-gray-700">Descripción</label>
                 <input
@@ -120,7 +157,7 @@ export default function UploadProductComponent() {
                 />
                 {errors.description && <span className="text-red-500 text-sm">{errors.description}</span>}
               </div>
-
+  
               <div>
                 <label htmlFor='mainCategory' className="block text-sm font-medium text-gray-700">Mascota</label>
                 <select
@@ -138,8 +175,27 @@ export default function UploadProductComponent() {
                 </select>
               </div>
             </div>
-
+  
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div>
+                <label htmlFor='subcategory' className="block text-sm font-medium text-gray-700">Subcategoría</label>
+                <select
+                  id='subcategory'
+                  value={selectedSubCategory}
+                  onChange={handleSubCategoryChange}
+                  className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm hover:cursor-pointer"
+                >
+                  <option value="">Selecciona una subcategoría</option>
+                  {categories
+                    .find(category => category.name === selectedMainCategory)
+                    ?.subcategories.map(subcategory => (
+                      <option key={subcategory} value={subcategory}>
+                        {subcategory}
+                      </option>
+                    ))}
+                </select>
+              </div>
+  
               <div>
                 <label htmlFor='stock' className="block text-sm font-medium text-gray-700">Stock</label>
                 <input
@@ -153,7 +209,7 @@ export default function UploadProductComponent() {
                 />
                 {errors.stock && <span className="text-red-500 text-sm">{errors.stock}</span>}
               </div>
-
+  
               <div>
                 <label htmlFor='waist' className="block text-sm font-medium text-gray-700">Tamaño</label>
                 <select
@@ -171,7 +227,7 @@ export default function UploadProductComponent() {
                   ))}
                 </select>
               </div>
-
+  
               <div>
                 <label htmlFor='weight' className="block text-sm font-medium text-gray-700">Peso</label>
                 <select
@@ -189,9 +245,9 @@ export default function UploadProductComponent() {
                   ))}
                 </select>
               </div>
-
+  
               <div>
-                <label htmlFor='imgUrl' className="block text-sm font-medium text-gray-700">URL de la imagen</label>
+                <label htmlFor='imgUrl' className="block text-sm font-medium text-gray-700">Imagen URL</label>
                 <input
                   id='imgUrl'
                   name='imgUrl'
@@ -203,12 +259,30 @@ export default function UploadProductComponent() {
                 />
                 {errors.imgUrl && <span className="text-red-500 text-sm">{errors.imgUrl}</span>}
               </div>
+  
+              {/* Campo de precio agregado aquí */}
+              <div>
+                <label htmlFor='price' className="block text-sm font-medium text-gray-700">Precio</label>
+                <input
+                  id='price'
+                  name='price'
+                  type='number'
+                  value={dataProduct.price}
+                  onChange={handleChange}
+                  placeholder='Precio del producto'
+                  className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm"
+                />
+                {errors.price && <span className="text-red-500 text-sm">{errors.price}</span>}
+              </div>
             </div>
-
+  
             <ButtonForms text='Cargar producto' disabled={Object.keys(errors).length > 0} type='submit' />
           </form>
         </div>
       </div>
+      {showNotification && <NotificationUploadProduct message={notificationMessage} />}
+      {showErrorNotification && <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />}
     </section>
   );
+  
 }

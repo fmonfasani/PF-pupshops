@@ -5,11 +5,13 @@ import { ButtonForms, ButtonRedirectUser } from '@/components/Buttons/ButtonsFor
 import { validateLogin } from '@/utils/validationLogin';
 import { fetchLoginUser } from '@/utils/fetchUser';
 import { ILoginUser } from '@/Interfaces/interfaces';
+import NotificationLogin from '@/components/Notifications/NotificationLogin';
+import { NotificationError } from '@/components/Notifications/NotificationError';
 
 
-///Agregar validaciones con back
-///Corroborar con back que las propiedades e login sean "email" u "password"
 //Agregar contexto de user
+
+
 export default function LoginUser() {
   const router = useRouter();
   const [userData, setUserData] = useState<ILoginUser>({
@@ -17,7 +19,10 @@ export default function LoginUser() {
     password: ""
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
+  const [showNotification, setShowNotification] = useState(false);
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
@@ -32,7 +37,7 @@ export default function LoginUser() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Valida los datos del formulario
+  
     const { formIsValid, errors: validationErrors } = validateLogin(userData);
 
     if (formIsValid) {
@@ -40,19 +45,24 @@ export default function LoginUser() {
             const success = await fetchLoginUser(userData);
 
             if (success) {
-                alert("Login exitoso");
+              setShowNotification(true);
+              setTimeout(() => {
+                setShowNotification(false); 
                 router.push("/home");
+              }, 3000); 
             } else {
-                setErrors({ ...errors, general: "Usuario inválido" });
+              setErrors({ ...errors, general: "Usuario inválido" });
             }
-        } catch (error) {
+          } catch (error) {
             console.error("Error durante el login:", error);
-            setErrors({ ...errors, general: "Error durante el login" });
+            setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
+            setShowErrorNotification(true); 
+            setTimeout(() => setShowErrorNotification(false), 3000); 
+          }
+        } else {
+          setErrors(validationErrors);
         }
-    } else {
-        setErrors(validationErrors); 
-    }
-};
+      }
 
   return (
     <section className="bg-gray-100 font-sans">
@@ -130,6 +140,8 @@ export default function LoginUser() {
         </form>
     </div>
     </div>
+    {showNotification && <NotificationLogin />}
+    {showErrorNotification && <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />}
     </section>
   )
 }

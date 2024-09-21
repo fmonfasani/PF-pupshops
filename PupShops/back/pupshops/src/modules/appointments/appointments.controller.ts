@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+
 import { User } from '../users/entities/user.entity';
 import { Appointment } from './entities/appointment.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -46,13 +46,20 @@ export class AppointmentsController {
     status: 400,
     description: 'Datos inválidos o error en el formato del request',
   })
-  create(@Body() createAppointmentDto: CreateAppointmentDto): Promise<{
+  @UseGuards(AuthGuard)
+  create(
+    @Body() createAppointmentDto: CreateAppointmentDto,
+    @Req() req: any,
+  ): Promise<{
     message: string;
     appointmentId: string;
     serviceId: string;
+    serviceName: string;
     userId: string;
+    userName: string;
   }> {
-    return this.appointmentsService.create(createAppointmentDto);
+    const user = req.user as User;
+    return this.appointmentsService.create(createAppointmentDto, user);
   }
 
   @Get()

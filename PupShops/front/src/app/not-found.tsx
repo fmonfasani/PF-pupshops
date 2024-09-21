@@ -32,7 +32,7 @@ export default function NotFound() {
           href="/"
           className="mt-6 inline-block rounded-full bg-blue-600 px-5 py-3 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring"
         >
-          Go Back Home
+          Go To Producst 🔙
         </Link>
       </div>
     </div>
