@@ -14,7 +14,7 @@ import { AppointmentModule } from './modules/appointments/appointments.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { WebhookModule } from './modules/webhook/webhook.module';
 import { Payment } from 'mercadopago';
-import { PaymentsModule } from './modules/payments/Payment.module';
+import { PaymentsModule } from './modules/payments/payment.module';
 
 @Module({
   imports: [

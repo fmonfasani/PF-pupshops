@@ -22,7 +22,7 @@ export class CreateProductDto {
     stock: number;
 
     @IsOptional()
-    category?: string; //no sé
+    categoryName?: string; //no sé
 
     @IsOptional()
     @IsString()

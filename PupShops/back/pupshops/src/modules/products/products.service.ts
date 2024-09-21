@@ -30,4 +30,15 @@ export class ProductsService {
   async createProduct(createProductDto: CreateProductDto): Promise<Products> {
     return this.productsRepository.createProduct(createProductDto);
   }
+
+   // Obtener productos por categoría hija
+   getProductsByChildCategory(categoryId: string) {
+    return this.productsRepository.getProductsByChildCategory(categoryId);
+  }
+
+  // Obtener productos por categoría padre y sus subcategorías
+  getProductsByParentCategory(categoryId: string) {
+    return this.productsRepository.getProductsByParentCategory(categoryId);
+  }
+  
 }

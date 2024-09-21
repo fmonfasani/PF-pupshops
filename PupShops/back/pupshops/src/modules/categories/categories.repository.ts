@@ -51,8 +51,11 @@ export class CategoriesRepository {
   }
 
   async getChildCategories(parentId: string) {
-    return await this.categoriesRepository.find({
+    console.log(parentId);
+        
+    return  await this.categoriesRepository.find({
       where: { parent: { id: parentId } },
     });
+    
   }
 }
