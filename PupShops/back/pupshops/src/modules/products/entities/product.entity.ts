@@ -64,6 +64,13 @@ export class Products {
   })
   weight: string;
 
+  //limite
+  @Column({
+    type: 'int',
+    default: 10
+  })
+  threshold: number;
+
   @ManyToOne(() => Categories, (category) => category.products)
   @JoinColumn({ name: 'category_id' })
   category: Categories;
