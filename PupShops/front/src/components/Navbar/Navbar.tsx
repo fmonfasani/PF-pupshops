@@ -11,20 +11,47 @@ import pups from "../../../public/pups.png";
 export default function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [isProductsOpen, setIsProductsOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isBalanceadosOpen, setIsBalanceadosOpen] = useState(false);
-  const [isAccesoriosOpen, setIsAccesoriosOpen] = useState(false);
-  const [isRopaOpen, setIsRopaOpen] = useState(false);
+
+  // Submenus para Perros
+  const [isDogsOpen, setIsDogsOpen] = useState(false);
+  const [isDogClothesOpen, setIsDogClothesOpen] = useState(false);
+  const [isDogToysOpen, setIsDogToysOpen] = useState(false);
+
+  // Submenus para Gatos
+  const [isCatsOpen, setIsCatsOpen] = useState(false);
+  const [isCatClothesOpen, setIsCatClothesOpen] = useState(false);
+  const [isCatToysOpen, setIsCatToysOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleSearch = () => setIsSearchOpen((prev) => !prev);
+
   const handleMenuClick = (
-    setter: React.Dispatch<React.SetStateAction<boolean>>
+    setter: React.Dispatch<React.SetStateAction<boolean>>,
+    closeOthers?: () => void
   ) => {
     setter((prev) => !prev);
+    if (closeOthers) closeOthers();
+  };
+
+  const handleDogMenuClick = (route: string) => {
+    router.push(route);
+    setIsDogsOpen(false);
+    setIsDogClothesOpen(false);
+    setIsDogToysOpen(false);
+  };
+
+  const handleCatMenuClick = (route: string) => {
+    router.push(route);
+    setIsCatsOpen(false);
+    setIsCatClothesOpen(false);
+    setIsCatToysOpen(false);
+  };
+
+  const handleProfileMenuClick = (route: string) => {
+    router.push(route);
+    setIsProfileOpen(false);
   };
 
   return (
@@ -55,116 +82,131 @@ export default function Navbar() {
             aria-label="Global"
             className="hidden md:flex gap-6 text-sm flex-1"
           >
+            {/* Botón de Productos */}
+            <button
+              className="text-gray-500 transition hover:text-gray-500/75"
+              onClick={() => router.push("/products")}
+            >
+              Productos
+            </button>
+
+            {/* Menu Perros */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
-                onClick={() => handleMenuClick(setIsProductsOpen)}
+                onClick={() =>
+                  handleMenuClick(setIsDogsOpen, () => {
+                    setIsCatsOpen(false);
+                  })
+                }
               >
-                Productos
+                Perros
               </button>
-              {isProductsOpen && (
-                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
-                  {/* Submenú de Balanceados */}
-                  <div className="relative group">
-                    <button
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                      onClick={() => handleMenuClick(setIsBalanceadosOpen)}
-                    >
-                      Balanceados
-                    </button>
-                    {isBalanceadosOpen && (
-                      <div className="pl-4 bg-white">
-                        <button
-                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                          onClick={() =>
-                            router.push("/Categorias/Balanceados/Perro")
-                          }
-                        >
-                          Perros
-                        </button>
-                        <button
-                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                          onClick={() =>
-                            router.push("/Categorias/Balanceados/Gato")
-                          }
-                        >
-                          Gatos
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  {/* Submenú de Accesorios */}
-                  <div className="relative group">
-                    <button
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                      onClick={() => handleMenuClick(setIsAccesoriosOpen)}
-                    >
-                      Accesorios
-                    </button>
-                    {isAccesoriosOpen && (
-                      <div className="pl-4 bg-white">
-                        <button
-                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                          onClick={() => router.push("/accesorios/perros")}
-                        >
-                          Perros
-                        </button>
-                        <button
-                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                          onClick={() => router.push("/accesorios/gatos")}
-                        >
-                          Gatos
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  {/* Submenú de Ropa */}
-                  <div className="relative group">
-                    <button
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                      onClick={() => handleMenuClick(setIsRopaOpen)}
-                    >
-                      Ropa
-                    </button>
-                    {isRopaOpen && (
-                      <div className="pl-4 bg-white">
-                        <button
-                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                          onClick={() => router.push("/ropa/perros")}
-                        >
-                          Perros
-                        </button>
-                        <button
-                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                          onClick={() => router.push("/ropa/gatos")}
-                        >
-                          Gatos
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-            {/* Otros enlaces */}
-            <div className="relative group">
-              <button
-                className="text-gray-500 transition hover:text-gray-500/75"
-                onClick={() => handleMenuClick(setIsServicesOpen)}
-              >
-                Peluquería
-              </button>
-              {isServicesOpen && (
+              {isDogsOpen && (
                 <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
                   <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    onClick={() => router.push("/turno-peluqueria")}
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() =>
+                      handleDogMenuClick("/Categorias/Balanceados/Perro")
+                    }
                   >
-                    Turno para Peluquería
+                    Balanceados
                   </button>
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() => handleMenuClick(setIsDogClothesOpen)}
+                  >
+                    Ropa
+                  </button>
+                  {isDogClothesOpen && (
+                    <div className="pl-4 bg-white">
+                      <button
+                        className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                        onClick={() => handleDogMenuClick("/ropa/perros")}
+                      >
+                        Ropa Perros
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() => handleMenuClick(setIsDogToysOpen)}
+                  >
+                    Juguetes
+                  </button>
+                  {isDogToysOpen && (
+                    <div className="pl-4 bg-white">
+                      <button
+                        className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                        onClick={() => handleDogMenuClick("/juguetes/perros")}
+                      >
+                        Juguetes Perros
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
+
+            {/* Menu Gatos */}
+            <div className="relative group">
+              <button
+                className="text-gray-500 transition hover:text-gray-500/75"
+                onClick={() =>
+                  handleMenuClick(setIsCatsOpen, () => {
+                    setIsDogsOpen(false);
+                  })
+                }
+              >
+                Gatos
+              </button>
+              {isCatsOpen && (
+                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() =>
+                      handleCatMenuClick("/Categorias/Balanceados/Gato")
+                    }
+                  >
+                    Balanceados
+                  </button>
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() => handleMenuClick(setIsCatClothesOpen)}
+                  >
+                    Ropa
+                  </button>
+                  {isCatClothesOpen && (
+                    <div className="pl-4 bg-white">
+                      <button
+                        className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                        onClick={() => handleCatMenuClick("/ropa/gatos")}
+                      >
+                        Ropa Gatos
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() => handleMenuClick(setIsCatToysOpen)}
+                  >
+                    Juguetes
+                  </button>
+                  {isCatToysOpen && (
+                    <div className="pl-4 bg-white">
+                      <button
+                        className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                        onClick={() => handleCatMenuClick("/juguetes/gatos")}
+                      >
+                        Juguetes Gatos
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Otros enlaces */}
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/aboutUs")}
@@ -183,6 +225,8 @@ export default function Navbar() {
             >
               Carro
             </button>
+
+            {/* Botón de perfil en escritorio */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
@@ -194,13 +238,17 @@ export default function Navbar() {
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => router.push("/userDashboard/register")}
+                    onClick={() =>
+                      handleProfileMenuClick("/userDashboard/register")
+                    }
                   >
                     Registrarse
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => router.push("/userDashboard/login")}
+                    onClick={() =>
+                      handleProfileMenuClick("/userDashboard/login")
+                    }
                   >
                     Iniciar sesión
                   </button>
@@ -208,6 +256,7 @@ export default function Navbar() {
               )}
             </div>
           </nav>
+
           {/* Botón de búsqueda y hamburguesa en móvil */}
           <div className="flex items-center gap-4 md:hidden">
             <button
@@ -266,118 +315,135 @@ export default function Navbar() {
             </button>
             <nav className="mt-4">
               <button
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 onClick={() => router.push("/")}
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
               >
                 Home
               </button>
+              {/* Botón de Productos */}
+              <button
+                onClick={() => router.push("/products")}
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+              >
+                Productos
+              </button>
+              {/* Menu Perros */}
               <div className="relative group">
                 <button
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  onClick={() => handleMenuClick(setIsProductsOpen)}
+                  onClick={() =>
+                    handleMenuClick(setIsDogsOpen, () => {
+                      setIsCatsOpen(false);
+                    })
+                  }
                 >
-                  Productos
+                  Perros
                 </button>
-                {isProductsOpen && (
-                  <div className="pl-4 bg-white">
-                    {/* Submenú de Balanceados */}
-                    <div className="relative group">
-                      <button
-                        className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                        onClick={() => handleMenuClick(setIsBalanceadosOpen)}
-                      >
-                        Balanceados
-                      </button>
-                      {isBalanceadosOpen && (
-                        <div className="pl-4 bg-white">
-                          <button
-                            className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                            onClick={() => router.push("/balanceados/perros")}
-                          >
-                            Perros
-                          </button>
-                          <button
-                            className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                            onClick={() =>
-                              router.push("/Categorias/Balanceados/catFood")
-                            }
-                          >
-                            Gatos
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    {/* Submenú de Accesorios */}
-                    <div className="relative group">
-                      <button
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleMenuClick(setIsAccesoriosOpen)}
-                      >
-                        Accesorios
-                      </button>
-                      {isAccesoriosOpen && (
-                        <div className="pl-4 bg-white">
-                          <button
-                            className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                            onClick={() => router.push("/accesorios/perros")}
-                          >
-                            Perros
-                          </button>
-                          <button
-                            className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                            onClick={() => router.push("/accesorios/gatos")}
-                          >
-                            Gatos
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    {/* Submenú de Ropa */}
-                    <div className="relative group">
-                      <button
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleMenuClick(setIsRopaOpen)}
-                      >
-                        Ropa
-                      </button>
-                      {isRopaOpen && (
-                        <div className="pl-4 bg-white">
-                          <button
-                            className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                            onClick={() => router.push("/ropa/perros")}
-                          >
-                            Perros
-                          </button>
-                          <button
-                            className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                            onClick={() => router.push("/ropa/gatos")}
-                          >
-                            Gatos
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="relative group">
-                <button
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  onClick={() => handleMenuClick(setIsServicesOpen)}
-                >
-                  Peluquería
-                </button>
-                {isServicesOpen && (
+                {isDogsOpen && (
                   <div className="pl-4 bg-white">
                     <button
                       className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                      onClick={() => router.push("/turno-peluqueria")}
+                      onClick={() =>
+                        handleDogMenuClick("/Categorias/Balanceados/Perro")
+                      }
                     >
-                      Turno para Peluquería
+                      Balanceados
                     </button>
+                    <button
+                      className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                      onClick={() => handleMenuClick(setIsDogClothesOpen)}
+                    >
+                      Ropa
+                    </button>
+                    {isDogClothesOpen && (
+                      <div className="pl-4 bg-white">
+                        <button
+                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                          onClick={() => handleDogMenuClick("/ropa/perros")}
+                        >
+                          Ropa Perros
+                        </button>
+                      </div>
+                    )}
+                    <button
+                      className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                      onClick={() => handleMenuClick(setIsDogToysOpen)}
+                    >
+                      Juguetes
+                    </button>
+                    {isDogToysOpen && (
+                      <div className="pl-4 bg-white">
+                        <button
+                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                          onClick={() => handleDogMenuClick("/juguetes/perros")}
+                        >
+                          Juguetes Perros
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
+
+              {/* Menu Gatos */}
+              <div className="relative group">
+                <button
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={() =>
+                    handleMenuClick(setIsCatsOpen, () => {
+                      setIsDogsOpen(false);
+                    })
+                  }
+                >
+                  Gatos
+                </button>
+                {isCatsOpen && (
+                  <div className="pl-4 bg-white">
+                    <button
+                      className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                      onClick={() =>
+                        handleCatMenuClick("/Categorias/Balanceados/Gato")
+                      }
+                    >
+                      Balanceados
+                    </button>
+                    <button
+                      className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                      onClick={() => handleMenuClick(setIsCatClothesOpen)}
+                    >
+                      Ropa
+                    </button>
+                    {isCatClothesOpen && (
+                      <div className="pl-4 bg-white">
+                        <button
+                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                          onClick={() => handleCatMenuClick("/ropa/gatos")}
+                        >
+                          Ropa Gatos
+                        </button>
+                      </div>
+                    )}
+                    <button
+                      className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                      onClick={() => handleMenuClick(setIsCatToysOpen)}
+                    >
+                      Juguetes
+                    </button>
+                    {isCatToysOpen && (
+                      <div className="pl-4 bg-white">
+                        <button
+                          className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
+                          onClick={() => handleCatMenuClick("/juguetes/gatos")}
+                        >
+                          Juguetes Gatos
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Otros enlaces */}
               <button
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 onClick={() => router.push("/aboutUs")}
@@ -396,6 +462,8 @@ export default function Navbar() {
               >
                 Carro
               </button>
+
+              {/* Botón de perfil en móvil */}
               <div className="relative group">
                 <button
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
@@ -407,13 +475,17 @@ export default function Navbar() {
                   <div className="pl-4 bg-white">
                     <button
                       className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                      onClick={() => router.push("/userDashboard/register")}
+                      onClick={() =>
+                        handleProfileMenuClick("/userDashboard/register")
+                      }
                     >
                       Registrarse
                     </button>
                     <button
                       className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md text-center"
-                      onClick={() => router.push("/userDashboard/login")}
+                      onClick={() =>
+                        handleProfileMenuClick("/userDashboard/login")
+                      }
                     >
                       Iniciar sesión
                     </button>

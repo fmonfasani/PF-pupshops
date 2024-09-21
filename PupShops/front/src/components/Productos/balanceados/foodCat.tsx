@@ -1,12 +1,49 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import productsCatFood from "@/helpers/productsFC"; // Asegúrate de que la ruta sea correcta
 import Image from "next/image";
-import { Product } from "@/Interfaces/Iproducts"; // Importa la interfaz correcta
-
+import { Product } from "@/Interfaces/Iproducts";
 export default function BalanceadosGatos() {
   const router = useRouter();
+  const [productsCatFood, setProductsCatFood] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/products/child/dcad67a5-b9c6-4f87-8a99-5cf455fdde6f"
+        );
+        if (!response.ok) {
+          throw new Error("Error al cargar los productos");
+        }
+        const data = await response.json();
+        setProductsCatFood(data);
+      } catch (err) {
+        //* Verificación de tipo
+
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Ocurrió un error desconocido");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="container mx-auto p-4">
