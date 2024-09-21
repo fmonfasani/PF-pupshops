@@ -89,11 +89,11 @@ export class ProductsRepository {
 
   async createProduct(createProductDto: CreateProductDto): Promise<Products> {
     const category = await this.categoriesRepository.findOne({
-      where: { name: createProductDto.category },
+      where: { name: createProductDto.categoryName },
     });
 
     if (!category) {
-      throw new NotFoundException(`Categoría ${createProductDto.category} no encontrada`);
+      throw new NotFoundException(`Categoría ${createProductDto.categoryName} no encontrada`);
     }
 
     const product = this.productsRepository.create({
