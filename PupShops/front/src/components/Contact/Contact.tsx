@@ -10,7 +10,7 @@ export default function Contact() {
         <p className="text-center text-gray-700 mb-10">
           Estamos aquí para atenderte y responder todas tus consultas sobre
           nuestros productos y servicios para tus mascotas. No dudes en
-          comunicarte con nosotros.
+          comunicarte con nosotros...
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
