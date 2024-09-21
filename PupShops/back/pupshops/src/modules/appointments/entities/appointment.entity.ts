@@ -30,4 +30,7 @@ export class Appointment {
     nullable: true,
   })
   service?: Service;
+
+  @Column({ default: false })
+  isDeleted: boolean;
 }

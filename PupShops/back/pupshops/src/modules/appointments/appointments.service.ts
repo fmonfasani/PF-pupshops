@@ -109,6 +109,7 @@ export class AppointmentsService {
   }
   async findAll(): Promise<Appointment[]> {
     return await this.appointmentRepository.find({
+      where: { isDeleted: false }, // Excluir los turnos eliminados
       relations: ['user', 'service'],
     });
   }
@@ -142,7 +143,9 @@ export class AppointmentsService {
       throw new Error('Turno no encontrado');
     }
 
-    await this.appointmentRepository.delete(id); // Elimina el turno
+    // Borrado lógico
+    appointment.isDeleted = true;
+    await this.appointmentRepository.save(appointment);
   }
 
   async getUserAppointments(userId: string) {
@@ -153,6 +156,7 @@ export class AppointmentsService {
       where: {
         user: { id: userId },
         appointmentDate: MoreThan(currentDate),
+        isDeleted: false, // Excluir turnos eliminados
       },
       relations: ['service'],
     });
@@ -162,6 +166,7 @@ export class AppointmentsService {
       where: {
         user: { id: userId },
         appointmentDate: LessThanOrEqual(currentDate),
+        isDeleted: false, // Excluir turnos eliminados
       },
       relations: ['service'],
     });

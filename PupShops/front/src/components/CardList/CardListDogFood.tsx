@@ -5,7 +5,7 @@ import productsFD from "../../helpers/productsFD";
 export default function CardListDogFood() {
   return (
     <div className="bg-pink-100/80 py-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-8 mt-14">
+      <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
         Nuestras marcas de comida para perros preferidas
       </h1>
 
