@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
-
 import { User } from '../users/entities/user.entity';
 import { Appointment } from './entities/appointment.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -23,7 +22,6 @@ import { Role } from '../auth/roles/roles.enum';
 @ApiTags('Appointments')
 @Controller('appointments')
 @UseGuards(AuthGuard, RolesGuard)
-@UseGuards(AuthGuard)
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
@@ -42,11 +40,6 @@ export class AppointmentsController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Datos inválidos o error en el formato del request',
-  })
-  @UseGuards(AuthGuard)
   create(
     @Body() createAppointmentDto: CreateAppointmentDto,
     @Req() req: any,
@@ -145,7 +138,7 @@ export class AppointmentsController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Eliminar un turno' })
+  @ApiOperation({ summary: 'Eliminar un turno (borrado lógico)' })
   @ApiResponse({
     status: 200,
     description: 'El turno ha sido eliminado exitosamente.',
