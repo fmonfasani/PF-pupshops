@@ -19,11 +19,11 @@ export class CategoriesController {
 
   @Get('parents')
   getParentCategories() {
-    return this.categoriesService.getParentCategories();
+    return this.categoriesService.getParentCategories();   
   }
 
   @Get('children/:parentId')
   getChildCategories(@Param('parentId') parentId: string) {
-    return this.categoriesService.getChildCategories(parentId);
+    return this.categoriesService.getChildCategories(parentId);   
   }
 }
