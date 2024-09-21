@@ -1,5 +1,7 @@
 import { ILoginUser, IUserRegister } from "@/Interfaces/interfaces";
 
+
+
 export const fetchRegisterUser = async (user: IUserRegister) => {
     const response = await fetch(`http://localhost:3000/auth/signup`, {
         method: "POST",
