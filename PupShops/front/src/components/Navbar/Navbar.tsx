@@ -103,7 +103,7 @@ export default function Navbar() {
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleDogMenuClick("/juguetes/perros")}
+                    onClick={() => handleDogMenuClick("/Categorias/Toys/Perro")}
                   >
                     Juguetes
                   </button>
@@ -137,7 +137,7 @@ export default function Navbar() {
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleCatMenuClick("/juguetes/gatos")}
+                    onClick={() => handleCatMenuClick("/Categorias/Toys/Gato")}
                   >
                     Juguetes
                   </button>
