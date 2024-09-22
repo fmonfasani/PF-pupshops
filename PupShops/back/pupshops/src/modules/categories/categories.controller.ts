@@ -17,13 +17,13 @@ export class CategoriesController {
     return this.categoriesService.getCategories();
   }
 
-  @Get('parents')
+  @Get('parents') // productos perros y gatos
   getParentCategories() {
-    return this.categoriesService.getParentCategories();
+    return this.categoriesService.getParentCategories();   
   }
 
-  @Get('children/:parentId')
+  @Get('children/:parentId') // productos perros O gatos
   getChildCategories(@Param('parentId') parentId: string) {
-    return this.categoriesService.getChildCategories(parentId);
+    return this.categoriesService.getChildCategories(parentId);   
   }
 }

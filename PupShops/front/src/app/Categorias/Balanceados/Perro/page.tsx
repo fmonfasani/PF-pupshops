@@ -4,7 +4,6 @@ import Balanceadosperros from "@/components/Productos/balanceados/foodDog"; // A
 const CatFood = () => {
   return (
     <div>
-      <h1>Alimentos para Gatos</h1>
       <Balanceadosperros />
     </div>
   );

@@ -48,7 +48,7 @@ const ProductsPage = () => {
 
   // Función para ordenar productos según la opción seleccionada
   const sortProducts = (option: string) => {
-    let sorted = [...products]; // Copia los productos para ordenarlos
+    const sorted = [...products]; // Copia los productos para ordenarlos
     if (option === "price-asc") {
       sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
     } else if (option === "price-desc") {

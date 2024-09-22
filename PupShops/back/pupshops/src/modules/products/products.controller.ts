@@ -56,5 +56,15 @@ export class ProductsController {
   async createProduct(@Body() createProductDto: CreateProductDto) {
     return this.productsService.createProduct(createProductDto);
   }
+
+  @Get('child/:categoryId')
+  getProductsByChildCategory(@Param('categoryId') categoryId: string) {
+    return this.productsService.getProductsByChildCategory(categoryId);
+  }
+
+  @Get('parent/:categoryId')
+  getProductsByParentCategory(@Param('categoryId') categoryId: string) {
+    return this.productsService.getProductsByParentCategory(categoryId);
+  }
   
 }
