@@ -161,13 +161,13 @@ export default function Navbar() {
 
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/quienes-somos")}
+              onClick={() => router.push("/aboutUs")}
             >
               Quienes Somos
             </button>
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/contacto")}
+              onClick={() => router.push("/contact")}
             >
               Contacto
             </button>

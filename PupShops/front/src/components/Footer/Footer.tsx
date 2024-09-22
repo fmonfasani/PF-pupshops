@@ -5,14 +5,13 @@ import { FaFacebookF, FaInstagram, FaTiktok, FaGithub } from "react-icons/fa"; /
 export default function Footer() {
   return (
     <footer className="bg-white">
-      <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
-        {/* Logo e íconos de redes sociales visibles en todas las versiones */}
-        <div className="flex flex-col items-center justify-center sm:flex-row sm:justify-between">
-          <div className="text-teal-600 flex flex-col items-center justify-center text-center sm:flex-row">
-            {/* Logo */}
+      <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+        {/* Contenedor flex para alinear todo en una fila */}
+        <div className="flex flex-col sm:flex-row sm:justify-between items-center space-y-8 sm:space-y-0">
+          {/* Logo e íconos de redes sociales */}
+          <div className="flex flex-col items-center sm:flex-row sm:items-center">
             <Image src={pups} width={150} height={150} alt="logo" />
-            {/* Íconos de redes sociales */}
-            <div className="flex justify-center space-x-4 text-2xl text-teal-600 mt-4 sm:mt-0 sm:ml-6">
+            <div className="flex justify-center space-x-4 text-2xl text-teal-600 mt-8 sm:mt-0 sm:ml-6">
               <a
                 href="https://www.facebook.com"
                 target="_blank"
@@ -45,59 +44,45 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Sección de Con quien trabajamos y contacto, solo visible en pantallas más grandes */}
-        <div className="hidden sm:grid grid-cols-1 gap-8 border-t border-gray-100 pt-8 sm:grid-cols-2 lg:grid-cols-3 lg:pt-16">
-          {/* Con quien trabajamos */}
-          <div>
+        {/* Sección oculta en mobile */}
+        <div className="hidden sm:flex sm:flex-row sm:justify-between mt-8">
+          {/* Sección de Con quien trabajamos */}
+          <div className="flex flex-col">
             <p className="font-medium text-gray-900">Principales Marcas</p>
-            <ul className="mt-6 space-y-4 text-sm">
-              <li className="text-gray-700">Royal Canin</li>
-              <li className="text-gray-700">Pedrigree</li>
-              <li className="text-gray-700">Eukanuba</li>
-              <li className="text-gray-700">Pro Plan</li>
-              <li></li>
+            <ul className="mt-2 space-y-1 text-sm text-gray-700">
+              <li>Royal Canin</li>
+              <li>Pedrigree</li>
+              <li>Eukanuba</li>
+              <li>Pro Plan</li>
             </ul>
           </div>
 
           {/* Información de contacto */}
-          <div>
+          <div className="flex flex-col">
             <p className="font-medium text-gray-900">Contacto</p>
-            <ul className="mt-6 space-y-4 text-sm">
-              <li className="text-gray-700">Teléfono: 351 5788413</li>
-              <li className="text-gray-700">
-                Correo electrónico: pupshops@info.com
-              </li>
-              <li className="text-gray-700">
-                Dirección: Artugo Orgaz 510, Alberdi, Cordoba City.
-              </li>
+            <ul className="mt-2 space-y-1 text-sm text-gray-700">
+              <li>Teléfono: 351 5788413</li>
+              <li>Correo electrónico: pupshops@info.com</li>
+              <li>Dirección: Artugo Orgaz 510, Alberdi, Cordoba City.</li>
             </ul>
           </div>
 
           {/* Contenido adicional */}
-          <div>
+          <div className="flex flex-col">
             <p className="font-medium text-gray-900">Más información</p>
-            <ul className="mt-6 space-y-4 text-sm">
+            <ul className="mt-2 space-y-1 text-sm text-gray-700">
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75"
-                >
+                <a href="#" className="transition hover:opacity-75">
                   Términos y condiciones
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75"
-                >
+                <a href="#" className="transition hover:opacity-75">
                   Política de privacidad
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75"
-                >
+                <a href="#" className="transition hover:opacity-75">
                   Política de devoluciones
                 </a>
               </li>
@@ -105,7 +90,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="hidden sm:block text-xs text-gray-500">
+        <p className="hidden sm:block text-xs text-gray-500 mt-8">
           &copy; {new Date().getFullYear()} Tu Empresa. Todos los derechos
           reservados.
         </p>

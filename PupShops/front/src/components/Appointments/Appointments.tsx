@@ -88,7 +88,7 @@ const AppointmentForm = () => {
       </div>
       <button
         type="submit"
-        className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200 shadow-md"
+        className="block w-full rounded-lg bg-sky-950 px-5 py-3 text-sm text-center font-medium text-white hover:cursor-pointer hover:bg-cyan-900"
       >
         Reservar Turno
       </button>

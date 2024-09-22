@@ -60,7 +60,7 @@ export default function SearchBar() {
         onClick={() => setIsOpen(!isOpen)}
         className="p-2 text-gray-600 transition hover:text-gray-600/75 md:hidden"
       >
-        <MdSearch className="w-6 h-6" />
+        <MdSearch className="w-6 h-6 text-sky-950" />
       </button>
 
       {isOpen && (
