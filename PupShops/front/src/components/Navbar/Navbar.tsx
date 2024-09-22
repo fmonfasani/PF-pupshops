@@ -148,6 +148,12 @@ export default function Navbar() {
             {/* Otros enlaces */}
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
+              onClick={() => router.push("/Appointments")}
+            >
+              Peluqueria
+            </button>
+            <button
+              className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/carro")}
             >
               Carrito
