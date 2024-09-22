@@ -27,7 +27,7 @@ const ProductsPage = () => {
 
   // Estado para la paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Define cuántos elementos mostrar por página
+  const itemsPerPage = 4; // Define cuántos elementos mostrar por página
 
   useEffect(() => {
     // Función para obtener los productos desde la API
