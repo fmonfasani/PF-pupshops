@@ -1,11 +1,10 @@
-// components/AppointmentForm.tsx
 "use client";
 
 import { useState } from "react";
 import {
   isDateValid,
   getMinAndMaxDates,
-} from "@/utils/validationFormAppointments"; // Importar las funciones de validación
+} from "@/utils/validationFormAppointments";
 
 const AppointmentForm = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
