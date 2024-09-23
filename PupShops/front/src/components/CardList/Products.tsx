@@ -10,7 +10,6 @@ export interface IProduct {
   price: string;
   imgUrl: string;
   description: string;
-  stock: number;
   category: {
     id: string;
     name: string;
@@ -129,7 +128,7 @@ const ProductsPage = () => {
               <img
                 src={product.imgUrl}
                 alt={product.name}
-                className="rounded-t-lg h-48 w-full object-cover"
+                className="rounded-t-lg h-48 w-full object-contain mt-3"
               />
               <div className="py-6 px-8 bg-white flex-grow">
                 <h2 className="text-purple-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">

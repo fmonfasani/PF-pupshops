@@ -19,7 +19,7 @@ export default function BalanceadosPerros() {
             onClick={() => router.push("/Categorias/Balanceados/Perro")}
           >
             <Image
-              src={product.image}
+              src={product.imgUrl}
               alt={product.name}
               width={300}
               height={300}
