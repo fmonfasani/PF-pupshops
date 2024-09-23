@@ -1,3 +1,5 @@
+import { IProductDetail } from "@/app/products/[id]/page";
+import { IProduct } from "@/components/CardList/Products";
 
 
 export const getAllProducts = async (page: number = 1, limit: number = 10) => {
@@ -12,3 +14,19 @@ export const getAllProducts = async (page: number = 1, limit: number = 10) => {
     return [];
   }
 };
+
+export async function fetchProductDetail(id:string): Promise<IProductDetail> {
+  try {
+      const response = await fetch(`http://localhost:3000/products/${id}`, {
+          cache: "no-cache"
+      });
+      if (!response.ok) {
+          throw new Error("Failed to fetch product details");
+      }
+      const product = await response.json();
+      return product;
+  } catch (error) {
+      console.error('Error fetching product detail:', error);
+      throw error;
+  }
+}

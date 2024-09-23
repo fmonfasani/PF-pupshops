@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllProducts } from "@/helpers/product.helper";
 import Link from "next/link";
 
-interface IProduct {
+export interface IProduct {
   id: string;
   name: string;
   price: string;
