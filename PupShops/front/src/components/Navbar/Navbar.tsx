@@ -236,13 +236,13 @@ export default function Navbar() {
                     </button>
                     <button
                       className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() => handleDogMenuClick("/ropa/perros")}
+                      onClick={() => handleDogMenuClick("/Categorias/Clothes/Perro")}
                     >
                       Ropa
                     </button>
                     <button
                       className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() => handleDogMenuClick("/juguetes/perros")}
+                      onClick={() => handleDogMenuClick("/Categorias/Toys/Perro")}
                     >
                       Juguetes
                     </button>
@@ -266,13 +266,13 @@ export default function Navbar() {
                     </button>
                     <button
                       className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() => handleCatMenuClick("/ropa/gatos")}
+                      onClick={() => handleCatMenuClick("/Categorias/Clothes/Gato")}
                     >
                       Ropa
                     </button>
                     <button
                       className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() => handleCatMenuClick("/juguetes/gatos")}
+                      onClick={() => handleCatMenuClick("/Categorias/Toys/Gato")}
                     >
                       Juguetes
                     </button>
