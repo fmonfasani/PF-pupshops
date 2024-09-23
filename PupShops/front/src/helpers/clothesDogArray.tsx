@@ -1,44 +1,40 @@
-const productsDogToys = [
+const productsDogClothes = [
   {
     id: 1,
-    name: "Pelota resistente",
+    name: "Chaleco impermeable",
     description:
-      "Pelota hecha de caucho duradero, ideal para morder y jugar. Ayuda a mantener la salud dental de tu perro.",
-    price: 12.0,
-    size: "Mediano",
-    imgUrl: "https://m.media-amazon.com/images/I/81D7LQgjXlL._AC_UL320_.jpg",
-    categoryId: 3,
+      "Chaleco para perros resistente al agua, perfecto para proteger a tu mascota en días lluviosos. Disponible en varios tamaños.",
+    price: 25,
+    image: "https://m.media-amazon.com/images/I/71pHGK5PK9L._AC_UL1500_.jpg",
+    categoryId: 1,
   },
   {
     id: 2,
-    name: "Cuerda para morder",
+    name: "Suéter de lana",
     description:
-      "Cuerda robusta para perros, perfecta para el juego de tirar y aflojar. Ayuda a fortalecer los dientes y encías.",
-    price: 10.0,
-    size: "Grande",
-    imgUrl: "https://m.media-amazon.com/images/I/91ycjTIdSJL._AC_UL320_.jpg",
-    categoryId: 3,
+      "Suéter de lana suave para perros, ideal para mantener a tu mascota abrigada durante el invierno.",
+    price: 20,
+    image: "https://m.media-amazon.com/images/I/71QvEie-+hL._AC_SL1500_.jpg",
+    categoryId: 1,
   },
   {
     id: 3,
-    name: "Juguete interactivo con sonido",
+    name: "Chaqueta acolchada",
     description:
-      "Juguete interactivo que emite sonidos para estimular a tu perro durante el juego. Resistente y divertido.",
-    price: 15.0,
-    size: "Mediano",
-    imgUrl: "https://m.media-amazon.com/images/I/81Z1kS+kEyL._AC_UL320_.jpg",
-    categoryId: 3,
+      "Chaqueta acolchada de alta calidad, diseñada para mantener a tu perro cálido y cómodo en climas fríos.",
+    price: 30,
+    image: "https://m.media-amazon.com/images/I/81jFt-y5P1L._AC_SL1500_.jpg",
+    categoryId: 1,
   },
   {
     id: 4,
-    name: "Hueso de goma",
+    name: "Capa reflectante",
     description:
-      "Hueso de goma para morder, diseñado para resistir mordiscos fuertes. Perfecto para perros con mandíbulas potentes.",
-    price: 14.0,
-    size: "Grande",
-    imgUrl: "https://m.media-amazon.com/images/I/71bTayfm6gL._AC_UL320_.jpg",
-    categoryId: 3,
+      "Capa con tiras reflectantes para mayor visibilidad en paseos nocturnos. Protege a tu perro del viento y la lluvia.",
+    price: 22,
+    image: "https://m.media-amazon.com/images/I/71bHtcSJDrL._AC_SL1500_.jpg",
+    categoryId: 1,
   },
 ];
 
-export default productsDogToys;
+export default productsDogClothes;
