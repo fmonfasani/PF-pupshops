@@ -97,7 +97,7 @@ export default function Navbar() {
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleDogMenuClick("/ropa/perros")}
+                    onClick={() => handleDogMenuClick("/Categorias/Clothes/Perro")}
                   >
                     Ropa
                   </button>

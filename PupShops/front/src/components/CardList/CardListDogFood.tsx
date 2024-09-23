@@ -17,7 +17,7 @@ export default function CardListDogFood() {
           >
             <div className="relative overflow-hidden h-80">
               <img
-                src={card.image}
+                src={card.imgUrl}
                 alt={card.name}
                 className="w-full h-full object-cover transform transition duration-300 scale-100 group-hover:scale-95"
               />

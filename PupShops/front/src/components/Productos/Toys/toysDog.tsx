@@ -1,81 +1,74 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Product } from "@/Interfaces/Iproducts";
+import toysDogArray from "@/helpers/toysDogArray";
+
+const ITEMS_PER_PAGE = 5;
+
 export default function ToysDog() {
   const router = useRouter();
-  const [productsCatFood, setProductsCatFood] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/products/child/308b1281-48dc-4b1d-9fc1-a63462890139"
-        );
-        if (!response.ok) {
-          throw new Error("Error al cargar los productos");
-        }
-        const data = await response.json();
-        setProductsCatFood(data);
-      } catch (err) {
-        //* Verificación de tipo
+  // Calcula el índice de inicio y fin de los productos en la página actual
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentProducts = toysDogArray.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(toysDogArray.length / ITEMS_PER_PAGE);
 
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Ocurrió un error desconocido");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Balanceados para Gatos</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {productsCatFood.map((product: Product) => (
+    <div className="container mx-auto p-4 bg-slate-50">
+      <h1 className="text-2xl text-center mt-24 font-bold mb-4">
+        Juguetes para Perro
+      </h1>
+      <div className="grid grid-cols-1 mt-6 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {currentProducts.map((product) => (
           <div
             key={product.id}
             className="border p-4 rounded-lg shadow-md cursor-pointer"
-            onClick={() => router.push("/Categorias/Balanceados/Gato")}
+            onClick={() => router.push("/Categorias/Juguetes/Gato")}
           >
             <Image
-              src={product.image}
+              src={product.imgUrl}
               alt={product.name}
-              width={300}
-              height={300}
+              width={200}
+              height={200}
               className="object-cover rounded-md"
             />
             <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
             <p className="text-gray-700">{product.description}</p>
             <p className="text-green-600 font-bold">${product.price}</p>
-            <p className="text-gray-500">Stock: {product.stock}</p>
             <button
               className="mt-2 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
               onClick={(e) => {
-                e.stopPropagation(); // Evita que se ejecute el onClick del div
+                e.stopPropagation();
                 console.log(`Agregando ${product.name} al carrito`);
               }}
             >
               Agregar al Carrito
             </button>
           </div>
+        ))}
+      </div>
+
+      <div className="flex justify-center mt-4">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`mx-1 px-3 py-1 rounded-md ${
+              currentPage === index + 1
+                ? "bg-blue-500 text-white"
+                : "bg-gray-300"
+            }`}
+          >
+            {index + 1}
+          </button>
         ))}
       </div>
     </div>
