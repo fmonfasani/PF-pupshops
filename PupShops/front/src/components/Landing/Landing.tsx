@@ -30,7 +30,7 @@ export default function Landing() {
             </Link>
 
             <Link
-              href="#"
+              href="/Appointments"
               className="block w-full rounded-full bg-pink-100 px-12 py-3 text-sm font-medium text-purple-600 shadow hover:bg-pink-200 focus:outline-none focus:ring focus:ring-pink-300 sm:w-auto transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
             >
               Our Services

@@ -57,3 +57,9 @@ export interface IUserContextType {
   // orders: IOrderResponse[] | [];
   //  logOut: () => void;
 }
+
+export interface IAppointment {
+  id?:string;
+  date: string;
+  time:string
+}

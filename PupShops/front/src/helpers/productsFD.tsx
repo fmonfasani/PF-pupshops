@@ -5,7 +5,6 @@ const productsDogFood = [
     description:
       "Comida de alta calidad, formulada con ingredientes específicos para apoyar la salud digestiva y el bienestar general de los perros.",
     price: 30,
-    stock: 15,
     image:
       "https://laikapp.s3.amazonaws.com/dev_images_products/dff0586acb5d3de1a58690f63ba9f315_1717358353.jpg",
     categoryId: 1
@@ -16,7 +15,6 @@ const productsDogFood = [
     description:
       "Alimento rico en proteínas naturales, sin subproductos ni conservantes artificiales. Ideal para mantener una dieta saludable.",
     price: 28,
-    stock: 20,
     image: "https://ss345.liverpool.com.mx/xl/1156163216.jpg",
     categoryId: 1
   },
@@ -26,7 +24,6 @@ const productsDogFood = [
     description:
       "Comida diseñada para satisfacer las necesidades específicas de diferentes razas y etapas de vida. Incluye nutrientes de alta calidad.",
     price: 35,
-    stock: 12,
     image:
       "https://laikapp.s3.amazonaws.com/dev_images_products/b5c8ad4def3a813e637fea86de9178e9_1700771949.jpg",
     categoryId: 1
@@ -37,7 +34,6 @@ const productsDogFood = [
     description:
       "Fórmulas científicamente diseñadas que ayudan al desarrollo y fortalecimiento de los perros en todas sus etapas.",
     price: 25,
-    stock: 18,
     image:
       "https://www.supermascotas.com.co/wp-content/uploads/2023/05/7501072208231_1.jpg",
     categoryId: 1

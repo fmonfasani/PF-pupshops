@@ -1,4 +1,7 @@
-const ClothesCat: React.FC = () => {
+"use client"
+import React from 'react'
+
+export default function clothesCat(){
   return (
     <div>
       <h2 className="text-lg font-semibold mb-2">Ropa para Gatos</h2>
@@ -14,5 +17,3 @@ const ClothesCat: React.FC = () => {
     </div>
   );
 };
-
-export default ClothesCat;

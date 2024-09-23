@@ -4,7 +4,7 @@ import pups from "../../../public/pups.png"
 
 const TurnosPage = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center mt-16 justify-center bg-gray-100">
       <div className="bg-white flex items-center gap-5 p-8 rounded-md shadow-lg">
         <Image src={pups} alt="logo" width={150} height={150}/>
         <AppointmentForm />
