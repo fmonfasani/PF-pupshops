@@ -5,6 +5,8 @@ import { ButtonForms, ButtonRedirectUser } from '@/components/Buttons/ButtonsFor
 import { validationRegister } from '@/utils/validationRegister';
 import { IUserRegister } from '@/Interfaces/interfaces';
 import { fetchRegisterUser } from '@/utils/fetchUser';
+import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
+import { NotificationError } from '@/components/Notifications/NotificationError';
 
 
 type Country = "Argentina" | "Chile" | "Colombia" | "México";
@@ -35,6 +37,10 @@ export default function RegisterUser() {
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
+    const [showErrorNotification, setShowErrorNotification] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -68,27 +74,41 @@ export default function RegisterUser() {
             country: userRegister.country,
             city: userRegister.city,
         };
+        
         console.log('User que se está enviando:', user);
+        
         try {
-            await fetchRegisterUser(user);
-            alert("Registro exitoso");
-            setUserRegister({
-              name: "",
-              lastname: "",
-              email: "",
-              password: "",
-              confirmPassword:"",
-              address: "",
-              phone: 0,
-              country: "",
-              city: ""
-            });
-            router.push("/home");
-          } catch (error) {
+            const success = await fetchRegisterUser(user);
+            
+            if (success) {
+                setNotificationMessage(`Registro exitoso. Bienvenido/a ${userRegister.name}`);
+                setShowNotification(true);
+                setTimeout(() => {
+                    setShowNotification(false);
+                    router.push("/home");
+                }, 3000);
+                setUserRegister({
+                    name: "",
+                    lastname: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                    address: "",
+                    phone: 0,
+                    country: "",
+                    city: ""
+                });
+            } else {
+                setErrors({ ...errors, general: "Registro inválido" });
+            }
+        } catch (error) {
             console.error("Error durante el registro:", error);
-            alert(error instanceof Error ? error.message : "Error desconocido.");
-          }
-        };
+            setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
+            setShowErrorNotification(true); 
+            setTimeout(() => setShowErrorNotification(false), 3000); 
+        }
+    };
+    
 
     return (
         <section className="bg-gray-100">
@@ -225,6 +245,8 @@ export default function RegisterUser() {
             </form>
         </div>
     </div>
+    {showNotification && <NotificationRegister message={notificationMessage} />}
+    {showErrorNotification && <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />}
 </section>
 )
 }
