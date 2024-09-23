@@ -23,7 +23,7 @@ const productsCatFood = [
     id: 3,
     name: "Purina Pro Plan",
     description:
-      "Fórmula premium para gatos que proporciona una dieta equilibrada y apoya el crecimiento y desarrollo de tu mascota.",
+      "Fórmula premium para gatos que proporciona una dieta equilibrada y apoya el crecimiento y desarrollo de tu mejor amigo.",
     price: 30,
     image:
       "https://purina.com.co/sites/default/files/styles/webp/public/2022-10/Kitten-Pollo-%26-H%C3%ADgado_1.png.webp?itok=4rV0aWti",

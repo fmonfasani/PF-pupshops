@@ -111,12 +111,12 @@ export default function RegisterUser() {
     
 
     return (
-        <section className="bg-gray-100">
+        <section className="bg-gray-100 p-4 mt-16">
             <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
                 <div className="rounded-lg bg-white py-8 px-4 shadow-lg lg:px-8">
                     <form onSubmit={onSubmit} className="space-y-4">
                         <div className="relative z-10 mt-0 bg-opacity-60 bg-white p-4 rounded-lg">
-                            <h1 className="text-2xl font-bold text-center text-blue-950 mb-4">
+                            <h1 className="text-2xl font-bold text-center text-blue-950 ">
                                 Únete a Nuestra Comunidad
                             </h1>
                             <p className="max-w-xl text-sm text-gray-600 text-center">

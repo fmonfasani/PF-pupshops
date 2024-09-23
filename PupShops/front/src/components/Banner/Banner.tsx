@@ -9,29 +9,29 @@ export default function Banner() {
       <div className="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8">
         <div className="max-w-xl text-center sm:text-left">
           <h1 className="text-3xl font-extrabold sm:text-5xl">
-            Find the perfect
-            <strong className="block font-extrabold text-purple-600">
-              Companion & Care
+            Lo mejor para tu amigo
+            <strong className="block font-extrabold text-teal-600">
+              Encontralo aca
             </strong>
           </h1>
 
           <p className="mt-4 max-w-lg text-xl text-gray-700">
             Discover a world of love, care, and joy for your furry friends. From
-            premium products to top-notch services, we've got everything your
+            premium products to top-notch services, weve got everything your
             pet needs!
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4 text-center">
             <Link
               href="#"
-              className="block w-full rounded-full bg-purple-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-purple-700 focus:outline-none focus:ring focus:ring-purple-300 sm:w-auto transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+              className="block w-full rounded-full bg-purple-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-orange-300 focus:outline-none focus:ring focus:ring-purple-300 sm:w-auto transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
             >
               Shop Now
             </Link>
 
             <Link
               href="#"
-              className="block w-full rounded-full bg-pink-100 px-12 py-3 text-sm font-medium text-purple-600 shadow hover:bg-pink-200 focus:outline-none focus:ring focus:ring-pink-300 sm:w-auto transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+              className="block w-full rounded-full bg-pink-100 px-12 py-3 text-sm font-medium text-teal-600 shadow hover:bg-pink-200 focus:outline-none focus:ring focus:ring-pink-300 sm:w-auto transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
             >
               Our Services
             </Link>

@@ -27,12 +27,12 @@ export default function NotFound() {
           Uh-oh!
         </h1>
 
-        <p className="mt-4 text-gray-500">We can't find that page.</p>
+        <p className="mt-4 text-gray-500">No pudimos encontrar esta pagina</p>
         <Link
           href="/"
           className="mt-6 inline-block rounded-full bg-blue-600 px-5 py-3 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring"
         >
-          Go To Producst 🔙
+          Volver al inicio 🔙
         </Link>
       </div>
     </div>

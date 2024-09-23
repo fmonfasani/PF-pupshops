@@ -29,7 +29,7 @@ export async function ProductDetail({ params }: { params: { id: string } }) {
             className="h-48 w-full object-cover"
           />
           <div className="py-6 px-8">
-            <h2 className="text-purple-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">
+            <h2 className="text-teal-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">
               {name}
             </h2>
             <p className="text-gray-700 tracking-wide mb-4">{description}</p>
@@ -42,7 +42,7 @@ export async function ProductDetail({ params }: { params: { id: string } }) {
             <div className="flex justify-between gap-2">
               <button
                 onClick={() => handleAddToCart(product.id)}
-                className="flex-1 py-2 bg-purple-600 text-white font-medium rounded-full shadow hover:bg-purple-900 transition duration-300 ease-in-out"
+                className="flex-1 py-2 bg-teal-600 text-white font-medium rounded-full shadow hover:bg-purple-900 transition duration-300 ease-in-out"
               >
                 Agregar al carrito
               </button>
