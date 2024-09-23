@@ -4,7 +4,7 @@ export default function Contact() {
   return (
     <section className="bg-gray-100 py-10">
       <div className="container mx-auto px-4 mt-16">
-        <h2 className="text-3xl font-bold text-center text-purple-600 mb-6">
+        <h2 className="text-3xl font-bold text-center text-teal-600 mb-6">
           Contáctanos
         </h2>
         <p className="text-center text-gray-700 mb-10">
@@ -16,14 +16,14 @@ export default function Contact() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
           {/* Información de contacto */}
           <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-            <h3 className="text-xl font-semibold text-purple-600 mb-4">
+            <h3 className="text-xl font-semibold text-teal-600 mb-4">
               Información de Contacto
             </h3>
             <p className="text-gray-700 mb-4">
               <strong>WhatsApp:</strong>{" "}
               <a
                 href="https://wa.me/1234567890"
-                className="text-purple-600 underline"
+                className="text-teal-600 underline"
               >
                 +123 456 7890
               </a>
@@ -32,7 +32,7 @@ export default function Contact() {
               <strong>Email:</strong>{" "}
               <a
                 href="mailto:info@tiendamascotas.com"
-                className="text-purple-600 underline"
+                className="text-teal-600 underline"
               >
                 info@tiendamascotas.com
               </a>
@@ -44,7 +44,7 @@ export default function Contact() {
 
           {/* Integración de Google Maps */}
           <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-            <h3 className="text-xl font-semibold text-purple-600 mb-4">
+            <h3 className="text-xl font-semibold text-teal-600 mb-4">
               Nuestra Ubicación
             </h3>
             <iframe
@@ -61,7 +61,7 @@ export default function Contact() {
 
         {/* Formulario de contacto */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold text-purple-600 mb-4">
+          <h3 className="text-xl font-semibold text-teal-600 mb-4">
             Envíanos un Mensaje
           </h3>
           <form className="grid grid-cols-1 gap-6">
@@ -101,7 +101,7 @@ export default function Contact() {
             <div>
               <button
                 type="submit"
-                className="w-full py-2 bg-purple-600 text-white font-medium rounded-lg shadow hover:bg-purple-700 transition duration-300"
+                className="w-full py-2 bg-teal-600 text-white font-medium rounded-lg shadow hover:bg-orange-300 transition duration-300"
               >
                 Enviar
               </button>

@@ -43,13 +43,13 @@ export default function Carousel() {
 
       <button
         onClick={prevSlide}
-        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-purple-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-full opacity-75 hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base z-10"
+        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-teal-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-full opacity-75 hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base z-10"
       >
         ❮
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-purple-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-full opacity-75 hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base z-10"
+        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-teal-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-full opacity-75 hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base z-10"
       >
         ❯
       </button>
@@ -60,7 +60,7 @@ export default function Carousel() {
             key={index}
             onClick={() => setCurrentIndex(index)}
             className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full cursor-pointer transition-colors duration-300 ${
-              index === currentIndex ? "bg-purple-600" : "bg-pink-300"
+              index === currentIndex ? "bg-teal-600" : "bg-pink-300"
             }`}
           ></div>
         ))}

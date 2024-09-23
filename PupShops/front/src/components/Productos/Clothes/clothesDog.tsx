@@ -42,7 +42,7 @@ const ClothesCat: React.FC = () => {
             <p className="text-gray-700">{product.description}</p>
             <p className="text-green-600 font-bold">${product.price}</p>
             <button
-              className="mt-2 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+              className="mt-2 w-full bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={(e) => {
                 e.stopPropagation();
                 console.log(`Agregando ${product.name} al carrito`);
@@ -61,7 +61,7 @@ const ClothesCat: React.FC = () => {
             onClick={() => handlePageChange(index + 1)}
             className={`mx-3 px-3 py-1 rounded-md ${
               currentPage === index + 1
-                ? "bg-blue-500 text-white"
+                ? "bg-teal-600 text-white"
                 : "bg-gray-300"
             }`}
           >

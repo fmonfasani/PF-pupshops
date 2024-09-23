@@ -58,9 +58,9 @@ export default function SearchBar() {
       {/* Botón para abrir la barra de búsqueda en mobile */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-gray-600 transition hover:text-gray-600/75 md:hidden"
+        className="p-2 text-white transition hover:text-gray-200 md:hidden bg-teal-600 hover:bg-orange-300 hover:text-black rounded"
       >
-        <MdSearch className="w-6 h-6 text-sky-950" />
+        <MdSearch className="w-6 h-6" />
       </button>
 
       {isOpen && (
@@ -111,7 +111,7 @@ export default function SearchBar() {
         />
         <button
           onClick={() => handleSearch(searchTerm)}
-          className="bg-blue-500 text-white p-2 rounded-md"
+          className="bg-teal-600 text-white p-2 rounded-md"
         >
           <MdSearch className="w-5 h-5" />
         </button>

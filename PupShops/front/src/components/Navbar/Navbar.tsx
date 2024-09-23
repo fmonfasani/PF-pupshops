@@ -52,7 +52,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-white shadow-md mt-6 fixed top-0 left-0 w-full z-50">
+    <header className="bg-gray-100 shadow-md mt-6 fixed top-0 left-0 w-full z-50">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <div

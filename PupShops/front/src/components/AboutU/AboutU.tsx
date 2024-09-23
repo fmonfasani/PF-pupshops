@@ -5,7 +5,7 @@ export default function AboutU() {
     <div>
       <section className="bg-gray-100 py-10">
         <div className="container mx-auto px-4 mt-16">
-          <h2 className="text-3xl font-bold text-center text-purple-600 mb-6">
+          <h2 className="text-3xl font-bold text-center text-teal-600 mb-6">
             Quiénes Somos
           </h2>
           <p className="text-center text-gray-700 mb-6">
@@ -16,7 +16,7 @@ export default function AboutU() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold text-purple-600 mb-4">
+              <h3 className="text-xl font-semibold text-teal-600 mb-4">
                 Nuestros Servicios
               </h3>
               <ul className="list-disc list-inside text-gray-700">
@@ -30,7 +30,7 @@ export default function AboutU() {
               </ul>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold text-purple-600 mb-4">
+              <h3 className="text-xl font-semibold text-teal-600 mb-4">
                 Nuestra Misión
               </h3>
               <p className="text-gray-700">
@@ -42,7 +42,7 @@ export default function AboutU() {
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-purple-600 mb-4">
+            <h3 className="text-xl font-semibold text-teal-600 mb-4">
               Nuestro Compromiso
             </h3>
             <p className="text-gray-700 mb-4">
