@@ -44,15 +44,11 @@ export const validateProduct = (productData: IUploadProduct) => {
     console.log("Error en el campo stock:", errors.stock);  
   }
 
-  // Validar URL de imagen
-  const urlRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
-  if (!productData.imgUrl) {
-    errors.imgUrl = "Debes ingresar una URL de imagen";
-    console.log("Error en el campo imgUrl:", errors.imgUrl);  
-  } else if (!urlRegex.test(productData.imgUrl)) {
-    errors.imgUrl = "Debes ingresar una URL válida, con la estructura http://example.com";
-    console.log("Error en el campo imgUrl:", errors.imgUrl); 
-  }
+   // Validar URL de imagen en validateProduct
+if (!productData.imgUrl) {
+  errors.imgUrl = "Haz click en Subir para realizar la carga";
+}
+
 
   // Validar categoría
   if (!productData.categoryName) {

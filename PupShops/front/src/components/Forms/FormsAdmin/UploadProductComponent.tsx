@@ -6,6 +6,7 @@ import { validateProduct } from '@/utils/validationUploadProduct';
 import React, { useState } from 'react';
 import { NotificationError } from '@/components/Notifications/NotificationError';
 import { NotificationUploadProduct } from '@/components/Notifications/NotificationUploadProduct';
+import ImageUpload from '@/components/Cloudinary/imageUpload';
 
 const categories = [
   { name: 'Perro', subcategories: ['Alimento para perros', 'Accesorios para Perro', 'Juguetes de Perro'] },
@@ -256,19 +257,12 @@ export default function UploadProductComponent() {
                 </select>
               </div>
   
-              <div>
-                <label htmlFor='imgUrl' className="block text-sm font-medium text-gray-700">Imagen URL</label>
-                <input
-                  id='imgUrl'
-                  name='imgUrl'
-                  type='text'
-                  value={dataProduct.imgUrl}
-                  onChange={handleChange}
-                  placeholder='URL de la imagen'
-                  className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm"
-                />
-                {errors.imgUrl && <span className="text-red-500 text-sm">{errors.imgUrl}</span>}
-              </div>
+              <div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700">Imagen</label>
+  <ImageUpload onUpload={(url: string) => setDataProduct(prev => ({ ...prev, imgUrl: url }))} />
+  
+</div>
+
   
               {/* Campo de precio agregado aquí */}
               <div>
