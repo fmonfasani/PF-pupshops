@@ -20,7 +20,7 @@ export class AppointmentsService {
 
   async create(
     createAppointmentDto: CreateAppointmentDto,
-    user: any,
+    user: User,
   ): Promise<{
     message: string;
     appointmentId: string;
@@ -29,35 +29,17 @@ export class AppointmentsService {
     userId: string;
     userName: string;
   }> {
-    const appointmentDateAux = new Date(createAppointmentDto.appointmentDate);
+    const { appointmentDate, appointmentTime, serviceName } =
+      createAppointmentDto;
 
-    // Validar si la fecha es mayor a la fecha actual
-    const currentDate = new Date();
-    if (appointmentDateAux <= currentDate) {
-      throw new BadRequestException(
-        'Los turnos solo pueden agendarse en fechas futuras',
-      );
-    }
-
-    // Validar si la fecha es lunes a viernes
-    const dayOfWeek = appointmentDateAux.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      throw new BadRequestException(
-        'Los turnos solo pueden agendarse de lunes a viernes',
-      );
-    }
-
-    // Validar si la hora está entre las 8:00 AM y las 6:00 PM
-    const hour = appointmentDateAux.getHours();
-    if (hour < 8 || hour >= 18) {
-      throw new BadRequestException(
-        'Los turnos solo pueden agendarse entre las 8:00 AM y las 6:00 PM',
-      );
-    }
+    // Combinar la fecha y la hora en un objeto Date
+    const combinedDateTime = new Date(
+      `${appointmentDate}T${appointmentTime}:00`,
+    );
 
     // Buscar el servicio en la base de datos usando el nombre del servicio
     const service = await this.serviceRepository.findOne({
-      where: { name: createAppointmentDto.serviceName },
+      where: { name: serviceName },
     });
 
     if (!service) {
@@ -66,7 +48,7 @@ export class AppointmentsService {
 
     // Validar si hay otro turno en el mismo horario para el mismo servicio
     const isAvailable = await this.checkAppointmentAvailability(
-      appointmentDateAux,
+      combinedDateTime,
       service.id,
     );
     if (!isAvailable) {
@@ -75,38 +57,35 @@ export class AppointmentsService {
       );
     }
 
+    const fullUser = await this.userRepository.findOne({
+      where: { id: user.id },
+    });
+    console.log('Usuario completo:', fullUser);
+
+    if (!fullUser) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+
     // Crear el turno asociado al usuario autenticado
     const appointment = this.appointmentRepository.create({
-      appointmentDate: createAppointmentDto.appointmentDate,
+      appointmentDate: combinedDateTime,
       status: AppointmentStatus.RESERVED,
-      user: { id: user.userId }, // Asociar el turno al usuario logueado
+      user: { id: user.id }, // Usar el id del usuario autenticado
       service,
     });
 
     const savedAppointment = await this.appointmentRepository.save(appointment);
 
-    const appointmentDate = new Date(savedAppointment.appointmentDate);
-    const formattedDate = appointmentDate.toLocaleDateString('es-ES', {
-      timeZone: 'UTC',
-    });
-    const formattedTime = appointmentDate.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-      timeZone: 'UTC',
-    });
-
-    const message = `${user.name} ha reservado un turno de ${service.name} a las ${formattedTime} con fecha ${formattedDate} exitosamente!`;
-
     return {
-      message,
-      appointmentId: appointment.id, // Devuelve el ID del appointment
-      serviceId: service.id, // Devuelve el ID del servicio
-      userId: user.userId, // Devuelve el ID del usuario autenticado
-      serviceName: service.name, // Devuelve el nombre del servicio
-      userName: user.name, // Devuelve el nombre del usuario autenticado
+      message: `UD. Se ha reservado un turno de ${service.name} a las ${combinedDateTime.toLocaleTimeString()} con fecha ${combinedDateTime.toLocaleDateString()} exitosamente!`,
+      appointmentId: appointment.id,
+      serviceId: service.id,
+      serviceName: service.name,
+      userId: user.id,
+      userName: user.name,
     };
   }
+
   async findAll(): Promise<Appointment[]> {
     return await this.appointmentRepository.find({
       where: { isDeleted: false }, // Excluir los turnos eliminados
