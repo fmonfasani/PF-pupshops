@@ -7,7 +7,7 @@ export class PaymentsService {
   private readonly mercadoPagoUrl =
     'https://api.mercadopago.com/checkout/preferences';
   private readonly accessToken =
-    'TEST-6146790226028049-091521-ea17f9befb1673933065f26ce198f0cf-33614063'; // Coloca tu Access Token aquí
+    'APP_USR-1158358512957720-092318-dfe5d1ec04ecb9c1622a5ea8adf71220-1994103886'; // Coloca tu Access Token aquí
 
   async createPayment(createPaymentDto: any) {
     const preference = {
@@ -20,7 +20,7 @@ export class PaymentsService {
         },
       ],
       back_urls: {
-        success: 'https://3e58-190-17-115-142.ngrok-free.app/success',
+        success: 'https://7b84-201-231-240-116.ngrok-free.app/success',
         failure: 'https://3e58-190-17-115-142.ngrok-free.app/failure',
         pending: 'https://3e58-190-17-115-142.ngrok-free.app/pending',
       },
