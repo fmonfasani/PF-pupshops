@@ -1,17 +1,18 @@
+// ICart.ts
 export interface IProduct {
-  id: number;
+  id: number; 
   name: string;
   description: string;
   price: number;
-  quantity: number; 
-  imageUrl: string; 
-  size?: string;
+  stock: number;
+  imgUrl: string;
+  categoryName: string;
 }
 
 export interface ICartContextType {
   cartItems: IProduct[];
-  addToCart: (product: number) => Promise<boolean>;
-  removeFromCart: (product: number) => void;
+  addToCart: (productId: number) => Promise<boolean>;
+  removeFromCart: (productId: number) => void; 
   total: number;
   proceedToBuy: () => Promise<void>;
   purchasedItems: IProduct[];

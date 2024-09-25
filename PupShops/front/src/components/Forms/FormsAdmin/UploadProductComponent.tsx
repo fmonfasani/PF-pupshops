@@ -145,7 +145,7 @@ export default function UploadProductComponent() {
                   id='name'
                   name='name'
                   type='text'
-                  value={dataProduct.name}
+                  value={dataproduct.id}
                   onChange={handleChange}
                   placeholder='Nombre del producto'
                   className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm"

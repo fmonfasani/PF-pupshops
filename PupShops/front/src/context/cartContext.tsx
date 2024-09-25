@@ -1,26 +1,20 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import { ICartContextType } from "@/Interfaces/ICart";
-import { IProduct } from "@/Interfaces/ICart";
+import { ICartContextType, IProduct } from "@/Interfaces/ICart";
 import { fetchProductsById } from "@/lib/servers/serverCart";
-
-//TODO Poner productillo 
 
 const addItemToCart = async (
   cartItems: IProduct[],
-  product: number
+  productId: number
 ): Promise<IProduct[]> => {
-  const data = await fetchProductsById(product.toString());
+  const data = await fetchProductsById(productId);
   return [...cartItems, data];
 };
 
-//TODO Eliminar producto
-
-const removeItem = (cartItems: IProduct[], product: number) => {
-  return cartItems.filter((item) => item.id !== product);
+const removeItem = (cartItems: IProduct[], productId: number) => {
+  return cartItems.filter((item) => item.id !== productId);
 };
-
 
 export const cartContext = createContext<ICartContextType>({
   cartItems: [],
@@ -36,8 +30,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [total, setTotal] = useState(0);
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
 
-  //! Cargar datos del localStorage al montar el componente
-  
   useEffect(() => {
     const storedCartItems = localStorage.getItem("cartItems");
     const storedPurchasedItems = localStorage.getItem("purchasedItems");
@@ -51,36 +43,31 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  
   useEffect(() => {
     localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
   }, [purchasedItems]);
 
-  
-  const addToCart = async (product: number): Promise<boolean> => {
-    const existingProduct = cartItems.find((item) => item.id === product);
+  const addToCart = async (productId: number): Promise<boolean> => {
+    const existingProduct = cartItems.find((item) => item.id === productId);
 
     if (existingProduct) {
-      return false; 
+      return false; // El producto ya está en el carrito
     }
 
-    const updatedCart = await addItemToCart(cartItems, product);
+    const updatedCart = await addItemToCart(cartItems, productId);
     setCartItems(updatedCart);
-    return true;
+    return true; // Producto agregado
   };
 
-  
-  const removeFromCart = (product: number) => {
-    const updatedCart = removeItem(cartItems, product);
+  const removeFromCart = (productId: number) => {
+    const updatedCart = removeItem(cartItems, productId);
     setCartItems(updatedCart);
   };
 
-  
   const proceedToBuy = async () => {
     try {
       const products = cartItems.map((item) => item.id);
@@ -103,7 +90,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       if (response.ok) {
         alert("Compra exitosa");
         setPurchasedItems(cartItems);
-        setCartItems([]); 
+        setCartItems([]);
       } else {
         const errorResponse = await response.json();
         alert("Error en la compra: " + errorResponse.message);
@@ -113,12 +100,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  
   useEffect(() => {
-    const totalAmount = cartItems.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
+    const totalAmount = cartItems.reduce((acc, item) => acc + item.price, 0);
     setTotal(totalAmount);
   }, [cartItems]);
 
