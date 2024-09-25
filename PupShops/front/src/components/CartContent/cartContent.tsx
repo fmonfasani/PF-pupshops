@@ -5,22 +5,21 @@ import { cartContext } from "@/context/cartContext";
 import CartItem from "@/components/CartItem/cartItem";
 import CartBuy from "@/components/CartBuy/cartBuy";
 
-const CartContent: React.FC = () => {
-  const { cartItems } = useContext(cartContext);
+const CartContent = () => {
+  const { cartItems, total } = useContext(cartContext);
 
   return (
-    <div className="flex flex-col">
-      <h2 className="text-2xl font-bold mb-4">Tu Carrito</h2>
-      {cartItems.length === 0 ? (
-        <p className="text-gray-500">El carrito está vacío.</p>
-      ) : (
-        <>
-          {cartItems.map((product) => (
-            <CartItem key={product.id} product={product} />
-          ))}
-          <CartBuy />
-        </>
-      )}
+    <div className="p-4 bg-white shadow-md rounded-lg">
+      <h2 className="text-lg font-bold">Carrito de Compras</h2>
+      <ul>
+        {cartItems.map((item) => (
+          <CartItem key={item.id} item={item} />
+        ))}
+      </ul>
+      <div className="mt-4">
+        <span className="font-bold">Total: ${total.toFixed(2)}</span>
+      </div>
+      <CartBuy />
     </div>
   );
 };

@@ -1,37 +1,30 @@
+"use client";
 
-import  { useContext } from "react";
-import Image from "next/image"; 
-import { cartContext } from "@/context/cartContext"; 
-import { IProduct } from "@/Interfaces/ICart";
+import { useContext } from "react";
+import { cartContext } from "@/context/cartContext";
+import { IProduct } from "@/Interfaces/ICart"; // Asegúrate de que esta ruta sea correcta
 
 interface CartItemProps {
-  product: IProduct;
+  item: IProduct; // Especificar que 'item' es del tipo IProduct
 }
 
-const CartItem: React.FC<CartItemProps> = ({ product }) => {
+const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { removeFromCart } = useContext(cartContext);
 
   return (
-    <div className="flex justify-between items-center border-b py-4">
-      <Image
-        src={product.imageUrl}
-        alt={product.name}
-        width={64}
-        height={64}
-        className="object-cover"
+    <li className="flex justify-between items-center">
+      <span>{item.name}</span>
+      <span>${item.price}</span>
+      <input
+        type="number"
+        value={item.quantity}
+        readOnly
+        className="w-16 text-center"
       />
-      <div className="flex-grow ml-4">
-        <h4 className="text-lg font-semibold">{product.name}</h4>
-        <p className="text-gray-600">Precio: ${product.price}</p>
-        <p className="text-gray-600">Cantidad: {product.quantity}</p>
-      </div>
-      <button
-        className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-        onClick={() => removeFromCart(product.id)}
-      >
+      <button onClick={() => removeFromCart(item.id)} className="text-red-500">
         Eliminar
       </button>
-    </div>
+    </li>
   );
 };
 

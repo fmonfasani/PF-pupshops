@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Products } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { Categories } from '../categories/categories.entity';
-import * as data from "../../utils/archivo.json";
+import * as data from '../../utils/archivo.json';
 import { CreateProductDto } from './dto/create-product.dto';
 
 @Injectable()
@@ -56,7 +56,9 @@ export class ProductsRepository {
 
   async addProducts() {
     if (!Array.isArray(data['default'])) {
-      throw new Error('El archivo JSON no contiene un array válido de productos.');
+      throw new Error(
+        'El archivo JSON no contiene un array válido de productos.',
+      );
     }
 
     const categories = await this.categoriesRepository.find();
@@ -67,7 +69,9 @@ export class ProductsRepository {
       );
 
       if (!category) {
-        throw new NotFoundException(`Categoría ${element.categoryName} no encontrada`);
+        throw new NotFoundException(
+          `Categoría ${element.categoryName} no encontrada`,
+        );
       }
 
       const product = this.productsRepository.create({
@@ -77,7 +81,7 @@ export class ProductsRepository {
         imgUrl: element.imgUrl,
         stock: element.stock,
         category: category,
-        waist: element.waist ? element.waist.toString() : null, 
+        waist: element.waist ? element.waist.toString() : null,
         weight: element.weight,
       });
 
@@ -93,18 +97,20 @@ export class ProductsRepository {
     });
 
     if (!category) {
-      throw new NotFoundException(`Categoría ${createProductDto.categoryName} no encontrada`);
+      throw new NotFoundException(
+        `Categoría ${createProductDto.categoryName} no encontrada`,
+      );
     }
 
     const product = this.productsRepository.create({
       ...createProductDto,
       category,
-      waist: createProductDto.waist ? createProductDto.waist.toString() : null, 
+      waist: createProductDto.waist ? createProductDto.waist.toString() : null,
     });
 
     return this.productsRepository.save(product);
   }
-  
+
   // Obtener productos por categoría hija
   async getProductsByChildCategory(categoryId: string): Promise<Products[]> {
     return this.productsRepository.find({
@@ -122,16 +128,17 @@ export class ProductsRepository {
     });
 
     if (!parentCategory) {
-      throw new NotFoundException(`Categoría padre con id ${categoryId} no encontrada`);
+      throw new NotFoundException(
+        `Categoría padre con id ${categoryId} no encontrada`,
+      );
     }
 
     const childCategoryIds = parentCategory.children.map((child) => child.id);
     console.log(childCategoryIds);
-    let products = []
-    for(let i = 0 ; i<childCategoryIds.length ; i++){
-      
-    }
-    return this.productsRepository.createQueryBuilder('product')
+    let products = [];
+    for (let i = 0; i < childCategoryIds.length; i++) {}
+    return this.productsRepository
+      .createQueryBuilder('product')
       .where('categoryId IN (:...childCategoryIds)', {
         categoryId,
         childCategoryIds,
@@ -139,5 +146,3 @@ export class ProductsRepository {
       .getMany();
   }
 }
-
-

@@ -4,16 +4,15 @@ import React, { useState, useContext } from "react";
 import clothesCatArray from "@/helpers/clothesCatArray";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { cartContext } from "@/context/cartContext"; // Importa el contexto del carrito
+import { cartContext } from "@/context/cartContext";
 
 const ITEMS_PER_PAGE = 5;
 
 const ClothesCat: React.FC = () => {
   const router = useRouter();
-  const { addToCart } = useContext(cartContext); // Usa el contexto del carrito
+  const { addToCart } = useContext(cartContext); // Accedemos a addToCart del contexto
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Cálculo de índices para la paginación
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentProducts = clothesCatArray.slice(startIndex, endIndex);
@@ -43,13 +42,15 @@ const ClothesCat: React.FC = () => {
               />
               <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
               <p className="text-gray-700 mb-2">{product.description}</p>
-              <p className="text-green-600 font-bold mb-2">${product.price}</p>
+              <p className="text-green-600 font-bold mb-2">
+                ${product.price.toFixed(2)}
+              </p>
             </div>
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
-                e.stopPropagation(); // Evita que se active el onClick del contenedor
-                const success = await addToCart(product.id); // Agrega al carrito
+                e.stopPropagation(); // Evita que el evento de click se propague al div contenedor
+                const success = await addToCart(product.id); // Llamamos a addToCart con el id
                 if (success) {
                   alert(`${product.name} ha sido agregado al carrito`);
                 } else {

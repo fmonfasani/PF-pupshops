@@ -1,9 +1,11 @@
 export interface IProduct {
   id: number;
   name: string;
+  description: string;
   price: number;
-  quantity: number;
-  imageUrl: string;
+  quantity: number; 
+  imageUrl: string; 
+  size?: string;
 }
 
 export interface ICartContextType {
