@@ -19,6 +19,10 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Build Docker image
+        run: |
+          docker build -t frontend:latest .
+
       - name: Set up Docker
         run: |
           echo "RENDER_SERVICE_ID: srv-c1pq1qg1eg4abcdefg"
@@ -27,7 +31,7 @@ jobs:
 
       - name: Deploy Frontend to Render
         env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Mantén el secreto para la API Key
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           API_URL: ${{ secrets.API_URL }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
@@ -35,4 +39,3 @@ jobs:
         run: |
           docker tag frontend:latest registry.render.com/srv-c1pq1qg1eg4abcdefg/frontend:latest
           docker push registry.render.com/srv-c1pq1qg1eg4abcdefg/frontend:latest
-
