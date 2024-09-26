@@ -51,3 +51,4 @@ export const fetchAppointment = async (appointment: IAppointment) => {
   console.log("Response data from appointment:", appointment);
   return data;
 };
+
