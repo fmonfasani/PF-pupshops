@@ -70,6 +70,7 @@ export class OrdersRepository {
     });
   }
 
+
   async getOrder(id: string) {
     const order = await this.ordersRepository.findOne({
       where: { id },
@@ -82,5 +83,39 @@ export class OrdersRepository {
     if (!order) throw new NotFoundException(`Order con id ${id} no encontrada`);
 
     return order;
+  }
+
+
+  async getAllOrders() {
+    return await this.ordersRepository.find({
+      relations: {
+        user: true,
+        orderDetails: true,
+      },
+    });
+  }
+
+
+  async updateOrder(id: string, updateOrderDto: any) {
+    const order = await this.ordersRepository.findOne({
+      where: { id },
+      relations: {
+        orderDetails: true,
+        user: true,
+      },
+    });
+
+    if (!order) throw new NotFoundException(`Order con id ${id} no encontrada`);
+
+    Object.assign(order, updateOrderDto);
+
+    return await this.ordersRepository.save(order);
+  }
+
+  async removeOrder(id: string) {
+    const order = await this.ordersRepository.findOne({ where: { id } });
+    if (!order) throw new NotFoundException(`Order con id ${id} no encontrada`);
+
+    return await this.ordersRepository.remove(order);
   }
 }

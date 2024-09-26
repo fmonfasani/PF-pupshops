@@ -1,9 +1,15 @@
-/* eslint-disable prettier/prettier */
-// src/modules/payments/dto/create-payment.dto.ts
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePaymentDto {
+  @IsString()
+  @IsNotEmpty()
   title: string;
+
+  @IsNumber()
+  @IsNotEmpty()
   quantity: number;
+
+  @IsNumber()
+  @IsNotEmpty()
   price: number;
 }
