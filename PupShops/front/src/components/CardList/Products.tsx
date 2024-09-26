@@ -7,6 +7,7 @@ import { ButtonForms } from "../Buttons/ButtonsForms";
 import AdminProductActions from "../ActionsAdmin/AdminProductsActions";
 import { NotificationRegister } from "../Notifications/NotificationRegister";
 import { NotificationError } from "../Notifications/NotificationError";
+import { useRouter } from "next/navigation";
 
 export interface IProduct {
   id: string;
@@ -22,7 +23,25 @@ export interface IProduct {
 }
 
 const ProductsPage = () => {
-  const { isAdmin } = useUserContext();
+  const { user } = useUserContext(); 
+  const isAdmin = user?.user?.isAdmin;
+  const router = useRouter();
+
+     //Ruta privada
+  useEffect(() => {
+    if (!isAdmin) {
+      setNotificationMessage(`Debes ser administrador para editar productos`);
+      setShowNotification(true);
+      setLoading(false)
+
+      setTimeout(() => {
+        setShowNotification(false);
+        router.push("/home");
+                }, 2000);
+     } else {
+      setLoading(false); 
+    }
+  }, [isAdmin, router]);
 
   // Estados
   const [products, setProducts] = useState<IProduct[]>([]);

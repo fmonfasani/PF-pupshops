@@ -1,9 +1,37 @@
-/*"use client"
+"use client"
 import React, { useState, useEffect } from 'react';
 import { fetchAppointments, fetchUserAppointments } from '@/utils/fetchAdminAppointments'; // Funciones de fetch
 import { IAppointment } from '@/Interfaces/interfaces';
+import { useUserContext } from '@/context/userContext';
+import { useRouter } from 'next/navigation';
+import { NotificationRegister } from '../Notifications/NotificationRegister';
+import { NotificationError } from '../Notifications/NotificationError';
 
 const AdminAppointments = () => {
+  const { user } = useUserContext(); 
+  const isAdmin = user?.user?.isAdmin;
+  const router = useRouter();
+
+     //Ruta privada
+  useEffect(() => {
+    if (!isAdmin) {
+      setNotificationMessage(`Debes ser administrador para editar productos`);
+      setShowNotification(true);
+      setLoading(false)
+
+      setTimeout(() => {
+        setShowNotification(false);
+        router.push("/home");
+                }, 2000);
+     } else {
+      setLoading(false); 
+    }
+  }, [isAdmin, router]);
+  const [loading, setLoading] = useState(true);
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [userAppointments, setUserAppointments] = useState<{scheduledAppointments: IAppointment[], historicalAppointments: IAppointment[]}>({ scheduledAppointments: [], historicalAppointments: [] });
   const [filter, setFilter] = useState('all'); // Estado para manejar el filtro
@@ -75,9 +103,12 @@ const AdminAppointments = () => {
           <p>No hay turnos disponibles.</p>
         )}
       </div>
+      {showNotification && <NotificationRegister message={notificationMessage} />}
+          {showErrorNotification && (
+            <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />
+          )}
     </div>
   );
 };
 
 export default AdminAppointments;
-*/
