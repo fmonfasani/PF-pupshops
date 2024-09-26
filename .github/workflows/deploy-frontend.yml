@@ -25,7 +25,6 @@ jobs:
 
       - name: Set up Docker
         run: |
-          echo "RENDER_SERVICE_ID: srv-c1pq1qg1eg4abcdefg"
           docker tag frontend:latest registry.render.com/srv-c1pq1qg1eg4abcdefg/frontend:latest
           docker push registry.render.com/srv-c1pq1qg1eg4abcdefg/frontend:latest
 
