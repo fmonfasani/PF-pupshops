@@ -1,10 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-<<<<<<< HEAD
-import * as bcrypt from 'bcrypt';
-=======
 import * as bcryptjs from 'bcryptjs';
->>>>>>> 918e06308e96ba03c83480ef394851bb5a672745
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './loginUserDto';
