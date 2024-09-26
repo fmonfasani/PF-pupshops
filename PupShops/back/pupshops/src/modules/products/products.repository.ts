@@ -105,7 +105,7 @@ export class ProductsRepository {
     return this.productsRepository.save(product);
   }
   
-  // Obtener productos por categoría hija
+
   async getProductsByChildCategory(categoryId: string): Promise<Products[]> {
     return this.productsRepository.find({
       where: { category: { id: categoryId } },
@@ -113,12 +113,11 @@ export class ProductsRepository {
     });
   }
 
-  // Obtener productos por categoría padre y sus subcategorías
+
   async getProductsByParentCategory(categoryId: string): Promise<Products[]> {
-    // Encontrar todas las subcategorías del padre
     const parentCategory = await this.categoriesRepository.findOne({
       where: { id: categoryId },
-      relations: ['children'], // assuming there is a children relation for subcategories
+      relations: ['children'], 
     });
 
     if (!parentCategory) {
