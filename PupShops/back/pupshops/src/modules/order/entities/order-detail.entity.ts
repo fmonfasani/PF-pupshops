@@ -24,6 +24,12 @@ export class OrderDetails {
   })
   price: number;
 
+  @Column({
+    type: 'int',
+    default: 1,
+  })
+  quantity: number;
+
   @OneToOne(() => Orders, (order) => order.orderDetails)
   @JoinColumn({ name: 'order_id' })
   order: Orders;

@@ -19,44 +19,38 @@ export class OrdersRepository {
     private readonly productsRepository: Repository<Products>,
   ) {}
 
-  async addOrder(userId: string, products: any) {
+  async addOrder(userId: string, products: Array<{ id: string, quantity: number }>) {
     let total = 0;
 
     const user = await this.usersRepository.findOneBy({ id: userId });
-    if (!user)
-      throw new NotFoundException(`Usuario con id ${userId} no encontrado`);
+    if (!user) throw new NotFoundException(`Usuario con id ${userId} no encontrado`);
 
     const order = new Orders();
     order.date = new Date();
     order.user = user;
-
     const newOrder = await this.ordersRepository.save(order);
 
     const productsArray = await Promise.all(
       products.map(async (element) => {
-        const product = await this.productsRepository.findOneBy({
-          id: element.id,
-        });
+        const product = await this.productsRepository.findOneBy({ id: element.id });
 
-        if (!product)
-          throw new NotFoundException(
-            `Producto con id ${element.id} no encontrado`,
-          );
+        if (!product) throw new NotFoundException(`Producto con id ${element.id} no encontrado`);
 
-        total += Number(product.price);
+        total += Number(product.price) * element.quantity;
 
         await this.productsRepository.update(
           { id: element.id },
-          { stock: product.stock - 1 },
+          { stock: product.stock - element.quantity },  
         );
 
-        return product;
+        return { product, quantity: element.quantity };
       }),
     );
 
     const orderDetail = new OrderDetails();
     orderDetail.price = Number(total.toFixed(2));
-    orderDetail.products = productsArray;
+    orderDetail.products = productsArray.map(item => item.product);
+    orderDetail.quantity = productsArray.reduce((acc, item) => acc + item.quantity, 0);  
     orderDetail.order = newOrder;
 
     await this.orderDetailRepository.save(orderDetail);
@@ -70,7 +64,7 @@ export class OrdersRepository {
     });
   }
 
-
+  // Asegúrate de que todas las funciones estén dentro de la clase
   async getOrder(id: string) {
     const order = await this.ordersRepository.findOne({
       where: { id },
@@ -85,7 +79,6 @@ export class OrdersRepository {
     return order;
   }
 
-
   async getAllOrders() {
     return await this.ordersRepository.find({
       relations: {
@@ -94,7 +87,6 @@ export class OrdersRepository {
       },
     });
   }
-
 
   async updateOrder(id: string, updateOrderDto: any) {
     const order = await this.ordersRepository.findOne({
@@ -119,3 +111,4 @@ export class OrdersRepository {
     return await this.ordersRepository.remove(order);
   }
 }
+

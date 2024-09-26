@@ -8,14 +8,12 @@ export class CreateOrderDto {
     userId: string;
 
     @ApiProperty({
-        example: [{"id": ""}],
-        description: "An array of product objects with at least one product",
+        example: [{ "id": "", "quantity": 1 }],
+        description: "An array of product objects with id and quantity",
         isArray: true,
     })
     @IsArray()
     @ArrayMinSize(1)
-    products: Partial<Products[]>
-
+    products: Array<{ id: string, quantity: number }>;
 }
 
-//export class PostOrderDto extends PickType(CreateOrderDto, ['userId', 'products']){}

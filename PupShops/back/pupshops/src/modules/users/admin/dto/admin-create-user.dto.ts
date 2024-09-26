@@ -6,11 +6,12 @@ import {
   IsInt,
   Length,
   IsStrongPassword,
-  IsEmpty,
+  
+  IsBoolean,
 } from 'class-validator';
-import { Column } from 'typeorm';
 
-export class CreateUserDto {
+
+export class AdminCreateUserDto {
   @IsString()
   @IsNotEmpty()
   @Length(3, 50)
@@ -102,5 +103,6 @@ export class CreateUserDto {
   })
   address: string;
 
- 
+  @IsBoolean()
+  isAdmin: boolean;
 }
