@@ -1,15 +1,21 @@
 "use client";
-
+import { useUserContext } from "@/context/userContext";
 import { useEffect, useState } from "react";
 import { getAllProducts } from "@/helpers/product.helper";
 import Link from "next/link";
+import { ButtonForms } from "../Buttons/ButtonsForms";
+import AdminProductActions from "../ActionsAdmin/AdminProductsActions";
+import { NotificationRegister } from "../Notifications/NotificationRegister";
+import { NotificationError } from "../Notifications/NotificationError";
+import { useRouter } from "next/navigation";
 
 export interface IProduct {
   id: string;
   name: string;
-  price: string;
+  price: number; // Asegúrate de que price sea un número
   imgUrl: string;
   description: string;
+  stock?: number;
   category: {
     id: string;
     name: string;
@@ -17,89 +23,130 @@ export interface IProduct {
 }
 
 const ProductsPage = () => {
-  // Estados para manejar productos, carga y errores
+  const { user } = useUserContext(); 
+  const isAdmin = user?.user?.isAdmin;
+  const router = useRouter();
+
+     //Ruta privada
+  useEffect(() => {
+    if (!isAdmin) {
+      setNotificationMessage(`Debes ser administrador para editar productos`);
+      setShowNotification(true);
+      setLoading(false)
+
+      setTimeout(() => {
+        setShowNotification(false);
+        router.push("/home");
+                }, 2000);
+     } else {
+      setLoading(false); 
+    }
+  }, [isAdmin, router]);
+
+  // Estados
   const [products, setProducts] = useState<IProduct[]>([]);
   const [sortedProducts, setSortedProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState("default");
 
-  // Estado para la paginación
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4; // Define cuántos elementos mostrar por página
+  // Notificaciones
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+
+  // Obtener productos
   useEffect(() => {
-    // Función para obtener los productos desde la API
     const fetchProducts = async () => {
       try {
         const data = await getAllProducts();
         setProducts(data);
-        setSortedProducts(data); // Al inicio, los productos están sin ordenar
-      } catch (error) {
-        setError("Failed to fetch products"); // Manejo de errores
+        setSortedProducts(data);
+      } catch (error: any) {
+        setError(error.message || "Failed to fetch products");
       } finally {
-        setLoading(false); // Finaliza la carga
+        setLoading(false);
       }
     };
-
-    fetchProducts(); // Llama a la función para obtener productos
+    fetchProducts();
   }, []);
 
-  // Función para ordenar productos según la opción seleccionada
+  // Función para ordenar productos
   const sortProducts = (option: string) => {
-    const sorted = [...products]; // Copia los productos para ordenarlos
+    const sorted = [...products];
     if (option === "price-asc") {
-      sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+      sorted.sort((a, b) => a.price - b.price);
     } else if (option === "price-desc") {
-      sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+      sorted.sort((a, b) => b.price - a.price);
     } else if (option === "name-asc") {
       sorted.sort((a, b) => a.name.localeCompare(b.name));
     } else if (option === "name-desc") {
       sorted.sort((a, b) => b.name.localeCompare(a.name));
     }
-    setSortedProducts(sorted); // Actualiza los productos ordenados
+    setSortedProducts(sorted);
   };
 
+  // Manejar cambio de opción de orden
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOption = event.target.value;
-    setSortOption(selectedOption); // Actualiza la opción de orden
-    sortProducts(selectedOption); // Ordena los productos
+    setSortOption(selectedOption);
+    sortProducts(selectedOption);
   };
 
   const handleAddToCart = (productId: string) => {
-    console.log(`Producto ${productId} añadido al carrito`); // Lógica para agregar al carrito
+    console.log(`Producto ${productId} añadido al carrito`);
   };
 
-  // Manejo de la paginación
-  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage); // Total de páginas
+  // Paginación
+  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
   const currentItems = sortedProducts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
-  ); // Elementos actuales de la página
+  );
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page); // Cambia la página actual
+    setCurrentPage(page);
   };
 
-  if (loading)
+  // Mostrar notificaciones
+  const handleDeleteNotification = (message: string) => {
+    setNotificationMessage(message);
+    setShowNotification(true);
+    setTimeout(() => setShowNotification(false), 3000);
+  };
+
+  const handleErrorNotification = (errorMessage: string) => {
+    setErrorMessage(errorMessage);
+    setShowErrorNotification(true);
+    setTimeout(() => setShowErrorNotification(false), 3000);
+  };
+
+  const handleDeleteProduct = (id: string) => {
+    setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+  };
+  
+
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return <div className="text-center text-red-500 mt-10">{error}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto py-10">
-        {/* Filtro de Ordenación */}
         <div className="flex justify-end mb-8 mt-16">
-          <label
-            htmlFor="sort"
-            className="mr-3 text-lg font-bold text-teal-600 mt-2"
-          >
+          <label htmlFor="sort" className="mr-3 text-lg font-bold text-teal-600 mt-2">
             Ordenar por:
           </label>
           <div className="bg-white shadow-lg hover:shadow-xl transition duration-500 rounded-lg p-3">
@@ -118,7 +165,6 @@ const ProductsPage = () => {
           </div>
         </div>
 
-        {/* Grilla de Productos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {currentItems.map((product) => (
             <div
@@ -127,107 +173,97 @@ const ProductsPage = () => {
             >
               <img
                 src={product.imgUrl}
-                alt={product.name}
+                alt={product.id}
                 className="rounded-t-lg h-48 w-full object-contain mt-3"
               />
               <div className="py-6 px-8 bg-white flex-grow">
                 <h2 className="text-teal-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">
-                  {product.name}
+                  {product.id}
                 </h2>
-                <p className="text-gray-700 tracking-wide mb-4">
-                  {product.description}
-                </p>
+                <p className="text-gray-700 tracking-wide mb-4">{product.description}</p>
                 <span className="text-lg font-bold text-purple-800">
-                  ${parseFloat(product.price).toFixed(2)}
+                  ${Number(product.price).toFixed(2)} {/* Asegura que price sea un número */}
                 </span>
-                <span className="text-xs text-pink-500 block mb-2">
-                  {product.category.name}
-                </span>
+                <span className="text-xs text-pink-500 block mb-2">{product.category.name}</span>
+                {isAdmin && (
+                  <p className="text-gray-700 tracking-wide mb-4 font-bold">Stock: {product.stock}</p>
+                )}
               </div>
 
               <div className="p-4 text-center">
                 <div className="flex justify-between gap-2">
-                  <button
-                    onClick={() => handleAddToCart(product.id)}
-                    className="flex-1 py-2 bg-teal-600 text-white font-medium rounded-full shadow hover:bg-purple-900 transition duration-300 ease-in-out"
-                  >
-                    Agregar al carrito
-                  </button>
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="flex-1 py-2 bg-pink-100 text-teal-600 font-medium rounded-full shadow hover:bg-pink-200 transition duration-300 ease-in-out"
-                  >
-                    Detalles
-                  </Link>
+                  {isAdmin ? (
+                    <AdminProductActions
+                      id={product.id}
+                      onDeleteNotification={handleDeleteNotification}
+                      onErrorNotification={handleErrorNotification}
+                      onDeleteProduct={handleDeleteProduct}
+                    />
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => handleAddToCart(product.id)}
+                        className="flex-1 py-2 bg-teal-600 text-white font-medium rounded-full shadow hover:bg-purple-900 transition duration-300 ease-in-out"
+                      >
+                        Agregar al carrito
+                      </button>
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="flex-1 py-2 bg-pink-100 text-teal-600 font-medium rounded-full shadow hover:bg-pink-200 transition duration-300 ease-in-out"
+                      >
+                        Detalles
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
           ))}
+
+          {showNotification && <NotificationRegister message={notificationMessage} />}
+          {showErrorNotification && (
+            <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />
+          )}
         </div>
 
-        {/* Paginación */}
         <ol className="flex justify-center gap-1 text-xs font-medium mt-10">
           <li>
             <a
               href="#"
-              onClick={() =>
-                handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
-              }
+              onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
               className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900"
             >
               <span className="sr-only">Prev Page</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="size-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" className="size-3" viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  d="M12.707 5.293a1 1 0 00-1.414 0L8 9.586 5.707 7.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"
                   clipRule="evenodd"
                 />
               </svg>
             </a>
           </li>
-
-          {/* Generación de botones de página */}
           {Array.from({ length: totalPages }, (_, index) => (
             <li key={index}>
-              <a
-                href="#"
+              <button
                 onClick={() => handlePageChange(index + 1)}
-                className={`block size-8 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900 ${
-                  currentPage === index + 1
-                    ? "border-purple-500 bg-blue-600 "
-                    : ""
-                }`}
+                className={`inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 ${currentPage === index + 1 ? "bg-gray-200" : ""}`}
               >
-                {index + 1} {/* Muestra el número de página */}
-              </a>
+                {index + 1}
+              </button>
             </li>
           ))}
-
           <li>
             <a
               href="#"
-              onClick={() =>
-                handlePageChange(
-                  currentPage < totalPages ? currentPage + 1 : totalPages
-                )
-              }
+              onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
               className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900"
             >
               <span className="sr-only">Next Page</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="size-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" className="size-3" viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  d="M7.293 5.293a1 1 0 011.414 0L12 9.586l2.293-2.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                   clipRule="evenodd"
                 />
               </svg>

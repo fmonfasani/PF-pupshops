@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { NotificationError } from '@/components/Notifications/NotificationError';
 import { NotificationUploadProduct } from '@/components/Notifications/NotificationUploadProduct';
 import ImageUpload from '@/components/Cloudinary/imageUpload';
+import { useUserContext } from '@/context/userContext';
 
 const categories = [
   { name: 'Perro', subcategories: ['Alimento para perros', 'Accesorios para Perro', 'Juguetes de Perro'] },
@@ -17,6 +18,13 @@ const sizes = ['Pequeña', 'Mediana', 'Grande'];
 const weights = ['sin especificar','2kg', '7kg', '15kg'];
 
 export default function UploadProductComponent() {
+  const { user } = useUserContext(); 
+  const isAdmin = user?.user?.isAdmin;
+ 
+  if (!isAdmin) {
+    return <p className='mt-20'>No tienes permisos para cargar productos.</p>; // Si no es administrador, mostramos un mensaje
+  }
+  
   const [dataProduct, setDataProduct] = useState<IUploadProduct>({
     name: '',
     description: '',
@@ -146,7 +154,7 @@ export default function UploadProductComponent() {
                   id='name'
                   name='name'
                   type='text'
-                  value={dataProduct.name}
+                  value={dataProduct.id}
                   onChange={handleChange}
                   placeholder='Nombre del producto'
                   className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm"
