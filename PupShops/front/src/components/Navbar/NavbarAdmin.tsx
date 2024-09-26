@@ -21,14 +21,14 @@ export default function NavbarAdminComponent() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isDogsOpen, setIsDogsOpen] = useState(false);
-  const [isCatsOpen, setIsCatsOpen] = useState(false);
+  const [isProductOpen, setIsProductOpen] = useState(false);
+  const [isServiceOpen, setIsServiceOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const closeAllMenus = () => {
-    setIsDogsOpen(false);
-    setIsCatsOpen(false);
+    setIsProductOpen(false);
+    setIsServiceOpen(false);
     setIsProfileOpen(false);
   };
 
@@ -45,12 +45,12 @@ export default function NavbarAdminComponent() {
     }
   };
 
-  const handleDogMenuClick = (route: string) => {
+  const handleProductMenuClick = (route: string) => {
     router.push(route);
     closeAllMenus();
   };
 
-  const handleCatMenuClick = (route: string) => {
+  const handleServiceMenuClick = (route: string) => {
     router.push(route);
     closeAllMenus();
   };
@@ -79,133 +79,91 @@ export default function NavbarAdminComponent() {
             aria-label="Global"
             className="hidden md:flex gap-6 text-sm flex-1"
           >
-            <button
-              className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/products")}
-            >
-              Productos
-            </button>
-
-            {/* Menu Perros */}
+           
+            {/* Menu Productos */}
             <div className="relative group">
+          
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
-                onClick={() => handleMenuClick(setIsDogsOpen, isDogsOpen)}
+                onClick={() => handleMenuClick(setIsProductOpen, isProductOpen)}
               >
-                Perros
+                Productos
               </button>
-              {isDogsOpen && (
+              {isProductOpen && (
                 <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
-                  <button
+                
+               <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() =>
-                      handleDogMenuClick("/Categorias/Balanceados/Perro")
-                    }
-                  >
-                    Balanceados
+                    onClick={() => handleProductMenuClick("/adminDashboard/uploadProducts")}
+                    >
+                      Cargar productos
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleDogMenuClick("/ropa/perros")}
+                    onClick={() => handleProductMenuClick("/products")}
                   >
-                    Ropa
+                    Editar y Eliminar
                   </button>
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleDogMenuClick("/Categorias/Toys/Perro")}
-                  >
-                    Juguetes
-                  </button>
-                </div>
+                   </div>
               )}
             </div>
 
-            {/* Menu Gatos */}
+            {/* Menu Servicios */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
-                onClick={() => handleMenuClick(setIsCatsOpen, isCatsOpen)}
+                onClick={() => handleMenuClick(setIsServiceOpen, isServiceOpen)}
               >
-                Gatos
+                Servicios
               </button>
-              {isCatsOpen && (
+              {isServiceOpen && (
                 <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                     onClick={() =>
-                      handleCatMenuClick("/Categorias/Balanceados/Gato")
+                      handleServiceMenuClick("/adminDashboard/appointments")
                     }
                   >
-                    Balanceados
+                    Turnos
                   </button>
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleCatMenuClick("/Categorias/Clothes/Gato")}
-                  >
-                    Ropa
-                  </button>
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleCatMenuClick("/Categorias/Toys/Gato")}
-                  >
-                    Juguetes
-                  </button>
-                </div>
+                   </div>
               )}
             </div>
 
             {/* Otros enlaces */}
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/Appointments")}
+              onClick={() => router.push("/adminDashboard/orders")}
             >
-              Peluqueria
+              Ordenes
             </button>
-            <button
-              className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/carro")}
-            >
-              Carrito
-            </button>
+           
 
-            <button
-              className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/aboutUs")}
-            >
-              Quienes Somos
-            </button>
-            <button
-              className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/contact")}
-            >
-              Contacto
-            </button>
-
-            {/* Botón de perfil en escritorio */}
+            {/* Botón de usuarios en escritorio */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
                 onClick={() => handleMenuClick(setIsProfileOpen, isProfileOpen)}
               >
-                Perfil
+                Usuarios
               </button>
               {isProfileOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                     onClick={() =>
-                      handleProfileMenuClick("/userDashboard/register")
+                      handleProfileMenuClick("/adminDashboard/users/usersData")
                     }
                   >
-                    Registrarse
+                    Datos de usuarios
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                     onClick={() =>
-                      handleProfileMenuClick("/userDashboard/login")
+                      handleProfileMenuClick("/adminDashboard/users/accessControl")
                     }
                   >
-                    Iniciar sesión
+                    Permisos de usuarios
                   </button>
                 </div>
               )}
@@ -229,102 +187,68 @@ export default function NavbarAdminComponent() {
                 </button>
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                  onClick={() => handleMenuClick(setIsDogsOpen, isDogsOpen)}
+                  onClick={() => handleMenuClick(setIsProductOpen, isProductOpen)}
                 >
-                  Perros
+                  Productos
                 </button>
-                {isDogsOpen && (
+                {isProductOpen && (
                   <div className="flex flex-col pl-4 bg-gray-100 items-end">
                     <button
                       className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleDogMenuClick("/Categorias/Balanceados/Perro")
-                      }
-                    >
-                      Balanceados
+                      onClick={() => handleProductMenuClick("/adminDashboard/uploadProducts")}
+                      >
+                        Cargar productos
                     </button>
                     <button
                       className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() => handleDogMenuClick("/ropa/perros")}
-                    >
-                      Ropa
+                      onClick={() => handleProductMenuClick("/products")}
+                      >
+                        Editar y Eliminar
                     </button>
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() => handleDogMenuClick("/juguetes/perros")}
-                    >
-                      Juguetes
-                    </button>
-                  </div>
+                      </div>
                 )}
-                <button
-                  className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                  onClick={() => handleMenuClick(setIsCatsOpen, isCatsOpen)}
-                >
-                  Gatos
+               <button className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200" onClick={() => handleMenuClick(setIsServiceOpen, isServiceOpen)}>
+              Servicios
+            </button>
+            {isServiceOpen && (
+              <div className="flex flex-col pl-4 bg-gray-100 items-end">
+                <button className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right" onClick={() => handleServiceMenuClick("/adminDashboard/appointments")}>
+                  Turnos
                 </button>
-                {isCatsOpen && (
-                  <div className="flex flex-col pl-4 bg-gray-100 items-end">
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleCatMenuClick("/Categorias/Balanceados/Gato")
-                      }
-                    >
-                      Balanceados
-                    </button>
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() => handleCatMenuClick("/ropa/gatos")}
-                    >
-                      Ropa
-                    </button>
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() => handleCatMenuClick("/juguetes/gatos")}
-                    >
-                      Juguetes
-                    </button>
-                  </div>
-                )}
-                <button
-                  className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                  onClick={() => router.push("/quienes-somos")}
-                >
-                  Quienes Somos
-                </button>
-                <button
-                  className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                  onClick={() => router.push("/contacto")}
-                >
-                  Contacto
-                </button>
-                {/* Botón de perfil al final */}
+              </div>
+            )}
+
+            {/* Botón de Ordenes siempre aparte */}
+            <button className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200" onClick={() => router.push("/adminDashboard/orders")}>
+              Ordenes
+            </button>
+              
+                {/* Botón de usuarios al final */}
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                   onClick={() =>
                     handleMenuClick(setIsProfileOpen, isProfileOpen)
                   }
                 >
-                  Perfil
+                  Usuarios
                 </button>
                 {isProfileOpen && (
                   <div className="flex flex-col pl-4 bg-gray-100 items-end">
                     <button
                       className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
                       onClick={() =>
-                        handleProfileMenuClick("/userDashboard/register")
+                        handleProfileMenuClick("/adminDashboard/users/usersData")
                       }
                     >
-                      Registrarse
+                      Datos de usuarios
                     </button>
                     <button
                       className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
                       onClick={() =>
-                        handleProfileMenuClick("/userDashboard/login")
+                        handleProfileMenuClick("/adminDashboard/users/accessControl")
                       }
                     >
-                      Iniciar sesión
+                      Permisos de usuarios
                     </button>
                   </div>
                 )}
