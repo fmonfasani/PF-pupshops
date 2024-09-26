@@ -8,6 +8,9 @@ import AdminProductActions from "../ActionsAdmin/AdminProductsActions";
 import { NotificationRegister } from "../Notifications/NotificationRegister";
 import { NotificationError } from "../Notifications/NotificationError";
 
+import { useRouter } from "next/navigation";
+
+
 export interface IProduct {
   id: string;
   name: string;
@@ -22,7 +25,27 @@ export interface IProduct {
 }
 
 const ProductsPage = () => {
-  const { isAdmin } = useUserContext();
+
+  const { user } = useUserContext(); 
+  const isAdmin = user?.user?.isAdmin;
+  const router = useRouter();
+
+     //Ruta privada
+  useEffect(() => {
+    if (!isAdmin) {
+      setNotificationMessage(`Debes ser administrador para editar productos`);
+      setShowNotification(true);
+      setLoading(false)
+
+      setTimeout(() => {
+        setShowNotification(false);
+        router.push("/home");
+                }, 2000);
+     } else {
+      setLoading(false); 
+    }
+  }, [isAdmin, router]);
+
 
   // Estados
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -98,6 +121,7 @@ const ProductsPage = () => {
     setNotificationMessage(message);
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
+
   };
 
   const handleErrorNotification = (errorMessage: string) => {
@@ -105,6 +129,7 @@ const ProductsPage = () => {
     setShowErrorNotification(true);
     setTimeout(() => setShowErrorNotification(false), 3000);
   };
+
 
   const handleDeleteProduct = (id: string) => {
     setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));

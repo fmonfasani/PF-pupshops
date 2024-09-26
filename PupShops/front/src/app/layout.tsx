@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
+import NavbarAdminComponent from "@/components/Navbar/NavbarAdmin";
+import { UserProvider } from "@/context/userContext";
 
 import ShowComponent from "@/components/ShowComponent/ShowComponet";
 
@@ -34,11 +36,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ShowComponent>
-          <Navbar />
-          {children}
-          <Footer />
-        </ShowComponent>
+
+        <UserProvider>
+        <NavbarAdminComponent/>
+        {/*<Navbar />*/}
+        {children}
+        <Footer />
+        </UserProvider>
+
       </body>
     </html>
   );

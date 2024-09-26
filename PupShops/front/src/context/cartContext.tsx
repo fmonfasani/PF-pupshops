@@ -5,6 +5,7 @@ import { ICartContextType, IProduct } from "@/Interfaces/ICart";
 import { fetchProductsById } from "@/lib/servers/serverCart";
 
 
+
 const addItemToCart = async (
   cartItems: IProduct[],
   productId: number,
@@ -24,6 +25,7 @@ const addItemToCart = async (
   
   const data = await fetchProductsById(productId);
   return [...cartItems, { ...data, quantity }];
+
 };
 
 const removeItem = (cartItems: IProduct[], productId: number) => {
@@ -65,6 +67,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
   }, [purchasedItems]);
 
+
   const addToCart = async (
     productId: number,
     quantity: number = 1
@@ -72,6 +75,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     const updatedCart = await addItemToCart(cartItems, productId, quantity);
     setCartItems(updatedCart);
     return !cartItems.some((item) => item.id === productId); // Devuelve true si se agregó el producto
+
   };
 
   const removeFromCart = (productId: number) => {
@@ -81,10 +85,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const proceedToBuy = async () => {
     try {
+
       const products = cartItems.map((item) => ({
         id: item.id,
         quantity: item.quantity,
       }));
+
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -92,7 +98,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
+
       const response = await fetch("http://localhost:3001/orders", {
+
         method: "POST",
         headers: {
           Authorization: token,
@@ -115,10 +123,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
+
     const totalAmount = cartItems.reduce(
       (acc, item) => acc + item.price * (item.quantity || 1), // Si no hay quantity, se asume como 1
       0
     );
+
     setTotal(totalAmount);
   }, [cartItems]);
 

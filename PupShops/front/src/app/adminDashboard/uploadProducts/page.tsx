@@ -8,8 +8,15 @@ import { NotificationRegister } from '@/components/Notifications/NotificationReg
 
 
 export default function UploadProducts() {
+
+  const { user } = useUserContext(); 
+  const isAdmin = user?.user?.isAdmin;
+  const router = useRouter();
+
+
   const { isAdmin } = useUserContext();
   const router = useRouter()
+
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [loading, setLoading] = useState(true);
