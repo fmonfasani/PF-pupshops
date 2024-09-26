@@ -1,15 +1,15 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class CreatePaymentDto {
+  @IsUUID()
+  orderId: string;
+
+  @IsNumber()
+  totalAmount: number; // Monto total a pagar
+
   @IsString()
-  @IsNotEmpty()
-  title: string;
+  title: string; // Título del ítem que se está comprando
 
-  @IsNumber()
-  @IsNotEmpty()
-  quantity: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  price: number;
+  @IsString()
+  type: 'product' | 'service'; // Nuevo campo para diferenciar si es un producto o servicio
 }

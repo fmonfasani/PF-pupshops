@@ -42,7 +42,7 @@ export class AuthService {
 
   async signIn(login: LoginUserDto) {
     const findUser = await this.usersService.getEmailLogin(login.email);
-    console.log('Usuario encontrado:', findUser);
+    console.log('Usuario encontrado:', findUser.email);
     if (!findUser) {
       throw new BadRequestException('Email y/o contraseña incorrectos');
     }
