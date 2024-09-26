@@ -20,7 +20,7 @@ const ClothesCat: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/products/child/${categoryId}`
+          `http://localhost:3001/products/child/${categoryId}`
         );
 
         if (!response.ok) {

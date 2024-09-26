@@ -1,16 +1,16 @@
 import {
   IAppointment,
   ILoginUser,
-  IUserRegister
+  IUserRegister,
 } from "@/Interfaces/interfaces";
 
 export const fetchRegisterUser = async (user: IUserRegister) => {
   const response = await fetch(`http://localhost:3000/auth/signup`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(user)
+    body: JSON.stringify(user),
   });
 
   if (!response.ok) {
@@ -24,9 +24,9 @@ export const fetchLoginUser = async (userData: ILoginUser) => {
   const response = await fetch("http://localhost:3000/auth/signin", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(userData)
+    body: JSON.stringify(userData),
   });
 
   if (!response.ok) {
@@ -43,9 +43,9 @@ export const fetchAppointment = async (appointment: IAppointment) => {
   const response = await fetch(`http://localhost:3000/appointments/`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(appointment)
+    body: JSON.stringify(appointment),
   });
   const data = await response.json();
   console.log("Response data from appointment:", appointment);
