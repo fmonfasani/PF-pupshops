@@ -1,4 +1,5 @@
 "use client";
+
 import {
   ILoginUser,
   IUserContextType,
@@ -7,6 +8,22 @@ import {
 } from "@/Interfaces/interfaces";
 import { fetchLoginUser, fetchRegisterUser } from "@/utils/fetchUser";
 import { createContext, useContext, useEffect, useState } from "react";
+=======
+import React, { createContext, useContext, useState } from 'react';
+
+// Definimos la interfaz para el tipo de usuario
+interface IUserContext {
+  isAdmin: boolean;
+}
+
+// Creamos el contexto con un valor inicial
+const UserContext = createContext<IUserContext | undefined>(undefined);
+
+// Provider para el contexto
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAdmin, setIsAdmin] = useState(true); // Estado de administrador
+
+
 
 export const UserContext = createContext<IUserContextType>({
   user: null,
@@ -17,9 +34,18 @@ export const UserContext = createContext<IUserContextType>({
   signUp: async () => false
 });
 
+
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<IUserResponse | null>(null);
   const [isLogged, setIsLogged] = useState<boolean>(false);
+=======
+
+
+export const UserProvider = ({children}: {children: React.ReactNode}) => {
+    const [user, setUser] = useState<IUserResponse | null>(null);
+    const [isLogged, setIsLogged] = useState<boolean>(false);
+  //  const [orders, setOrders] = useState<IOrderResponse[]>([]);
+
 
   const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     try {
@@ -54,6 +80,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Error during sign in:", error);
       return false;
     }
+
   };
 
   const signUp = async (user: IUserRegister) => {
@@ -114,3 +141,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 export const useUser = () => {
   return useContext(UserContext);
 };
+=======
+};
+export const useUserContext = () => {
+    const context = useContext(UserContext);
+    if (!context) {
+      throw new Error('useUserContext debe ser usado dentro de un UserProvider');
+    }
+    return context;
+  };
+
