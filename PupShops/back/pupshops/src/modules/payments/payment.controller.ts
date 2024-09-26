@@ -1,5 +1,6 @@
 import { Controller, Post, Body, Get, Query, Res } from '@nestjs/common';
 import { PaymentsService } from './payment.service';
+import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Response } from 'express';
 
 @Controller('payments')
@@ -8,7 +9,7 @@ export class PaymentsController {
 
   // Crear pago
   @Post('/create')
-  async createPayment(@Body() createPaymentDto: any) {
+  async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
     try {
       const payment =
         await this.paymentsService.createPayment(createPaymentDto);
@@ -61,24 +62,14 @@ export class PaymentsController {
 
     try {
       if (topic === 'payment') {
-        // Lógica para manejar el pago
         const paymentResponse =
           await this.paymentsService.getPaymentInfo(resource);
-        if (!paymentResponse || !paymentResponse.id) {
-          console.error('Respuesta de pago no contiene un id válido');
-          return;
-        }
         console.log('ID del pago:', paymentResponse.id);
-        // Continúa con la lógica de procesamiento...
+        // Continúa con la lógica de procesamiento del pago...
       } else if (topic === 'merchant_order') {
-        // Lógica para manejar órdenes
         const orderResponse = await this.paymentsService.getOrderInfo(resource);
-        if (!orderResponse || !orderResponse.id) {
-          console.error('Respuesta de orden no contiene un id válido');
-          return;
-        }
         console.log('ID de la orden:', orderResponse.id);
-        // Continúa con la lógica de procesamiento...
+        // Continúa con la lógica de procesamiento de la orden...
       } else {
         console.error('Tipo de notificación no manejado:', topic);
       }

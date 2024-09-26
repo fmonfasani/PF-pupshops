@@ -3,12 +3,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderDetails } from './order-detail.entity';
 import { User } from '../../users/entities/user.entity';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Payment } from '../../payments/entities/payment.entity';
 
 @Entity({
   name: 'orders',
@@ -31,4 +33,7 @@ export class Orders {
   @ManyToOne(() => User, (user) => user.orders)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => Payment, (payment) => payment.order)
+  payments: Payment[];
 }
