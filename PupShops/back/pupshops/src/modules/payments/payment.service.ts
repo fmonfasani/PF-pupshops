@@ -1,54 +1,98 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import fetch from 'node-fetch';
+import { CreatePaymentDto } from './dto/create-payment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Payment } from './entities/payment.entity';
+import { Orders } from '../../modules/order/entities/order.entity';
 
 @Injectable()
 export class PaymentsService {
   private readonly mercadoPagoUrl = 'https://api.mercadopago.com/v1/payments';
-
   private readonly mercadoPagoPreferenceUrl =
     'https://api.mercadopago.com/checkout/preferences';
   private readonly accessToken: string;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    @InjectRepository(Payment)
+    private paymentRepository: Repository<Payment>,
+    @InjectRepository(Orders)
+    private ordersRepository: Repository<Orders>,
+  ) {
     this.accessToken = this.configService.get<string>(
       'MERCADO_PAGO_ACCESS_TOKEN',
     );
   }
+  private readonly ngrokBaseUrl = 'https://fcc3-190-17-115-142.ngrok-free.app';
 
-  // Crear preferencia de pago
-  async createPayment(createPaymentDto: any) {
+  // Método auxiliar para realizar solicitudes HTTP
+  private async httpRequest(url: string, options: any) {
+    try {
+      // Agregar el header de autorización si no está presente en las opciones
+      if (!options.headers) {
+        options.headers = {};
+      }
+
+      // Incluir el token de acceso en el header
+      options.headers['Authorization'] = `Bearer ${this.accessToken}`;
+
+      const response = await fetch(url, options);
+
+      if (!response.ok) {
+        const errorResponse = await response.text();
+        throw new Error(
+          `Error en la solicitud: ${response.statusText}, Response: ${errorResponse}`,
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error en la solicitud HTTP:', error.message || error);
+      throw error;
+    }
+  }
+
+  async createPayment(createPaymentDto: CreatePaymentDto) {
+    const { type, title, totalAmount, orderId } = createPaymentDto;
+
+    // Buscar la orden de compra en la base de datos
+    const order = await this.ordersRepository.findOne({
+      where: { id: orderId },
+    });
+    if (!order) {
+      throw new NotFoundException('Orden de compra no encontrada');
+    }
+
     const preference = {
       items: [
         {
-          title: createPaymentDto.title,
-          quantity: createPaymentDto.quantity,
+          title: title,
+          quantity: 1,
           currency_id: 'ARS',
-          unit_price: createPaymentDto.price,
-          id: '1234',
-          description: 'Peluqueria de perro',
-          picture_url:
-            'https://res.cloudinary.com/dncbavrxt/image/upload/v1727189968/samples/animals/three-dogs.jpg',
+          unit_price: totalAmount,
+          id: type === 'service' ? 'service_1234' : 'product_1234',
+
+          //   description: type === 'service' ? 'Descripción del servicio' : 'Descripción del producto', // Descripción adecuada según el tipo
+          //    picture_url: type === 'service'?
+          //   'https://your-service-image-url'
+          //   : 'https://your-product-image-url',
+          //    picture_url:
+          //   'https://res.cloudinary.com/dncbavrxt/image/upload/v1727189968/samples/animals/three-dogs.jpg',
         },
       ],
+
+      external_reference: orderId, // Referencia externa con el orden del negocio
+
       back_urls: {
-        success: 'https://8659-190-17-115-142.ngrok-free.app/success',
-        failure: 'https://8659-190-17-115-142.ngrok-free.app/failure',
-        pending: 'https://8659-190-17-115-142.ngrok-free.app/pending',
+        success: `${this.ngrokBaseUrl}/success`,
+        failure: `${this.ngrokBaseUrl}/failure`,
+        pending: `${this.ngrokBaseUrl}/pending`,
       },
-      notification_url:
-        'https://8659-190-17-115-142.ngrok-free.app/payments/webhook',
+      notification_url: `${this.ngrokBaseUrl}/payments/webhook`,
       auto_return: 'approved',
 
-      external_reference: 'fmonfasani@gmail.com',
-      payment_methods: {
-        excluded_payment_methods: [
-          {
-            id: 'visa', // Excluir el método de pago Visa
-          },
-        ],
-        installments: 6, // Máximo número de cuotas
-      },
       metadata: {
         integrator_id: 'dev_24c65fb163bf11ea96500242ac130004',
       },
@@ -71,57 +115,43 @@ export class PaymentsService {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error al crear la preferencia:', error);
-      throw new Error('No se pudo crear la preferencia de pago.');
+      console.error(
+        'Error en la solicitud HTTP:',
+        error.response?.data || error.message,
+      );
+      throw new Error(
+        'Error en la solicitud: ' + (error.response?.status || 'Unknown error'),
+      );
     }
   }
 
   // Obtener el estado del pago usando el Payment ID
   async getPaymentStatus(paymentId: string) {
-    try {
-      const response = await fetch(`${this.mercadoPagoUrl}/${paymentId}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al obtener el estado del pago');
-      }
-
-      const data = await response.json();
-      return data; // Detalles del pago
-    } catch (error) {
-      console.error('Error al obtener el estado del pago:', error);
-      throw new Error('No se pudo obtener el estado del pago.');
-    }
+    const url = `https://api.mercadopago.com/v1/payments/${paymentId}`;
+    return this.httpRequest(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+      },
+    });
   }
+
   async getPaymentInfo(resource: string) {
-    try {
-      const response = await fetch(resource);
-      if (!response.ok) {
-        throw new Error(`Error en la solicitud: ${response.statusText}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error al obtener la información del pago:', error);
-      throw error;
+    if (!resource.startsWith('https://api.mercadopago.com')) {
+      throw new Error('URL de recurso inválida');
     }
+
+    return this.httpRequest(resource, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`, // Asegúrate de enviar el token aquí
+      },
+    });
   }
 
   async getOrderInfo(resource: string) {
-    try {
-      const response = await fetch(resource);
-      if (!response.ok) {
-        throw new Error(`Error en la solicitud: ${response.statusText}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error al obtener la información de la orden:', error);
-      throw error;
-    }
+    return this.httpRequest(resource, {
+      method: 'GET',
+    });
   }
 }
