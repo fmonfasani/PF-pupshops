@@ -1,145 +1,52 @@
 "use client";
 
-
 import {
   ILoginUser,
-  IUserContextType,
   IUserRegister,
   IUserResponse
 } from "@/Interfaces/interfaces";
+import { IUserContextType } from "@/Interfaces/interfaces";
 import { fetchLoginUser, fetchRegisterUser } from "@/utils/fetchUser";
 import { createContext, useContext, useEffect, useState } from "react";
-=======
-import React, { createContext, useContext, useState } from 'react';
-
-// Definimos la interfaz para el tipo de usuario
-interface IUserContext {
-  isAdmin: boolean;
-}
 
 // Creamos el contexto con un valor inicial
-const UserContext = createContext<IUserContext | undefined>(undefined);
-
-// Provider para el contexto
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAdmin, setIsAdmin] = useState(true); // Estado de administrador
-
-
-
-
-// Definimos el contexto con el tipo correcto
 export const UserContext = createContext<IUserContextType>({
-
-    user: null,
-    setUser: () => {},
-    isLogged: false,
-    setIsLogged: () => {},
-    signIn: async () => false,
-    signUp: async () => false,
+  user: null,
+  setUser: () => {},
+  isLogged: false,
+  setIsLogged: () => {},
+  signIn: async () => false,
+  signUp: async () => false
 });
 
 // Provider para el contexto
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<IUserResponse | null>({
-    login: true,
-    user: {
-      id: 1,
-      name: "Admin",
-      lastname: "User",
-      email: "admin@ejemplo.com",
-      password: "hashedpassword",
-      country: "País",
-      city: "Ciudad",
-      address: "Dirección",
-      phone: 123456789,
-      isAdmin: true, // Fuerzas el valor de isAdmin a true para pruebas
-    },
-    token: "token_simulado",
-  });
-
-
-
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
   const [user, setUser] = useState<IUserResponse | null>(null);
   const [isLogged, setIsLogged] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false); // Estado para el rol de admin
 
-
-    const [isLogged, setIsLogged] = useState<boolean>(false);
-    const [isAdmin, setIsAdmin] = useState<boolean>(false); // Añadimos estado para isAdmin
-
-    // LOGIN DE USUARIO
-    const signIn = async (credentials: ILoginUser): Promise<boolean> => {
-        try {
-            const data = await fetchLoginUser(credentials);
-            if (data.login) {
-                const userData = {
-                    login: data.login,
-                    token: data.token,
-                    user: data.findUser, // Asegúrate de asignar el objeto correcto
-                };
-
-                if (typeof window !== "undefined") {
-                    localStorage.setItem("user", JSON.stringify(userData));
-                    localStorage.setItem("token", data.token);
-                }
-
-
-                setUser(userData);
-                setIsLogged(true);
-                setIsAdmin(userData.user.isAdmin); // Establecemos si el usuario es admin
-
-                return true;
-            } else {
-                return false;
-            }
-        } catch (error) {
-            console.error('Error during sign in:', error);
-            return false;
-        }
-    };
-
-    return (
-        <UserContext.Provider value={{ user, setUser, isLogged, setIsLogged, signIn, signUp: async () => false }}>
-            {children}
-        </UserContext.Provider>
-    );
-};
-
-// Hook para usar el contexto
-export const useUserContext = () => {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error('useUserContext debe ser usado dentro de un UserProvider');
-    }
-    return context;
-};
-
-
+  // Función para iniciar sesión
   const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     try {
-      const response = await fetchLoginUser(credentials);
-      console.log("Login response:", response);
-
-      // Comprobar si la respuesta es exitosa
-      if (response.success) {
-        const userData: IUserResponse = {
-          login: true,
-          user: response.findUser,
-          token: response.token
+      const data = await fetchLoginUser(credentials);
+      if (data.login) {
+        const userData = {
+          login: data.login,
+          token: data.token,
+          user: data.findUser
         };
 
-        // Guardar en localStorage
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", response.token);
-        console.log(
-          "LocalStorage after sign in:",
-          localStorage.getItem("user"),
-          localStorage.getItem("token")
-        );
+        if (typeof window !== "undefined") {
+          localStorage.setItem("user", JSON.stringify(userData));
+          localStorage.setItem("token", data.token);
+        }
 
-        // Actualizar el estado
         setUser(userData);
         setIsLogged(true);
+        setIsAdmin(userData.user.isAdmin); // Establecemos si el usuario es admin
+
         return true;
       } else {
         return false;
@@ -148,10 +55,10 @@ export const useUserContext = () => {
       console.error("Error during sign in:", error);
       return false;
     }
-
   };
 
-  const signUp = async (user: IUserRegister) => {
+  // Función para registrarse
+  const signUp = async (user: IUserRegister): Promise<boolean> => {
     try {
       const data = await fetchRegisterUser(user);
       if (data.id) {
@@ -166,6 +73,7 @@ export const useUserContext = () => {
     }
   };
 
+  // Efecto para cargar el estado del usuario desde localStorage al montar
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
@@ -175,16 +83,29 @@ export const useUserContext = () => {
         try {
           const parsedUser: IUserResponse = JSON.parse(storedUser);
           console.log("Parsed user from localStorage:", parsedUser);
-          setUser(parsedUser);
-          setIsLogged(Boolean(token));
+
+          // Verificamos que parsedUser y parsedUser.user no sean null antes de acceder a ellos
+          if (parsedUser && parsedUser.user) {
+            setUser(parsedUser);
+            setIsLogged(Boolean(token));
+            setIsAdmin(parsedUser.user.isAdmin); // Aseguramos que user no sea null
+          } else {
+            // Si no hay usuario, reseteamos los estados
+            setUser(null);
+            setIsLogged(false);
+            setIsAdmin(false);
+          }
         } catch (error) {
           console.error("Error parsing stored user:", error);
           setUser(null);
           setIsLogged(false);
+          setIsAdmin(false);
         }
       } else {
+        // Si no hay un usuario guardado, reseteamos los estados
         setUser(null);
         setIsLogged(false);
+        setIsAdmin(false);
       }
     }
   }, []);
@@ -206,17 +127,10 @@ export const useUserContext = () => {
 };
 
 // Hook para usar el contexto
-export const useUser = () => {
-  return useContext(UserContext);
-};
-
-};
 export const useUserContext = () => {
-    const context = useContext(UserContext);
-    if (!context) {
-      throw new Error('useUserContext debe ser usado dentro de un UserProvider');
-    }
-    return context;
-  };
-
-
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUserContext debe ser usado dentro de un UserProvider");
+  }
+  return context;
+};
