@@ -1,6 +1,5 @@
 name: CI/CD Pipeline
 
-# Disparadores: cada vez que haya un push a main o develop o cuando se cree un PR hacia esas ramas.
 on:
   push:
     branches:
@@ -12,7 +11,6 @@ on:
       - develop
 
 jobs:
-  # Build y pruebas
   build-and-test:
     runs-on: ubuntu-latest
     services:
@@ -48,11 +46,11 @@ jobs:
           node-version: '16'
 
       - name: Install backend dependencies
-        working-directory: ./back/pupshops
+        working-directory: ./back/pupshops  # Ajuste de ruta
         run: npm install
 
       - name: Run backend tests
-        working-directory: ./back/pupshops
+        working-directory: ./back/pupshops  # Ajuste de ruta
         run: npm run test
 
       # Frontend: Instalar dependencias y correr tests
@@ -62,11 +60,11 @@ jobs:
           node-version: '16'
 
       - name: Install frontend dependencies
-        working-directory: ./front
+        working-directory: ./front  # Ruta correcta para el frontend
         run: npm install
 
       - name: Run frontend tests
-        working-directory: ./front
+        working-directory: ./front  # Ruta correcta para el frontend
         run: npm run test
 
   # Construcción de las imágenes Docker y push a Docker Hub
@@ -84,11 +82,11 @@ jobs:
 
       # Construir imagen Docker del backend
       - name: Build backend Docker image
-        run: docker build -t fmonfasani/backend:latest ./back/pupshops
+        run: docker build -t fmonfasani/backend:latest ./back/pupshops  # Ajuste de ruta
 
       # Construir imagen Docker del frontend
       - name: Build frontend Docker image
-        run: docker build -t fmonfasani/frontend:latest ./front
+        run: docker build -t fmonfasani/frontend:latest ./front  # Ajuste de ruta
 
       # Subir la imagen del backend a Docker Hub
       - name: Push backend Docker image
