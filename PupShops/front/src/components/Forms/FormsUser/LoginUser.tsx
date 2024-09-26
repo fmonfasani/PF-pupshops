@@ -1,4 +1,5 @@
 "use client";
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -14,10 +15,20 @@ import { NotificationError } from "@/components/Notifications/NotificationError"
 //Agregar contexto de user
 
 export default function LoginUser() {
+=======
+import { login } from "@/helpers/auth.helpers";
+import { validateLoginForm } from "../../../helpers/validate";
+import { ILoginError, ILoginProps } from "../../../Interfaces/types";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
+function LoginPage() {
+>>>>>>> 0b8f7965c6e6cd37ee3d88bbaabca02ca3eceeb9
   const router = useRouter();
-  const [userData, setUserData] = useState<ILoginUser>({
+  const initialState = {
     email: "",
     password: ""
+<<<<<<< HEAD
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showNotification, setShowNotification] = useState(false);
@@ -32,15 +43,31 @@ export default function LoginUser() {
       [name]: value
     });
     setErrors(validationErrors);
+=======
+  };
+  const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
+  const [errors, setErrors] = useState<ILoginError>(initialState);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setDataUser({ ...dataUser, [name]: value });
+>>>>>>> 0b8f7965c6e6cd37ee3d88bbaabca02ca3eceeb9
   };
 
-  const handleRegisterRedirect = () => {
-    router.push("/userDashboard/register");
-  };
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const response = await login(dataUser);
+      console.log(response);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+      if (response && response.token && response.findUser) {
+        const { token, findUser } = response;
+        localStorage.setItem(
+          "userSession",
+          JSON.stringify({ token, user: findUser })
+        );
 
+<<<<<<< HEAD
     const { formIsValid, errors: validationErrors } = validateLogin(userData);
 
     if (formIsValid) {
@@ -148,6 +175,76 @@ export default function LoginUser() {
                     />
                   </svg>
                 </span>
+=======
+        router.push("/");
+      } else {
+        setErrors({ ...errors, email: "Invalid login credentials." });
+      }
+    } catch (error: any) {
+      const errors = validateLoginForm(dataUser);
+      setErrors(errors);
+    }
+  };
+
+  useEffect(() => {
+    const errors = validateLoginForm(dataUser);
+    setErrors(errors);
+  }, [dataUser]);
+
+  return (
+    <section className="bg-gray-100 p-4 mt-16">
+      <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
+        <div className="rounded-lg bg-white py-8 px-4 shadow-lg lg:px-8">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="relative z-10 mt-0 bg-opacity-60 bg-white p-4 rounded-lg">
+              <h1 className="text-2xl font-bold text-center text-blue-950 ">
+                Iniciar sesión en tu cuenta
+              </h1>
+            </div>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Email
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={dataUser.email}
+                  onChange={handleChange}
+                  placeholder="example@gmail.com"
+                  required
+                  autoComplete="email"
+                  className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                />
+                {errors.email && (
+                  <span className="text-red-500 text-sm">{errors.email}</span>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Contraseña
+              </label>
+              <div className="mt-2">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={dataUser.password}
+                  onChange={handleChange}
+                  placeholder="********"
+                  required
+                  className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                />
+>>>>>>> 0b8f7965c6e6cd37ee3d88bbaabca02ca3eceeb9
                 {errors.password && (
                   <span className="text-red-500 text-sm">
                     {errors.password}
@@ -155,6 +252,7 @@ export default function LoginUser() {
                 )}
               </div>
             </div>
+<<<<<<< HEAD
             <ButtonForms
               text="Ingresar"
               disabled={Object.keys(errors).length > 0}
@@ -174,6 +272,33 @@ export default function LoginUser() {
           onClose={() => setShowErrorNotification(false)}
         />
       )}
+=======
+
+            <div>
+              <button
+                disabled={errors.email ? true : false}
+                type="submit"
+                className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Iniciar sesión
+              </button>
+            </div>
+          </form>
+
+          <p className="mt-10 text-center text-sm text-gray-500">
+            ¿No eres miembro?{" "}
+            <a
+              href="/register"
+              className="font-semibold leading-6 text-teal-600 hover:text-teal-300"
+            >
+              Regístrate aquí
+            </a>
+          </p>
+        </div>
+      </div>
+>>>>>>> 0b8f7965c6e6cd37ee3d88bbaabca02ca3eceeb9
     </section>
   );
 }
+
+export default LoginPage;

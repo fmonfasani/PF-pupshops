@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './loginUserDto';
@@ -63,6 +63,6 @@ export class AuthService {
     };
 
     const token = this.jwtService.sign(userPayload);
-    return { success: 'Usuario logeado correctamente', token };
+    return { success: 'Usuario logeado correctamente', token, findUser };
   }
 }
