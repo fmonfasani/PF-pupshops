@@ -1,81 +1,79 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Product } from "@/Interfaces/Iproducts";
+import toysCatArray from "@/helpers/toysCatArray";
+
+const ITEMS_PER_PAGE = 5;
+
 export default function ToysCat() {
   const router = useRouter();
-  const [productsCatFood, setProductsCatFood] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/products/child/dcad67a5-b9c6-4f87-8a99-5cf455fdde6f"
-        );
-        if (!response.ok) {
-          throw new Error("Error al cargar los productos");
-        }
-        const data = await response.json();
-        setProductsCatFood(data);
-      } catch (err) {
-        //* Verificación de tipo
+  // Calcula el índice de inicio y fin de los productos en la página actual
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentProducts = toysCatArray.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(toysCatArray.length / ITEMS_PER_PAGE);
 
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Ocurrió un error desconocido");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Balanceados para Gatos</h1>
+    <div className="container mx-auto p-4 bg-slate-50">
+      <h1 className="text-2xl text-center m-4 font-bold mb-4">
+        Juguetes para Gatos
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {productsCatFood.map((product: Product) => (
+        {currentProducts.map((product) => (
           <div
             key={product.id}
-            className="border p-4 rounded-lg shadow-md cursor-pointer"
-            onClick={() => router.push("/Categorias/Balanceados/Gato")}
+            className="border p-4 rounded-lg shadow-md cursor-pointer flex flex-col justify-between h-full" // Asegura que el contenido de la tarjeta esté distribuido verticalmente
+            onClick={() => router.push("/Categorias/Juguetes/Gato")}
           >
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={300}
-              height={300}
-              className="object-cover rounded-md"
-            />
-            <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
-            <p className="text-gray-700">{product.description}</p>
-            <p className="text-green-600 font-bold">${product.price}</p>
-            <p className="text-gray-500">Stock: {product.stock}</p>
+            <div className="flex flex-col items-center">
+              <Image
+                src={product.imgUrl}
+                alt={product.name}
+                width={200}
+                height={200}
+                className="object-contan rounded-md mb-4" // Asegura que todas las imágenes tengan la misma altura y ancho completo
+              />
+              <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
+              <p className="text-gray-700 mb-2">{product.description}</p>
+              <p className="text-green-600 font-bold mb-4">
+                ${product.price}
+              </p>{" "}
+              {/* Espaciado inferior para separar el botón */}
+            </div>
             <button
-              className="mt-2 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+              className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition" // mt-auto para empujar el botón al final
               onClick={(e) => {
-                e.stopPropagation(); // Evita que se ejecute el onClick del div
+                e.stopPropagation();
                 console.log(`Agregando ${product.name} al carrito`);
               }}
             >
               Agregar al Carrito
             </button>
           </div>
+        ))}
+      </div>
+
+      <div className="flex justify-center mt-4">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`mx-1 px-3 py-1 rounded-md ${
+              currentPage === index + 1
+                ? "bg-teal-600 text-white"
+                : "bg-gray-300"
+            }`}
+          >
+            {index + 1}
+          </button>
         ))}
       </div>
     </div>

@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import { getAllProducts } from "@/helpers/product.helper";
 import Link from "next/link";
 
-interface IProduct {
+export interface IProduct {
   id: string;
   name: string;
   price: string;
   imgUrl: string;
   description: string;
-  stock: number;
   category: {
     id: string;
     name: string;
@@ -27,7 +26,7 @@ const ProductsPage = () => {
 
   // Estado para la paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Define cuántos elementos mostrar por página
+  const itemsPerPage = 4; // Define cuántos elementos mostrar por página
 
   useEffect(() => {
     // Función para obtener los productos desde la API
@@ -99,7 +98,7 @@ const ProductsPage = () => {
         <div className="flex justify-end mb-8 mt-16">
           <label
             htmlFor="sort"
-            className="mr-3 text-lg font-bold text-purple-600 mt-2"
+            className="mr-3 text-lg font-bold text-teal-600 mt-2"
           >
             Ordenar por:
           </label>
@@ -108,7 +107,7 @@ const ProductsPage = () => {
               id="sort"
               value={sortOption}
               onChange={handleSortChange}
-              className="border-none bg-transparent text-purple-600 font-medium rounded-md focus:outline-none focus:ring-0"
+              className="border-none bg-transparent text-teal-600 font-medium rounded-md focus:outline-none focus:ring-0"
             >
               <option value="default">Por defecto</option>
               <option value="price-asc">Precio: Menor a Mayor</option>
@@ -129,10 +128,10 @@ const ProductsPage = () => {
               <img
                 src={product.imgUrl}
                 alt={product.name}
-                className="rounded-t-lg h-48 w-full object-cover"
+                className="rounded-t-lg h-48 w-full object-contain mt-3"
               />
               <div className="py-6 px-8 bg-white flex-grow">
-                <h2 className="text-purple-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">
+                <h2 className="text-teal-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">
                   {product.name}
                 </h2>
                 <p className="text-gray-700 tracking-wide mb-4">
@@ -150,13 +149,13 @@ const ProductsPage = () => {
                 <div className="flex justify-between gap-2">
                   <button
                     onClick={() => handleAddToCart(product.id)}
-                    className="flex-1 py-2 bg-purple-600 text-white font-medium rounded-full shadow hover:bg-purple-900 transition duration-300 ease-in-out"
+                    className="flex-1 py-2 bg-teal-600 text-white font-medium rounded-full shadow hover:bg-purple-900 transition duration-300 ease-in-out"
                   >
                     Agregar al carrito
                   </button>
                   <Link
                     href={`/products/${product.id}`}
-                    className="flex-1 py-2 bg-pink-100 text-purple-600 font-medium rounded-full shadow hover:bg-pink-200 transition duration-300 ease-in-out"
+                    className="flex-1 py-2 bg-pink-100 text-teal-600 font-medium rounded-full shadow hover:bg-pink-200 transition duration-300 ease-in-out"
                   >
                     Detalles
                   </Link>

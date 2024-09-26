@@ -65,7 +65,7 @@ export default function LoginUser() {
       }
 
   return (
-    <section className="bg-gray-100 font-sans">
+    <section className="bg-gray-100 mt-10 font-sans">
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg px-4 rounded-lg shadow-lg bg-white">
         <h1 className="text-center text-2xl pt-6 font-bold text-blue-950 sm:text-3xl">¡Bienvenido de vuelta a tu tienda de mascotas!</h1>

@@ -1,9 +1,9 @@
-import { ILoginUser, IUserRegister } from "@/Interfaces/interfaces";
+import { IAppointment, ILoginUser, IUserRegister } from "@/Interfaces/interfaces";
 
 
 
 export const fetchRegisterUser = async (user: IUserRegister) => {
-    const response = await fetch(`http://localhost:3000/auth/signup`, {
+    const response = await fetch(`http://localhost:3001/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -20,7 +20,7 @@ export const fetchRegisterUser = async (user: IUserRegister) => {
 
 
 export const fetchLoginUser = async (credentials: ILoginUser) => {
-    const response = await fetch(`http://localhost:3000/auth/signin`, {
+    const response = await fetch(`http://localhost:3001/auth/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,3 +31,17 @@ export const fetchLoginUser = async (credentials: ILoginUser) => {
       console.log("Response data from login:", data);
       return data;
     }
+
+
+export const fetchAppointment = async(appointment: IAppointment) => {
+  const response = await fetch(`http://localhost:3001/appointments/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(appointment),
+  });
+  const data = await response.json();
+  console.log("Response data from appointment:", appointment);
+  return data;
+}

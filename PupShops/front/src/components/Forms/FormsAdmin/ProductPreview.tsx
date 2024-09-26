@@ -19,7 +19,7 @@ const ProductPreview: React.FC<{ product: IUploadProduct }> = ({ product }) => {
         {/* Detalles del producto */}
         <div className="p-4 flex-grow flex flex-col justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-purple-600 mb-2">
+            <h2 className="text-xl font-semibold text-teal-600 mb-2">
               {product.name}
             </h2>
             <p className="text-gray-600 mb-4 text-sm">{product.description}</p>
@@ -33,13 +33,13 @@ const ProductPreview: React.FC<{ product: IUploadProduct }> = ({ product }) => {
           <div className="mt-auto">
             <a
               href="#"
-              className="block w-full text-center rounded-full bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-purple-700 focus:outline-none focus:ring focus:ring-purple-300 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 mb-2"
+              className="block w-full text-center rounded-full bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-orange-300 focus:outline-none focus:ring focus:ring-purple-300 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 mb-2"
             >
               Más Información
             </a>
             <a
               href="#"
-              className="block w-full text-center rounded-full bg-pink-500 px-4 py-2 text-sm font-medium text-white shadow hover:bg-pink-600 focus:outline-none focus:ring focus:ring-pink-300 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+              className="block w-full text-center rounded-full bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-orange-300 focus:outline-none focus:ring focus:ring-purple-300 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 mb-2"
             >
               Comprar ahora
             </a>

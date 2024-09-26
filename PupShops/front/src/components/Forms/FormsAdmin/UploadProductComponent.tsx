@@ -6,6 +6,7 @@ import { validateProduct } from '@/utils/validationUploadProduct';
 import React, { useState } from 'react';
 import { NotificationError } from '@/components/Notifications/NotificationError';
 import { NotificationUploadProduct } from '@/components/Notifications/NotificationUploadProduct';
+import ImageUpload from '@/components/Cloudinary/imageUpload';
 
 const categories = [
   { name: 'Perro', subcategories: ['Alimento para perros', 'Accesorios para Perro', 'Juguetes de Perro'] },
@@ -108,6 +109,15 @@ export default function UploadProductComponent() {
         setTimeout(() => {
             setShowNotification(false);
         }, 3000);
+        setDataProduct({
+          name: '',
+          description: '',
+          price: 0,
+          imgUrl: '',
+          stock: 0,
+          categoryName: '', 
+          waist: '', 
+          weight: null,})
       } else {
         setErrors({ ...errors, general: "Error al cargar productos" });
       }
@@ -121,7 +131,7 @@ export default function UploadProductComponent() {
   
 
   return (
-    <section className="bg-gray-100 font-sans">
+    <section className="bg-gray-100 font-sans mt-9">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl px-4 rounded-lg shadow-lg bg-white">
           <h1 className="text-center text-2xl pt-6 font-bold text-blue-950 sm:text-3xl">Agregar nuevo producto</h1>
@@ -193,6 +203,7 @@ export default function UploadProductComponent() {
                         {subcategory}
                       </option>
                     ))}
+                {errors.subcategory && <span className="text-red-500 text-sm">{errors.subcategory}</span>}
                 </select>
               </div>
   
@@ -246,19 +257,12 @@ export default function UploadProductComponent() {
                 </select>
               </div>
   
-              <div>
-                <label htmlFor='imgUrl' className="block text-sm font-medium text-gray-700">Imagen URL</label>
-                <input
-                  id='imgUrl'
-                  name='imgUrl'
-                  type='text'
-                  value={dataProduct.imgUrl}
-                  onChange={handleChange}
-                  placeholder='URL de la imagen'
-                  className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm"
-                />
-                {errors.imgUrl && <span className="text-red-500 text-sm">{errors.imgUrl}</span>}
-              </div>
+              <div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700">Imagen</label>
+  <ImageUpload onUpload={(url: string) => setDataProduct(prev => ({ ...prev, imgUrl: url }))} />
+  
+</div>
+
   
               {/* Campo de precio agregado aquí */}
               <div>
