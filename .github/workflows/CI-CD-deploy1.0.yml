@@ -25,15 +25,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install docker-compose -y
 
-      # 4. Log in to Docker Hub (opcional si necesitas hacer push de imágenes a Docker Hub)
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      # 4. List files to verify docker-compose.yml exists
+      - name: List files
+        run: ls -R
 
-      # 5. Build and deploy with Docker Compose
+      # 5. Deploy with Docker Compose (ajusta la ruta si es necesario)
       - name: Deploy with Docker Compose
         run: |
-          docker-compose -f docker-compose.yml up --build -d
-
-      # 6. (Opcional) Stop and remove Docker containers after deploy if necessary
-      # - name: Stop and remove Docker containers
-      #   run: docker-compose down
+          docker-compose -f ./PupShops/docker-compose.yml up --build -d
