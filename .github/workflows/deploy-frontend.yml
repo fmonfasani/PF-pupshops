@@ -21,7 +21,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t frontend:latest .
+          docker build -t frontend:latest -f docker/Dockerfile .
 
       - name: Set up Docker
         run: |
