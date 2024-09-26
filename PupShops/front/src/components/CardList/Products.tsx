@@ -127,12 +127,12 @@ const ProductsPage = () => {
             >
               <img
                 src={product.imgUrl}
-                alt={product.name}
+                alt={product.id}
                 className="rounded-t-lg h-48 w-full object-contain mt-3"
               />
               <div className="py-6 px-8 bg-white flex-grow">
                 <h2 className="text-teal-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">
-                  {product.name}
+                  {product.id}
                 </h2>
                 <p className="text-gray-700 tracking-wide mb-4">
                   {product.description}

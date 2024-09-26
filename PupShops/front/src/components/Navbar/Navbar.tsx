@@ -154,7 +154,7 @@ export default function Navbar() {
             </button>
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/carro")}
+              onClick={() => router.push("/cart")}
             >
               Carrito
             </button>

@@ -11,7 +11,7 @@ const ProductPreview: React.FC<{ product: IUploadProduct }> = ({ product }) => {
         <div className="relative overflow-hidden h-80">
           <img
             src={product.imgUrl}
-            alt={product.name}
+            alt={product.id}
             className="w-full h-full object-cover transform transition duration-300 scale-100 group-hover:scale-95"
           />
         </div>
@@ -20,7 +20,7 @@ const ProductPreview: React.FC<{ product: IUploadProduct }> = ({ product }) => {
         <div className="p-4 flex-grow flex flex-col justify-between">
           <div>
             <h2 className="text-xl font-semibold text-teal-600 mb-2">
-              {product.name}
+              {product.id}
             </h2>
             <p className="text-gray-600 mb-4 text-sm">{product.description}</p>
             <p className="text-gray-600 mb-4 text-sm">Precio: ${product.price}</p>
