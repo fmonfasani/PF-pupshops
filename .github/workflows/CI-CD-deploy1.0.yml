@@ -19,15 +19,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # 3. Log in to Docker Hub (opcional si necesitas hacer push de imágenes a Docker Hub)
+      # 3. Install Docker Compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      # 4. Log in to Docker Hub (opcional si necesitas hacer push de imágenes a Docker Hub)
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # 4. Build and deploy with Docker Compose
+      # 5. Build and deploy with Docker Compose
       - name: Deploy with Docker Compose
         run: |
           docker-compose -f docker-compose.yml up --build -d
 
-      # 5. (Opcional) Stop and remove Docker containers after deploy if necessary
+      # 6. (Opcional) Stop and remove Docker containers after deploy if necessary
       # - name: Stop and remove Docker containers
       #   run: docker-compose down
