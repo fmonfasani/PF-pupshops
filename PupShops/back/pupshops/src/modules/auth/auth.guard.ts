@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     const token = request.headers['authorization']?.split(' ')[1] ?? '';
 
     if (!token) {
-      throw new BadRequestException('Bearer token not found');
+      throw new BadRequestException('Token de autenticación erróneo/faltante');
     }
     try {
       const secret = process.env.JWT_SECRET;
