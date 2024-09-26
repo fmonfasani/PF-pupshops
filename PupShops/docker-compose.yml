@@ -7,7 +7,7 @@ services:
       context: ./front # Ruta al proyecto de Next
       dockerfile: Dockerfile # Dockerfile que se usa para construir el frontend
     ports:
-      - "3001:3001"
+      - "3000:3000"
     # Mapea el puerto del contenedor al puerto local
     volumes:
       - ./front:/app # Sincroniza el código local con el contenedor
@@ -21,7 +21,7 @@ services:
       context: ./back/pupshops # Ruta al proyecto del backend
       dockerfile: Dockerfile # Dockerfile que se usa para construir el backend
     ports:
-      - "3000:3000" # Puerto para el backend
+      - "3001:3001" # Puerto para el backend
     volumes:
       - ./back/pupshops:/app # Sincroniza el código local con el contenedor
     command: npm run start:dev # Comando para iniciar el backend en modo desarrollo
