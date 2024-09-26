@@ -1,31 +1,35 @@
-name: CI/CD Pipeline
+name: Deploy Frontend to Render
 
 on:
   push:
     branches:
       - main
-      - develop
-      - deploy
 
 jobs:
-  build:
+  deploy-frontend:
+    name: Deploy Frontend
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    # Instalar Docker Buildx
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
-    # Instalar Docker Compose
-    - name: Install Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
-    - name: Build backend service
-      run: docker-compose -f PupShops/docker-compose.yml build backend
+      - name: Build Docker image for frontend
+        run: |
+          docker build -t frontend ./PupShops/front
 
-    - name: Build frontend service
-      run: docker-compose -f PupShops/docker-compose.yml build frontend
+      - name: Deploy Frontend to Render
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          API_URL: ${{ secrets.API_URL }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
+          NEXT_PUBLIC_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}
+        run: |
+          docker tag frontend:latest registry.render.com/$RENDER_SERVICE_ID/frontend:latest
+          docker push registry.render.com/$RENDER_SERVICE_ID/frontend:latest
