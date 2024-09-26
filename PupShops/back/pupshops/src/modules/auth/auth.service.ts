@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import * as bcrypt from 'bcryptjs';
+import * as bcryptjs from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './loginUserDto';
@@ -22,7 +22,7 @@ export class AuthService {
       throw new BadRequestException('Las contraseñas no coinciden');
     }
 
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const hashedPassword = await bcryptjs.hash(user.password, 10);
     if (!hashedPassword) {
       throw new Error('Error en la encriptación de la contraseña');
     }
@@ -42,12 +42,12 @@ export class AuthService {
 
   async signIn(login: LoginUserDto) {
     const findUser = await this.usersService.getEmailLogin(login.email);
-    console.log('Usuario encontrado:', findUser);
+    console.log('Usuario encontrado:', findUser.email);
     if (!findUser) {
       throw new BadRequestException('Email y/o contraseña incorrectos');
     }
 
-    const comparedPasswords = await bcrypt.compare(
+    const comparedPasswords = await bcryptjs.compare(
       login.password,
       findUser.password,
     );

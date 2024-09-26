@@ -5,7 +5,7 @@ import { IUploadProduct } from "@/Interfaces/interfacesAdmin";
 
 //Cargar  productos
 export const fetchUploadProduct = async (product:IUploadProduct) => {
-    const response = await fetch(`http://localhost:3000/products/`, {
+    const response = await fetch(`http://localhost:3001/products/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
