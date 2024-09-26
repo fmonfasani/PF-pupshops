@@ -12,6 +12,7 @@ import {
   Req,
   UseGuards,
   InternalServerErrorException,
+  Post,
 } from '@nestjs/common';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -22,6 +23,8 @@ import { Roles } from '../../auth/roles/roles.decorator';
 
 import { AdminService } from './admin.service';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
+import { AdminCreateUserDto } from './dto/admin-create-user.dto';
+import { plainToClass } from 'class-transformer';
 
 @ApiTags('Admin')
 @ApiBearerAuth()
@@ -66,6 +69,19 @@ export class AdminController {
       throw new InternalServerErrorException('Error al buscar el usuario por ID');
     }
   }
+  @Post('users/register')
+  @HttpCode(201)
+  async signUp(
+    @Body() user: AdminCreateUserDto,
+    @Req() request: Request & { now: string },
+  ) {
+    console.log('Usuario creado a las: ', request.now);
+    const nuevoUsuario = await this.adminService.createUser(user);
+    return plainToClass(AdminCreateUserDto, nuevoUsuario, {
+      excludeExtraneousValues: true,
+    });
+  }
+
 
   @HttpCode(200)
   @Put('users/:id')

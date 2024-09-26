@@ -48,7 +48,7 @@ export class CreateUserDto {
   @ApiProperty({
     description:
       'La contraseña debe contener al menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial',
-    example: 'Contraseña1234-',
+    example: 'Palabra1*',
   })
   password: string;
 
@@ -63,7 +63,7 @@ export class CreateUserDto {
   @ApiProperty({
     description:
       'Corrobora que la confirmación sea igual a la contraseña proporcionada',
-    example: 'Contraseña1234-',
+    example: 'Palabra1*',
   })
   confirmPassword: string;
 
