@@ -1,5 +1,4 @@
 [
-
   {
     "name": "Pelota para Gato",
     "description": "Pelota interactiva para gatos",
@@ -39,8 +38,200 @@
     "stock": 60,
     "imgUrl": "https://caravanaexpert.com/wp-content/uploads/2023/05/71CXaaURP6L._AC_SX679_-450x450.jpg",
     "categoryName": "Accesorios para Perro"
+  },
+
+  {
+    "name": "Hill's Science Diet",
+    "description": "Comida de alta calidad formulada específicamente para gatos. Incluye nutrientes esenciales que promueven la salud digestiva y el bienestar general.",
+    "price": 32,
+    "stock": 100,
+    "imgUrl": "https://www.vetshopaustralia.com.au/media/catalog/product/cache/700x700/c/_/c_hsfs_seni_ad_bag-hills-sdcat-adult11_chicken-agedefying_3.jpg",
+    "categoryName": "Alimento para gatos"
+  },
+  {
+    "name": "Royal Canin",
+    "description": "Comida diseñada para satisfacer las necesidades nutricionales específicas de los gatos, con nutrientes de alta calidad para promover una vida saludable.",
+    "price": 38,
+    "stock": 100,
+    "imgUrl": "https://puppiscolombia.vteximg.com.br/arquivos/ids/184365-1000-1000/kitten-sterilised.png?v=638018651108330000",
+    "categoryName": "Alimento para gatos"
+  },
+  {
+    "name": "Purina Pro Plan",
+    "description": "Fórmula premium para gatos que proporciona una dieta equilibrada y apoya el crecimiento y desarrollo de tu mejor amigo.",
+    "price": 30,
+    "stock": 100,
+    "imgUrl": "https://purina.com.co/sites/default/files/styles/webp/public/2022-10/Kitten-Pollo-%26-H%C3%ADgado_1.png.webp?itok=4rV0aWti",
+    "categoryName": "Alimento para gatos"
+  },
+  {
+    "name": "Blue Buffalo",
+    "description": "Alimento natural rico en proteínas de alta calidad y sin conservantes artificiales. Ideal para gatos con sensibilidades alimentarias.",
+    "price": 28,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/71uKQEo3oaL.jpg",
+    "categoryName": "Alimento para gatos"
+  },
+
+  {
+    "name": "Juguete Cañita Resorte",
+    "description": "Caña con resorte para Gato",
+    "price": 12.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/196922-150-150/Foto-Principal--5--Photoroom.png?v=638570042196770000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Ratoncitos para Gato",
+    "description": "Set tres ratoncitos para gatos de felpa",
+    "price": 17.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/180464-150-150/237597.jpg?v=637590641661330000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Mariposa para Gato",
+    "description": "Mariposa para gatos de felpa",
+    "price": 14.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/177258-150-150/221228.jpg?v=637567929651370000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Pescaditos para Gato",
+    "description": "Set dos pescaditos para gatos de felpa",
+    "price": 18.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/176487-150-150/237525.jpg?v=637546240098700000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Plumudo para Gato",
+    "description": "Juguete plumudo para gato de goma",
+    "price": 10.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/174033-150-150/221299.jpg?v=637434938302000000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Rascador anti-strees para Gato",
+    "description": "Rascador anti-strees para gatos de Lino",
+    "price": 7.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/171502-150-150/221078.jpg?v=637290590229730000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Juguete dispensador de alimento para Gato",
+    "description": "Dispensador de alimento interactivo para Gato",
+    "price": 20.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/181420-150-150/246317.jpg?v=637636581673730000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Ardilla para Gato",
+    "description": "Ardilla para gatos de felpa",
+    "price": 12.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/177318-150-150/244197.jpg?v=637567929838600000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Varita Star Wars para Gato",
+    "description": "Varita motivo Star Wars para Gato",
+    "price": 10.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/196274-150-150/233214.jpg?v=638494155336300000",
+    "categoryName": "Juguetes de Gato"
+  },
+  {
+    "name": "Juguete dispensador Hongo para Gato",
+    "description": "Dispensador de alimento interactivo Hongo para gato",
+    "price": 12.99,
+    "stock": 100,
+    "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/192692-150-150/243754.jpg?v=638209697002770000",
+    "categoryName": "Juguetes de Gato"
+  },
+
+  {
+    "name": "Suéter Gato Polar",
+    "description": "Suéter abrigado de polar para gatos",
+    "price": 19.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/71B7YNjN+qL._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Capa Impermeable Gato",
+    "description": "Capa impermeable para gatos en días de lluvia",
+    "price": 14.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/711VrLmMvCL._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Sweater Frutilla Gato",
+    "description": "Sweater Frutilla para de lana",
+    "price": 17.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/61MHB9DBq2L._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Pechera Gato",
+    "description": "Pechera reforzada reflex",
+    "price": 12.49,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/71KqkqtUWHL._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Pijama Gato Algodón",
+    "description": "Pijama cómodo de algodón para gatos",
+    "price": 22.5,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/817O0PrzENL._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Vestido Gato Sombrilla",
+    "description": "Vestido gato corte sombrilla",
+    "price": 9.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/51LJA6stiXL._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Pañuelo Gato",
+    "description": "Collar pañuelo para gato",
+    "price": 15.0,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/81wv9OXLnZL._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Abrigo Total Gato",
+    "description": "Mameluco para gato polar",
+    "price": 13.75,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/612WSANqupL._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Pijama para gato",
+    "description": "Pijama grueso para invierno",
+    "price": 24.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/51FEfaWbkNL._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
+  },
+  {
+    "name": "Vestido de cangrejos gato",
+    "description": "Vestido polar de gato estampado de cangrejos",
+    "price": 18.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/712+UfpS2ML._AC_UL320_.jpg",
+    "categoryName": "Accesorios para gatos"
   }
 ]
-
-
-

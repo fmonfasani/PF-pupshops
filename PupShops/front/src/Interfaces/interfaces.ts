@@ -41,7 +41,7 @@ export interface IButtonProps {
 
 export interface IUserResponse {
   login: boolean;
-  user: IUser | null;
+  user: IUser;
   token: string;
 }
 
@@ -59,7 +59,7 @@ export interface IUserContextType {
 }
 
 export interface IAppointment {
-  id?:string;
+  id?: string;
   date: string;
-  time:string
+  time: string;
 }
