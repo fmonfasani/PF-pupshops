@@ -14,11 +14,52 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdmin, setIsAdmin] = useState(true); // Estado de administrador
 
 
-  return (
-    <UserContext.Provider value={{ isAdmin }}>
-      {children}
-    </UserContext.Provider>
-  );
+export const UserContext = createContext<IUserContextType>({
+    user: null,
+    setUser: () => {},
+    isLogged: false,
+    setIsLogged: () => {},
+    signIn: async () => false,
+    signUp: async () => false,
+   //getOrders: async () => {},
+   //setOrders: () => {},
+   //orders: [],
+   //logOut: () => {},
+});
+
+
+
+export const UserProvider = ({children}: {children: React.ReactNode}) => {
+    const [user, setUser] = useState<IUserResponse | null>(null);
+    const [isLogged, setIsLogged] = useState<boolean>(false);
+  //  const [orders, setOrders] = useState<IOrderResponse[]>([]);
+
+//LOGIN DE USUARIO
+const signIn = async (credentials: ILoginUser): Promise<boolean> => {
+    try {
+        const data = await fetchLoginUser(credentials);
+        if (data.login) {
+            const userData = {
+                login: data.login,
+                token: data.token,
+                user: data.user,
+            };
+            if (typeof window !== "undefined") {
+             
+                localStorage.setItem("user", JSON.stringify(userData));
+                localStorage.setItem("token", data.token);
+            }
+            
+            setUser(userData);
+            setIsLogged(true);
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Error during sign in:', error);
+        return false;
+    }
 };
 export const useUserContext = () => {
     const context = useContext(UserContext);
