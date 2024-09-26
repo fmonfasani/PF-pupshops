@@ -1,6 +1,5 @@
 name: Deploy Frontend and Backend to Render
 
-# Este workflow se ejecuta cuando hay un push en la rama main
 on:
   push:
     branches:
@@ -15,10 +14,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Autenticarse en Docker con Render
-      - name: Log in to Docker Hub
+      # Autenticarse en Docker con Render (usando 'none' como username)
+      - name: Log in to Render Docker registry
         run: |
-          echo ${{ secrets.RENDER_API_KEY }} | docker login registry.render.com -u ${{ secrets.RENDER_USERNAME }} --password-stdin
+          echo "rnd_rVauhUlzHdv597jChP38u4UyL43q" | docker login registry.render.com -u "none" --password-stdin
 
       - name: Build Frontend Docker image
         run: |
@@ -35,22 +34,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Paso 1: Clonar el código del repositorio
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Log in to Docker Hub for Backend
+      # Autenticarse en Docker con Render para el backend (usando 'none' como username)
+      - name: Log in to Render Docker registry
         run: |
-          echo ${{ secrets.RENDER_API_KEY }} | docker login registry.render.com -u ${{ secrets.RENDER_USERNAME }} --password-stdin
+          echo "rnd_rVauhUlzHdv597jChP38u4UyL43q" | docker login registry.render.com -u "none" --password-stdin
 
-
-      # Paso 2: Construir la imagen Docker para el backend
       - name: Build Backend Docker image
         run: |
           cd PupShops/back/pupshops
           docker build -t backend:latest .
 
-      # Paso 3: Subir la imagen Docker del backend a Render
       - name: Push Backend Docker image to Render
         run: |
           docker tag backend:latest registry.render.com/srv-crh11f88fa8c738qnvu0/backend:latest
