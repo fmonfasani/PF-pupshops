@@ -102,6 +102,5 @@ export class CreateUserDto {
   })
   address: string;
 
-  @IsEmpty()
-  isAdmin: boolean;
+ 
 }

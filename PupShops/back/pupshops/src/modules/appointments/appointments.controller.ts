@@ -28,18 +28,6 @@ export class AppointmentsController {
   @Post()
   @Roles(Role.User)
   @ApiOperation({ summary: 'Crear un nuevo turno para un servicio' })
-  @ApiResponse({
-    status: 201,
-    description: 'Respuesta al crear turno.',
-    schema: {
-      example: {
-        message: 'Su turno se ha creado exitosamente',
-        appointmentId: 'f0e59ef0-819d-4f59-87be-4c847ac7e462',
-        serviceId: 'a9117bf4-1cf7-43d3-a07c-4de1df18252b',
-        userId: 'fe165c21-92bb-4066-bc98-2f0bfa999944',
-      },
-    },
-  })
   create(
     @Body() createAppointmentDto: CreateAppointmentDto,
     @Req() req: any,
@@ -51,7 +39,8 @@ export class AppointmentsController {
     userId: string;
     userName: string;
   }> {
-    const user = req.user as User;
+    console.log(req.user);
+    const user = req.user as User; // Obtener el usuario autenticado desde el request
     return this.appointmentsService.create(createAppointmentDto, user);
   }
 

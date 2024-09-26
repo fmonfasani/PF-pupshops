@@ -1,6 +1,6 @@
-/* eslint-disable prettier/prettier */
 import { Controller, Post, Body, Get, Query, Res } from '@nestjs/common';
 import { PaymentsService } from './payment.service';
+import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Response } from 'express';
 
 @Controller('payments')
@@ -9,7 +9,7 @@ export class PaymentsController {
 
   // Crear pago
   @Post('/create')
-  async createPayment(@Body() createPaymentDto: any) {
+  async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
     try {
       const payment =
         await this.paymentsService.createPayment(createPaymentDto);
@@ -45,5 +45,36 @@ export class PaymentsController {
   handlePending(@Query() query, @Res() res: Response) {
     console.log('Pago pendiente:', query);
     res.send('Tu pago está en proceso. Espera la confirmación.');
+  }
+
+  // Webhook para recibir notificaciones de Mercado Pago
+  @Post('/webhook')
+  async handleNotification(@Body() body: any) {
+    console.log('Notificación recibida:', body);
+
+    if (!body || !body.resource) {
+      console.error('Notificación no contiene un resource válido');
+      return;
+    }
+
+    const resource = body.resource;
+    const topic = body.topic;
+
+    try {
+      if (topic === 'payment') {
+        const paymentResponse =
+          await this.paymentsService.getPaymentInfo(resource);
+        console.log('ID del pago:', paymentResponse.id);
+        // Continúa con la lógica de procesamiento del pago...
+      } else if (topic === 'merchant_order') {
+        const orderResponse = await this.paymentsService.getOrderInfo(resource);
+        console.log('ID de la orden:', orderResponse.id);
+        // Continúa con la lógica de procesamiento de la orden...
+      } else {
+        console.error('Tipo de notificación no manejado:', topic);
+      }
+    } catch (error) {
+      console.error('Error al manejar la notificación:', error.message);
+    }
   }
 }

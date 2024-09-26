@@ -1,28 +1,28 @@
-/* eslint-disable prettier/prettier */
-import { IsNotEmpty, IsDateString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAppointmentDto {
-  @IsDateString()
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Fecha y hora del turno',
-    example: '2024-09-14T10:00:00Z',
+    description: 'Fecha del turno (formato YYYY-MM-DD)',
+    example: '2024-09-25',
   })
-  appointmentDate: Date;
+  appointmentDate: string;
 
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'ID del servicio en formato UUID', //UUID del Servicio
-    example: 'a9117bf4-1cf7-43d3-a07c-4de1df18252b',
+    description: 'Hora del turno (formato HH:mm)',
+    example: '10:00',
+  })
+  appointmentTime: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Nombre del servicio',
+    example: 'Peluquería',
   })
   serviceName: string;
-  @IsUUID()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'ID del usuario en formato UUID', //UUID del usuario
-    example: 'fe165c21-92bb-4066-bc98-2f0bfa999944',
-  })
-  userId: string;
 }
