@@ -1,6 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import * as bcrypt from 'bcrypt';
+<<<<<<< HEAD
+import * as bcryptjs from 'bcryptjs';
+=======
+import * as bcrypt from 'bcryptjs';
+>>>>>>> 846b06a8fc6f38dcb889d066e59d0a7ec674fa28
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './loginUserDto';
@@ -22,7 +26,7 @@ export class AuthService {
       throw new BadRequestException('Las contraseñas no coinciden');
     }
 
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const hashedPassword = await bcryptjs.hash(user.password, 10);
     if (!hashedPassword) {
       throw new Error('Error en la encriptación de la contraseña');
     }
@@ -47,7 +51,7 @@ export class AuthService {
       throw new BadRequestException('Email y/o contraseña incorrectos');
     }
 
-    const comparedPasswords = await bcrypt.compare(
+    const comparedPasswords = await bcryptjs.compare(
       login.password,
       findUser.password,
     );
@@ -63,6 +67,6 @@ export class AuthService {
     };
 
     const token = this.jwtService.sign(userPayload);
-    return { success: 'Usuario logeado correctamente', token };
+    return { success: 'Usuario logeado correctamente', token, findUser };
   }
 }
