@@ -19,9 +19,11 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Build Docker image for frontend
+      - name: Set up Docker
         run: |
-          docker build -t frontend ./PupShops/front
+          echo "RENDER_SERVICE_ID: $RENDER_SERVICE_ID"  # Verifica el valor aquí
+          docker tag frontend:latest registry.render.com/$RENDER_SERVICE_ID/frontend:latest
+          docker push registry.render.com/$RENDER_SERVICE_ID/frontend:latest
 
       - name: Deploy Frontend to Render
         env:
