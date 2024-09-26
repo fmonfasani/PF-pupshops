@@ -1,0 +1,50 @@
+name: Deploy Frontend and Backend to Render
+
+# Este workflow se ejecuta cuando hay un push en la rama main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      # Paso 1: Clonar el código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Paso 2: Construir la imagen Docker para el frontend
+      - name: Build Frontend Docker image
+        run: |
+          cd PupShops/front
+          docker build -t frontend:latest .
+
+      # Paso 3: Subir la imagen Docker del frontend a Render
+      - name: Push Frontend Docker image to Render
+        run: |
+          docker tag frontend:latest registry.render.com/srv-crh11f88fa8c738qnvu0/frontend:latest
+          docker push registry.render.com/srv-crh11f88fa8c738qnvu0/frontend:latest
+
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      # Paso 1: Clonar el código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Paso 2: Construir la imagen Docker para el backend
+      - name: Build Backend Docker image
+        run: |
+          cd PupShops/back/pupshops
+          docker build -t backend:latest .
+
+      # Paso 3: Subir la imagen Docker del backend a Render
+      - name: Push Backend Docker image to Render
+        run: |
+          docker tag backend:latest registry.render.com/srv-crh11f88fa8c738qnvu0/backend:latest
+          docker push registry.render.com/srv-crh11f88fa8c738qnvu0/backend:latest
