@@ -37,5 +37,5 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         run: |
-          docker tag backend:latest registry.render.com/$RENDER_SERVICE_ID/backend:latest
-          docker push registry.render.com/$RENDER_SERVICE_ID/backend:latest
+          docker tag backend:latest registry.render.com/srv-c1pq1qg1eg4abcdefg/backend:latest
+          docker push registry.render.com/srv-c1pq1qg1eg4abcdefg/backend:latest
