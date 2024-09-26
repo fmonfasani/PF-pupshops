@@ -60,9 +60,16 @@ export interface IButtonProps {
 }
 
 
+export interface IUserResponse {
+  login: boolean;
+  user: IUser;
+  token: string;
+}
+
+
 
 export interface IAppointment {
-  id?:string;
+  id?: string;
   date: string;
-  time:string
+  time: string;
 }

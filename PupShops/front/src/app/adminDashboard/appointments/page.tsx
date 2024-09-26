@@ -1,4 +1,8 @@
+
 import AdminAppointments from '@/components/AdminAppointments/AdminAppointments'
+
+/*import AdminAppointments from '@/components/AdminAppointments/AdminAppointments'
+
 import React from 'react'
 
 export default function adminAppointments() {
@@ -6,3 +10,7 @@ export default function adminAppointments() {
     <div className='mt-20'><AdminAppointments/></div>
   )
 }
+
+
+*/
+
