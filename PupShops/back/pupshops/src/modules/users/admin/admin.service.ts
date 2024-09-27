@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { AdminCreateUserDto } from './dto/admin-create-user.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
-import * as bcryptjs from 'bcryptjs';
+import * as bcryptjs from 'bcrypt';
 
 @Injectable()
 export class AdminService {
