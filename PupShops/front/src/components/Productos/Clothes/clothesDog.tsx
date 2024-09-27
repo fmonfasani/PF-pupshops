@@ -33,19 +33,19 @@ const ClothesCat: React.FC = () => {
           >
             <Image
               src={product.imgUrl}
-              alt={product.name}
+              alt={product.id}
               width={200}
               height={200}
               className="object-cover rounded-md"
             />
-            <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
+            <h2 className="text-lg font-semibold mt-2">{product.id}</h2>
             <p className="text-gray-700">{product.description}</p>
             <p className="text-green-600 font-bold">${product.price}</p>
             <button
               className="mt-2 w-full bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log(`Agregando ${product.name} al carrito`);
+                console.log(`Agregando ${product.id} al carrito`);
               }}
             >
               Agregar al Carrito
