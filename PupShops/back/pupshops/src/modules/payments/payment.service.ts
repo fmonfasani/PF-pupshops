@@ -25,12 +25,12 @@ export class PaymentsService {
       'MERCADO_PAGO_ACCESS_TOKEN',
     );
   }
+
   private readonly ngrokBaseUrl = 'https://fcc3-190-17-115-142.ngrok-free.app';
 
   // Método auxiliar para realizar solicitudes HTTP
   private async httpRequest(url: string, options: any) {
     try {
-      // Agregar el header de autorización si no está presente en las opciones
       if (!options.headers) {
         options.headers = {};
       }
@@ -73,17 +73,10 @@ export class PaymentsService {
           currency_id: 'ARS',
           unit_price: totalAmount,
           id: type === 'service' ? 'service_1234' : 'product_1234',
-
-          //   description: type === 'service' ? 'Descripción del servicio' : 'Descripción del producto', // Descripción adecuada según el tipo
-          //    picture_url: type === 'service'?
-          //   'https://your-service-image-url'
-          //   : 'https://your-product-image-url',
-          //    picture_url:
-          //   'https://res.cloudinary.com/dncbavrxt/image/upload/v1727189968/samples/animals/three-dogs.jpg',
         },
       ],
 
-      external_reference: orderId, // Referencia externa con el orden del negocio
+      external_reference: orderId,
 
       back_urls: {
         success: `${this.ngrokBaseUrl}/success`,
@@ -112,8 +105,7 @@ export class PaymentsService {
         throw new Error('Error en la creación de la preferencia');
       }
 
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
       console.error(
         'Error en la solicitud HTTP:',
@@ -125,33 +117,55 @@ export class PaymentsService {
     }
   }
 
-  // Obtener el estado del pago usando el Payment ID
   async getPaymentStatus(paymentId: string) {
     const url = `https://api.mercadopago.com/v1/payments/${paymentId}`;
-    return this.httpRequest(url, {
+    const paymentResponse = await this.httpRequest(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.accessToken}`,
       },
     });
+
+    console.log(
+      'Respuesta del pago:',
+      JSON.stringify(paymentResponse, null, 2),
+    );
+
+    if (!paymentResponse || !paymentResponse.id) {
+      throw new Error('Respuesta inválida: no se encontró el ID del pago');
+    }
+    return paymentResponse;
   }
 
   async getPaymentInfo(resource: string) {
-    if (!resource.startsWith('https://api.mercadopago.com')) {
-      throw new Error('URL de recurso inválida');
+    if (
+      resource.startsWith(
+        'https://api.mercadopago.com/collections/notifications/',
+      )
+    ) {
+      const paymentId = resource.split('/').pop(); // Extrae el ID del pago desde la URL
+      if (paymentId) {
+        return await this.getPaymentStatus(paymentId);
+      } else {
+        throw new Error('No se pudo extraer el ID del pago desde el recurso');
+      }
+    } else if (
+      resource.startsWith('https://api.mercadopago.com/merchant_orders/')
+    ) {
+      return this.getOrderInfo(resource);
+    } else {
+      throw new Error('URL de recurso inválida o no reconocida');
     }
-
-    return this.httpRequest(resource, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.accessToken}`, // Asegúrate de enviar el token aquí
-      },
-    });
   }
 
   async getOrderInfo(resource: string) {
-    return this.httpRequest(resource, {
+    const orderResponse = await this.httpRequest(resource, {
       method: 'GET',
     });
+
+    if (!orderResponse || !orderResponse.id) {
+      throw new Error('Respuesta inválida: no se encontró el ID de la orden');
+    }
+    return orderResponse;
   }
 }

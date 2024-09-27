@@ -2,12 +2,13 @@
 
 import {
   ILoginUser,
-  IUserContextType,
   IUserRegister,
   IUserResponse,
 } from "@/Interfaces/interfaces";
+import { IUserContextType } from "@/Interfaces/interfaces";
 import { fetchLoginUser, fetchRegisterUser } from "@/utils/fetchUser";
 import { createContext, useContext, useEffect, useState } from "react";
+
 
 // Definimos la interfaz para el tipo de usuario
 interface IUserContext {
@@ -80,8 +81,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       };
 
+
       const signUp = async (user: IUserRegister) => {
         try {
+
           const data = await fetchRegisterUser(user);
           if (data.id) {
             await signIn({ email: user.email, password: user.password });
@@ -149,4 +152,5 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       return context;
     };
   };
+
 };

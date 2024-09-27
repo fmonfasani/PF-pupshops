@@ -8,7 +8,27 @@ export interface IUser {
   city: string;
   address: string;
   phone: number;
+  isAdmin: boolean; 
   //  orders?: IOrderResponse[];
+}
+
+export interface IUserResponse {
+  login: boolean;
+  user: IUser | null;
+  token: string;
+}
+
+export interface IUserContextType {
+  user: IUserResponse | null;
+  setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
+  isLogged: boolean;
+  setIsLogged: (isLogged: boolean) => void;
+  signIn: (credentials: ILoginUser) => Promise<boolean>;
+  signUp: (user: IUserRegister) => Promise<boolean>;
+  //   getOrders: () => Promise<void>;
+  // setOrders: (orders: IOrderResponse[]) => void;
+  // orders: IOrderResponse[] | [];
+  //  logOut: () => void;
 }
 
 export interface ILoginUser {
@@ -39,24 +59,14 @@ export interface IButtonProps {
   disabled?: boolean;
 }
 
+
 export interface IUserResponse {
   login: boolean;
   user: IUser;
   token: string;
 }
 
-export interface IUserContextType {
-  user: IUserResponse | null;
-  setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
-  isLogged: boolean;
-  setIsLogged: (isLogged: boolean) => void;
-  signIn: (credentials: ILoginUser) => Promise<boolean>;
-  signUp: (user: IUserRegister) => Promise<boolean>;
-  //   getOrders: () => Promise<void>;
-  // setOrders: (orders: IOrderResponse[]) => void;
-  // orders: IOrderResponse[] | [];
-  //  logOut: () => void;
-}
+
 
 export interface IAppointment {
   id?: string;

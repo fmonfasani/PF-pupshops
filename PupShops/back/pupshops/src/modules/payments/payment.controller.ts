@@ -25,7 +25,6 @@ export class PaymentsController {
     }
   }
 
-  // Redirección en caso de éxito
   @Get('success')
   handleSuccess(@Query() query, @Res() res: Response) {
     const { payment_id, status, external_reference } = query;
@@ -33,14 +32,12 @@ export class PaymentsController {
     res.send('Pago completado con éxito. ¡Gracias!');
   }
 
-  // Redirección en caso de fallo
   @Get('failure')
   handleFailure(@Query() query, @Res() res: Response) {
     console.log('Pago fallido:', query);
     res.send('Hubo un error con tu pago. Intenta nuevamente.');
   }
 
-  // Redirección en caso de pago pendiente
   @Get('pending')
   handlePending(@Query() query, @Res() res: Response) {
     console.log('Pago pendiente:', query);
@@ -49,32 +46,52 @@ export class PaymentsController {
 
   // Webhook para recibir notificaciones de Mercado Pago
   @Post('/webhook')
-  async handleNotification(@Body() body: any) {
+  async handleNotification(@Body() body: any, @Res() res: Response) {
     console.log('Notificación recibida:', body);
 
-    if (!body || !body.resource) {
-      console.error('Notificación no contiene un resource válido');
-      return;
-    }
-
-    const resource = body.resource;
-    const topic = body.topic;
+    const topic = body.topic || body.type;
+    const resource =
+      body.resource || (body.data && body.data.id) ? body.resource : null;
 
     try {
       if (topic === 'payment') {
-        const paymentResponse =
-          await this.paymentsService.getPaymentInfo(resource);
-        console.log('ID del pago:', paymentResponse.id);
-        // Continúa con la lógica de procesamiento del pago...
+        if (resource) {
+          const paymentResponse =
+            await this.paymentsService.getPaymentInfo(resource);
+          if (paymentResponse && paymentResponse.id) {
+            console.log('ID del pago:', paymentResponse.id);
+          } else {
+            console.error(
+              'El ID del pago no fue encontrado en la respuesta:',
+              paymentResponse,
+            );
+          }
+        } else {
+          console.error('Notificación de pago no contiene un recurso válido');
+        }
       } else if (topic === 'merchant_order') {
-        const orderResponse = await this.paymentsService.getOrderInfo(resource);
-        console.log('ID de la orden:', orderResponse.id);
-        // Continúa con la lógica de procesamiento de la orden...
+        if (resource) {
+          const orderResponse =
+            await this.paymentsService.getOrderInfo(resource);
+          if (orderResponse && orderResponse.id) {
+            console.log('ID de la orden:', orderResponse.id);
+          } else {
+            console.error(
+              'El ID de la orden no fue encontrado en la respuesta:',
+              orderResponse,
+            );
+          }
+        } else {
+          console.error('Notificación de orden no contiene un recurso válido');
+        }
       } else {
         console.error('Tipo de notificación no manejado:', topic);
       }
+
+      res.status(200).send({ message: 'Notificación recibida y procesada' });
     } catch (error) {
       console.error('Error al manejar la notificación:', error.message);
+      res.status(500).send({ message: 'Error al procesar la notificación' });
     }
   }
 }

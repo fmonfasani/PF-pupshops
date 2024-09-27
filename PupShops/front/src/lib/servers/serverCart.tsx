@@ -1,6 +1,8 @@
 import { IProduct } from "@/Interfaces/ICart";
 
+
 const BASE_URL = "http://localhost:3001/products";
+
 
 export const fetchProductsById = async (
   productId: number
@@ -57,7 +59,9 @@ export const addToCart = async (
       })),
     };
 
+
     const response = await fetch("http://localhost:3001/orders", {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",

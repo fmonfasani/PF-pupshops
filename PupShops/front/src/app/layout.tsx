@@ -3,7 +3,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import ShowComponent from "@/components/ShowComponent/ShowComponet";
+
+import NavbarAdminComponent from "@/components/Navbar/NavbarAdmin";
+import { UserProvider } from "@/context/userContext";
 import { CartProvider } from "@/context/cartContext"; // Asegúrate de usar la ruta correcta
 
 const geistSans = localFont({
@@ -32,13 +34,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+
+        <UserProvider>
         <CartProvider>
-          <ShowComponent>
+          <NavbarAdminComponent/>
             <Navbar />
             {children}
             <Footer />
-          </ShowComponent>
-        </CartProvider>
+         </CartProvider>
+          </UserProvider>
+
       </body>
     </html>
   );

@@ -1,3 +1,6 @@
+
+// ICart.ts
+
 export interface IProduct {
   id: number;
   name: string;
@@ -6,13 +9,17 @@ export interface IProduct {
   stock: number;
   imgUrl: string;
   categoryName: string;
-  quantity: number;
+  quantity?: number;
+
+
 }
 
 export interface ICartContextType {
   cartItems: IProduct[];
+
   addToCart: (productId: number, quantity?: number) => Promise<boolean>;
   removeFromCart: (productId: number) => void;
+
   total: number;
   proceedToBuy: () => Promise<void>;
   purchasedItems: IProduct[];

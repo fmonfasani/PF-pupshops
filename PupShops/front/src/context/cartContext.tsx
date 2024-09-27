@@ -4,6 +4,36 @@ import { createContext, useEffect, useState } from "react";
 import { ICartContextType, IProduct } from "@/Interfaces/ICart";
 import { fetchProductsById } from "@/lib/servers/serverCart";
 
+
+
+
+const addItemToCart = async (
+  cartItems: IProduct[],
+  productId: number,
+  quantity: number
+): Promise<IProduct[]> => {
+  const existingProduct = cartItems.find((item) => item.id === productId);
+
+  if (existingProduct) {
+  
+    return cartItems.map((item) =>
+      item.id === productId
+        ? { ...item, quantity: (item.quantity || 1) + quantity }
+        : item
+    );
+  }
+
+  
+  const data = await fetchProductsById(productId);
+  return [...cartItems, { ...data, quantity }];
+
+};
+
+const removeItem = (cartItems: IProduct[], productId: number) => {
+  return cartItems.filter((item) => item.id !== productId);
+};
+
+
 export const cartContext = createContext<ICartContextType>({
   cartItems: [],
   addToCart: async () => false,
@@ -39,10 +69,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
   }, [purchasedItems]);
 
+
   const addToCart = async (
     productId: number,
     quantity: number = 1
   ): Promise<boolean> => {
+
     try {
       const existingProduct = cartItems.find((item) => item.id === productId);
       let updatedCartItems;
@@ -64,6 +96,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Error al agregar al carrito:", error);
       return false;
     }
+
   };
 
   const removeFromCart = (productId: number) => {
@@ -73,10 +106,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const proceedToBuy = async () => {
     try {
+
       const products = cartItems.map((item) => ({
         id: item.id,
         quantity: item.quantity || 1,
       }));
+
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -84,7 +119,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
+
       const response = await fetch("http://localhost:3001/orders", {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -109,11 +146,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
+
     const newTotal = cartItems.reduce(
       (acc, item) => acc + item.price * (item.quantity || 1),
       0
     );
     setTotal(newTotal);
+
   }, [cartItems]);
 
   return (

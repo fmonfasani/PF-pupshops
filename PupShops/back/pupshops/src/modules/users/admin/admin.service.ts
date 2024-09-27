@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { AdminCreateUserDto } from './dto/admin-create-user.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class AdminService {
@@ -59,8 +60,7 @@ export class AdminService {
       if (!user) {
         throw new NotFoundException('Usuario no encontrado');
       }
-      const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword;
+      return user;
     } catch (error) {
       throw new InternalServerErrorException('Error al buscar el usuario por ID');
     }
@@ -68,8 +68,25 @@ export class AdminService {
 
   async createUser(user: AdminCreateUserDto): Promise<User> {
     try {
-      const newUser = await this.usersRepository.save(user);
-      return newUser;
+      const findUser = await this.getEmailLogin(user.email);
+    if (findUser) {
+      throw new BadRequestException('Email existente');
+    }
+    if (user.password !== user.confirmPassword) {
+      throw new BadRequestException('Las contraseñas no coinciden');
+    }
+
+    const hashedPassword = await bcryptjs.hash(user.password, 10);
+    if (!hashedPassword) {
+      throw new Error('Error en la encriptación de la contraseña');
+    }
+    console.log('Datos antes de guardar:', {
+      ...user,
+      password: hashedPassword,
+    });
+
+    const newUser = await this.usersRepository.save({...user, password:hashedPassword});
+    return newUser;
     } catch (error) {
       throw new InternalServerErrorException('Error al crear el usuario');
     }

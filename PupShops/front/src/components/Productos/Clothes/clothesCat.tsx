@@ -16,13 +16,17 @@ const ClothesCat: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const categoryId = "2c5d9c21-1997-4311-b7ca-e9362c05aa2a";
 
+
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
+
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
+
           `http://localhost:3001/products/child/${categoryId}`
+
         );
 
         if (!response.ok) {
@@ -31,6 +35,7 @@ const ClothesCat: React.FC = () => {
         }
 
         const data: IProduct[] = await response.json();
+
 
         const formattedData = data.map((product) => ({
           ...product,
@@ -43,6 +48,7 @@ const ClothesCat: React.FC = () => {
           return acc;
         }, {} as { [key: number]: number });
         setQuantity(initialQuantity);
+
       } catch (error) {
         console.error("Error al obtener los productos:", error);
       } finally {
@@ -98,6 +104,7 @@ const ClothesCat: React.FC = () => {
               <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
               <p className="text-gray-700 mb-2">{product.description}</p>
               <p className="text-green-600 font-bold mb-2">
+
                 ${product.price.toFixed(2)}
               </p>
               <div className="flex items-center space-x-4 mb-4">
@@ -121,20 +128,25 @@ const ClothesCat: React.FC = () => {
                   +
                 </button>
               </div>
+
             </div>
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
+
                 e.stopPropagation(); // Previene el evento de click en el contenedor
                 const currentQuantity = quantity[product.id] || 1; // Asegúrate de que quantity esté definido
                 console.log("Adding to cart:", product.id, currentQuantity);
                 const success = await addToCart(product.id, currentQuantity); // Aquí
+
                 if (success) {
                   alert(
                     `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito`
                   );
                 } else {
+
                   alert("Error al agregar al carrito");
+
                 }
               }}
             >

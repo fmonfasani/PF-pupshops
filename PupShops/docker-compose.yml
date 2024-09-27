@@ -2,32 +2,38 @@ version: "3.8"
 
 services:
   frontend:
-    container_name: nextjs-frontend
     build:
-      context: ./front # Ruta al proyecto de Next
-      dockerfile: Dockerfile # Dockerfile que se usa para construir el frontend
+      context: ./front # La ruta donde se encuentra el Dockerfile del frontend
     ports:
       - "3000:3000"
-    # Mapea el puerto del contenedor al puerto local
-    volumes:
-      - ./front:/app # Sincroniza el código local con el contenedor
-    command: npm run dev # Comando para ejecutar Next
-    networks:
-      - pupshops-network
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend # Asegúrate de que el backend esté disponible antes de iniciar el frontend
 
   backend:
-    container_name: node-backend
     build:
-      context: ./back/pupshops # Ruta al proyecto del backend
-      dockerfile: Dockerfile # Dockerfile que se usa para construir el backend
+      context: ./back/pupshops # La ruta correcta para el backend
     ports:
-      - "3001:3001" # Puerto para el backend
-    volumes:
-      - ./back/pupshops:/app # Sincroniza el código local con el contenedor
-    command: npm run start:dev # Comando para iniciar el backend en modo desarrollo
-    networks:
-      - pupshops-network
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgres://yourusername:yourpassword@database:5432/yourdatabase # Conectado al servicio 'database'
+      - JWT_SECRET=${JWT_SECRET}
+      - MERCADO_PAGO_ACCESS_TOKEN=${MERCADO_PAGO_ACCESS_TOKEN}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+    depends_on:
+      - database # Asegura que la base de datos esté disponible antes del backend
 
-networks:
-  pupshops-network:
-    driver: bridge
+  database:
+    image: postgres:13 # Usa la imagen oficial de PostgreSQL
+    environment:
+      - POSTGRES_USER=yourusername
+      - POSTGRES_PASSWORD=yourpassword
+      - POSTGRES_DB=yourdatabase
+    ports:
+      - "5432:5432" # Expone el puerto de PostgreSQL
+
+volumes:
+  db-data: # Define un volumen para la persistencia de los datos de la base de datos
