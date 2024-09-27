@@ -11,6 +11,7 @@ export interface IProduct {
   categoryName: string;
   quantity?: number;
 
+
 }
 
 export interface ICartContextType {

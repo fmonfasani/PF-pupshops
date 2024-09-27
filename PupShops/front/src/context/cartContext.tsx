@@ -6,6 +6,7 @@ import { fetchProductsById } from "@/lib/servers/serverCart";
 
 
 
+
 const addItemToCart = async (
   cartItems: IProduct[],
   productId: number,
@@ -31,6 +32,7 @@ const addItemToCart = async (
 const removeItem = (cartItems: IProduct[], productId: number) => {
   return cartItems.filter((item) => item.id !== productId);
 };
+
 
 export const cartContext = createContext<ICartContextType>({
   cartItems: [],
@@ -72,15 +74,34 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     productId: number,
     quantity: number = 1
   ): Promise<boolean> => {
-    const updatedCart = await addItemToCart(cartItems, productId, quantity);
-    setCartItems(updatedCart);
-    return !cartItems.some((item) => item.id === productId); // Devuelve true si se agregó el producto
+
+    try {
+      const existingProduct = cartItems.find((item) => item.id === productId);
+      let updatedCartItems;
+
+      if (existingProduct) {
+        updatedCartItems = cartItems.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: (existingProduct.quantity ?? 0) + quantity }
+            : item
+        );
+      } else {
+        const productData = await fetchProductsById(productId);
+        updatedCartItems = [...cartItems, { ...productData, quantity }];
+      }
+
+      setCartItems(updatedCartItems);
+      return true;
+    } catch (error) {
+      console.error("Error al agregar al carrito:", error);
+      return false;
+    }
 
   };
 
   const removeFromCart = (productId: number) => {
-    const updatedCart = removeItem(cartItems, productId);
-    setCartItems(updatedCart);
+    const updatedCartItems = cartItems.filter((item) => item.id !== productId);
+    setCartItems(updatedCartItems);
   };
 
   const proceedToBuy = async () => {
@@ -88,7 +109,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
       const products = cartItems.map((item) => ({
         id: item.id,
-        quantity: item.quantity,
+        quantity: item.quantity || 1,
       }));
 
       const token = localStorage.getItem("token");
@@ -103,42 +124,44 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
         method: "POST",
         headers: {
-          Authorization: token,
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ products }),
+        body: JSON.stringify({ userId: token, products }),
       });
 
       if (response.ok) {
-        alert("Compra exitosa");
-        setPurchasedItems(cartItems);
+        const result = await response.json();
+        alert("Compra realizada con éxito");
+        setPurchasedItems(result);
         setCartItems([]);
       } else {
-        const errorResponse = await response.json();
-        alert("Error en la compra: " + errorResponse.message);
+        const errorMessage = await response.text();
+        throw new Error(`Error en la compra: ${errorMessage}`);
       }
     } catch (error) {
-      alert("Error en el proceso: " + error);
+      console.error("Error al proceder a la compra:", error);
+      alert("Error al realizar la compra");
     }
   };
 
   useEffect(() => {
 
-    const totalAmount = cartItems.reduce(
-      (acc, item) => acc + item.price * (item.quantity || 1), // Si no hay quantity, se asume como 1
+    const newTotal = cartItems.reduce(
+      (acc, item) => acc + item.price * (item.quantity || 1),
       0
     );
+    setTotal(newTotal);
 
-    setTotal(totalAmount);
   }, [cartItems]);
 
   return (
     <cartContext.Provider
       value={{
         cartItems,
-        total,
         addToCart,
         removeFromCart,
+        total,
         proceedToBuy,
         purchasedItems,
       }}

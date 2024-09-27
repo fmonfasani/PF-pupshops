@@ -1,5 +1,5 @@
 import { IProductDetail } from "@/app/products/[id]/page";
-import { IProduct } from "@/components/CardList/Products";
+
 
 
 export const getAllProducts = async (page: number = 1, limit: number = 10) => {
