@@ -27,12 +27,12 @@ jobs:
       # Construye la imagen Docker para el backend
       - name: Build Backend Docker image
         run: |
-          docker build -t fmonfasani/pupshops-backend:latest ./PupShops/back/pupshops  # Especifica el contexto de construcción correcto para el backend
+          docker build -t fmonfasani/pupshops-backend:latest ./PupShops/back/pupshops
 
       # Construye la imagen Docker para el frontend
       - name: Build Frontend Docker image
         run: |
-          docker build -t fmonfasani/pupshops-frontend:latest ./PupShops/front  # Especifica el contexto de construcción correcto para el frontend
+          docker build -t fmonfasani/pupshops-frontend:latest ./PupShops/front
 
       # Empuja la imagen Docker del backend a Docker Hub
       - name: Push Backend Docker image
@@ -44,6 +44,12 @@ jobs:
         run: |
           docker push fmonfasani/pupshops-frontend:latest
 
+      # Instala Render CLI
+      - name: Install Render CLI
+        run: |
+          curl -L https://github.com/renderinc/cli/releases/download/v0.1.0/render-cli_linux_amd64 -o /usr/local/bin/render
+          chmod +x /usr/local/bin/render
+
       # Loguea en Render
       - name: Log in to Render
         run: |
@@ -53,4 +59,3 @@ jobs:
       - name: Deploy Backend to Render
         run: |
           render deploy service srv-crrap656l47c73cgehig --api-key ${{ secrets.RENDER_API_KEY }} --branch main
-
