@@ -1,6 +1,5 @@
 import { IProduct } from "@/Interfaces/ICart";
 
-
 const BASE_URL = "http://localhost:3001/products";
 
 export const fetchProductsById = async (
@@ -26,8 +25,6 @@ export const fetchProductsByCategoryId = async (
   categoryId: string
 ): Promise<IProduct[]> => {
   try {
-    console.log("Buscando productos por categoría ID:", categoryId);
-
     const response = await fetch(`${BASE_URL}/child/${categoryId}`);
     if (!response.ok) {
       const errorMessage = await response.text();
@@ -35,11 +32,9 @@ export const fetchProductsByCategoryId = async (
     }
 
     const products: IProduct[] = await response.json();
-
-    // Asegúrate de que el precio de cada producto sea un número
     const formattedProducts = products.map((product) => ({
       ...product,
-      price: Number(product.price), // Convertir a número
+      price: Number(product.price),
     }));
 
     return formattedProducts;
@@ -49,7 +44,6 @@ export const fetchProductsByCategoryId = async (
   }
 };
 
-// Lógica para agregar al carrito, asumiendo que se hace una petición POST
 export const addToCart = async (
   userId: string,
   products: IProduct[]
@@ -57,10 +51,13 @@ export const addToCart = async (
   try {
     const orderData = {
       userId,
-      products: products.map((product) => ({ name: product.id })), // Usamos el nombre en vez del ID
+      products: products.map((product) => ({
+        id: product.id,
+        quantity: product.quantity || 1, // Asegúrate de incluir quantity
+      })),
     };
 
-    const response = await fetch(`http://localhost:3001/order`, {
+    const response = await fetch("http://localhost:3001/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

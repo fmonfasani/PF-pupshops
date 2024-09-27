@@ -6,7 +6,7 @@ export interface IProduct {
   stock: number;
   imgUrl: string;
   categoryName: string;
-  quantity?: number;
+  quantity: number;
 }
 
 export interface ICartContextType {
