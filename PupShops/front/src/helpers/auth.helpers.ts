@@ -35,30 +35,19 @@ export async function register(userData: IRegisterProps) {
 // Función para iniciar sesión
 export async function login(userData: ILoginProps) {
   try {
-    // Verificar si APIURL está definida
-    if (!APIURL) {
-      throw new Error("APIURL no está definida");
-    }
-
     const res = await fetch(`${APIURL}/auth/signin`, {
-      // Aquí se corrige la interpolación
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(userData)
     });
-
     if (res.ok) {
       return res.json();
     } else {
-      const errorText = await res.text(); // Captura la respuesta como texto
-      throw new Error(`Failed to login: ${errorText}`);
+      throw Error("Failed to Login");
     }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(`Error en el login: ${error.message}`);
-    }
-    throw new Error("Error en el login: Ocurrió un problema inesperado.");
+  } catch (error: any) {
+    throw new Error(error);
   }
 }
