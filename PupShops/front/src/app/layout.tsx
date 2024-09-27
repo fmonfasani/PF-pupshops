@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import NavbarAdminComponent from "@/components/Navbar/NavbarAdmin";
 import { UserProvider } from "@/context/userContext";
-import { AuthProvider } from "@/context/authContext";
 
 import ShowComponent from "@/components/ShowComponent/ShowComponet";
 
@@ -36,15 +35,15 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-    >
-        <AuthProvider>
+      >
+
         <UserProvider>
         <NavbarAdminComponent/>
         {/*<Navbar />*/}
         {children}
         <Footer />
         </UserProvider>
-        </AuthProvider>
+
       </body>
     </html>
   );

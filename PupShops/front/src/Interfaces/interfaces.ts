@@ -22,6 +22,8 @@ export interface IUserContextType {
   user: IUserResponse | null;
   setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
   isLogged: boolean;
+  isAdmin:boolean;
+  setIsAdmin: (isLogged: boolean) => void;
   setIsLogged: (isLogged: boolean) => void;
   signIn: (credentials: ILoginUser) => Promise<boolean>;
   signUp: (user: IUserRegister) => Promise<boolean>;
@@ -72,20 +74,11 @@ export interface IButtonProps {
   disabled?: boolean;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
 export interface IUserResponse {
   login: boolean;
   user: IUser | null;
   token: string;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
-
 
 export interface IAppointment {
   id?: string;

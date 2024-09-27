@@ -3,8 +3,9 @@
 import { useUserContext } from '@/context/userContext';
 import { IUser } from '@/Interfaces/interfaces';
 import { fetchGetUsers } from '@/utils/fetchAdminCreateUser';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import PrivateRoute from '../PrivateRoute/PrivateRoute';
+
 // Array ficticio de usuarios
 const mockUsers = [
   {
@@ -64,42 +65,16 @@ const mockUsers = [
   },
 ];
 
+
 export default function AdminUsersDataComponent() {
-  const { user } = useUserContext(); // Obtén el usuario del contexto
+  const { user } = useUserContext(); // Obtiene el usuario del contexto
   const [users, setUsers] = useState<IUser[]>(mockUsers); // Inicializa con mockUsers
-  const [loading, setLoading] = useState(false); // Puedes cambiar esto si deseas simular carga
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda
-  const token = user?.token; // Aquí se utiliza el token del contexto
+    const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda
+  const token = user?.token; // Token del contexto
+ 
+  const router = useRouter();
 
-  // Comentamos la función de carga si solo usamos mockUsers
-  // useEffect(() => {
-  //   async function loadUsers() {
-  //     if (!token) {
-  //       console.error('Token no disponible');
-  //       setLoading(false);
-  //       return; // Sale si el token no está disponible
-  //     }
-  //     // Lógica para cargar usuarios aquí...
-  //   }
-  //   loadUsers();
-  // }, [token]); // Cambia la dependencia a `token`
 
-  // Simulando carga
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000); // Simula un retraso de 1 segundo
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
-      </div>
-    );
-  }
 
   // Filtra los usuarios según el término de búsqueda
   const filteredUsers = users.filter(user => {
@@ -111,8 +86,10 @@ export default function AdminUsersDataComponent() {
     );
   });
 
+
+
+
   return (
-    <PrivateRoute>
     <div className="bg-pink-100/80 py-12 px-4 sm:px-6 lg:px-8 mt-36">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
         Usuarios Registrados
@@ -152,6 +129,5 @@ export default function AdminUsersDataComponent() {
         </div>
       )}
     </div>
-    </PrivateRoute>
   );
 }

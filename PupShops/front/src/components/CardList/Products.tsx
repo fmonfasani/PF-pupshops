@@ -26,26 +26,8 @@ export interface IProduct {
 
 const ProductsPage = () => {
 
-  const { user } = useUserContext(); 
-  const isAdmin = user?.user?.isAdmin;
-  const router = useRouter();
-
-     //Ruta privada
-  useEffect(() => {
-    if (!isAdmin) {
-      setNotificationMessage(`Debes ser administrador para editar productos`);
-      setShowNotification(true);
-      setLoading(false)
-
-      setTimeout(() => {
-        setShowNotification(false);
-        router.push("/home");
-                }, 2000);
-     } else {
-      setLoading(false); 
-    }
-  }, [isAdmin, router]);
-
+  const { isAdmin } = useUserContext(); 
+  
 
   // Estados
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -184,7 +166,7 @@ const ProductsPage = () => {
               />
               <div className="py-6 px-8 bg-white flex-grow">
                 <h2 className="text-teal-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">
-                  {product.id}
+                  {product.name}
                 </h2>
                 <p className="text-gray-700 tracking-wide mb-4">{product.description}</p>
                 <span className="text-lg font-bold text-purple-800">

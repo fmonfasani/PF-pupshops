@@ -10,11 +10,7 @@ import { NotificationRegister } from '@/components/Notifications/NotificationReg
 export default function UploadProducts() {
 
   const { user } = useUserContext(); 
-  const isAdmin = user?.user?.isAdmin;
-  const router = useRouter();
-
-
-  const { isAdmin } = useUserContext();
+  const { isAdmin } = useUserContext(); 
   const router = useRouter()
 
   const [showNotification, setShowNotification] = useState(false);
@@ -33,7 +29,7 @@ export default function UploadProducts() {
         router.push("/home");
                 }, 2000);
      } else {
-      setLoading(false); // Si es admin, se termina la carga
+      setLoading(false); 
     }
   }, [isAdmin, router]);
 
