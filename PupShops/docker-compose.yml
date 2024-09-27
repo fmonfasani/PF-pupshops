@@ -29,7 +29,7 @@ services:
       CLOUDINARY_API_KEY: 887721685277851
       CLOUDINARY_API_SECRET: JQhdfiBIGwQKNZdLgspWYK_07TY
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       - db
     networks:
@@ -41,7 +41,7 @@ services:
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3000 # Cambia esta URL según la configuración de tu API
     ports:
-      - "3001:3000" # Puedes cambiar los puertos si es necesario
+      - "3000:3000" # Puedes cambiar los puertos si es necesario
     depends_on:
       - backend
     networks:
