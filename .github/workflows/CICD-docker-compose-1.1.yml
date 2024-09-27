@@ -1,0 +1,61 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main  # Cambia esta rama si deseas usar otra rama para los despliegues
+
+jobs:
+  deploy:
+    name: Build and Deploy to Render
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Configura el acceso a Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Construye la imagen Docker para el backend
+      - name: Build Backend Docker image
+        run: |
+          docker build -t fmonfasani/pupshops-backend:latest ./PupShops/back/pupshops
+
+      # Construye la imagen Docker para el frontend
+      - name: Build Frontend Docker image
+        run: |
+          docker build -t fmonfasani/pupshops-frontend:latest ./PupShops/front
+
+      # Empuja la imagen Docker del backend a Docker Hub
+      - name: Push Backend Docker image
+        run: |
+          docker push fmonfasani/pupshops-backend:latest
+
+      # Empuja la imagen Docker del frontend a Docker Hub
+      - name: Push Frontend Docker image
+        run: |
+          docker push fmonfasani/pupshops-frontend:latest
+
+      # Instala Render CLI
+      - name: Install Render CLI
+        run: |
+          curl -L https://github.com/renderinc/cli/releases/download/v0.1.0/render-cli_linux_amd64 -o /usr/local/bin/render
+          chmod +x /usr/local/bin/render
+
+      # Loguea en Render
+      - name: Log in to Render
+        run: |
+          render login --api-key ${{ secrets.RENDER_API_KEY }}
+
+      # Desplegar en Render el backend
+      - name: Deploy Backend to Render
+        run: |
+          render deploy service srv-crrap656l47c73cgehig --api-key ${{ secrets.RENDER_API_KEY }} --branch main

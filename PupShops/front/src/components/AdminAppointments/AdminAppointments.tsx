@@ -1,3 +1,4 @@
+
 "use client"
 import React, { useState, useEffect } from 'react';
 import { fetchAppointments, fetchUserAppointments } from '@/utils/fetchAdminAppointments'; // Funciones de fetch
@@ -32,6 +33,7 @@ const AdminAppointments = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
+
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [userAppointments, setUserAppointments] = useState<{scheduledAppointments: IAppointment[], historicalAppointments: IAppointment[]}>({ scheduledAppointments: [], historicalAppointments: [] });
   const [filter, setFilter] = useState('all'); // Estado para manejar el filtro
@@ -103,12 +105,15 @@ const AdminAppointments = () => {
           <p>No hay turnos disponibles.</p>
         )}
       </div>
+
       {showNotification && <NotificationRegister message={notificationMessage} />}
           {showErrorNotification && (
             <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />
           )}
+
     </div>
   );
 };
 
 export default AdminAppointments;
+

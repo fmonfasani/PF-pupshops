@@ -18,11 +18,13 @@ const sizes = ['Pequeña', 'Mediana', 'Grande'];
 const weights = ['sin especificar','2kg', '7kg', '15kg'];
 
 export default function UploadProductComponent() {
+
   const { user } = useUserContext(); 
   const isAdmin = user?.user?.isAdmin;
  
   if (!isAdmin) {
     return <p className='mt-20'>No tienes permisos para cargar productos.</p>; // Si no es administrador, mostramos un mensaje
+
   }
   
   const [dataProduct, setDataProduct] = useState<IUploadProduct>({
@@ -154,7 +156,9 @@ export default function UploadProductComponent() {
                   id='name'
                   name='name'
                   type='text'
+
                   value={dataProduct.id}
+
                   onChange={handleChange}
                   placeholder='Nombre del producto'
                   className="w-full rounded-lg border border-gray-200 p-4 text-sm shadow-sm"

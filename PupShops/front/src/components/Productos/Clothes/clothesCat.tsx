@@ -16,14 +16,18 @@ const ClothesCat: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const categoryId = "2c5d9c21-1997-4311-b7ca-e9362c05aa2a";
 
+
   // Cambiamos el estado quantity para ser un objeto
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
+
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
+
           `http://localhost:3001/products/child/${categoryId}`
+
         );
 
         if (!response.ok) {
@@ -32,6 +36,7 @@ const ClothesCat: React.FC = () => {
         }
 
         const data: IProduct[] = await response.json();
+
 
         const formattedData = data.map((product) => ({
           ...product,
@@ -45,6 +50,7 @@ const ClothesCat: React.FC = () => {
           return acc;
         }, {} as { [key: number]: number });
         setQuantity(initialQuantity);
+
       } catch (error) {
         console.error("Error al obtener los productos:", error);
       } finally {
@@ -101,6 +107,7 @@ const ClothesCat: React.FC = () => {
               <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
               <p className="text-gray-700 mb-2">{product.description}</p>
               <p className="text-green-600 font-bold mb-2">
+
                 ${product.price.toFixed(2)}
               </p>
               {/* Sección de cantidad */}
@@ -126,11 +133,13 @@ const ClothesCat: React.FC = () => {
                   +
                 </button>
               </div>
+
             </div>
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
                 e.stopPropagation();
+
                 const success = await addToCart(
                   product.id,
                   quantity[product.id] || 1
@@ -143,6 +152,7 @@ const ClothesCat: React.FC = () => {
                   );
                 } else {
                   alert(`${product.name} ya está en el carrito`);
+
                 }
               }}
             >

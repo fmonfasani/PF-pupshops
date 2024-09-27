@@ -7,7 +7,9 @@ import { ButtonForms } from "../Buttons/ButtonsForms";
 import AdminProductActions from "../ActionsAdmin/AdminProductsActions";
 import { NotificationRegister } from "../Notifications/NotificationRegister";
 import { NotificationError } from "../Notifications/NotificationError";
+
 import { useRouter } from "next/navigation";
+
 
 export interface IProduct {
   id: string;
@@ -23,6 +25,7 @@ export interface IProduct {
 }
 
 const ProductsPage = () => {
+
   const { user } = useUserContext(); 
   const isAdmin = user?.user?.isAdmin;
   const router = useRouter();
@@ -42,6 +45,7 @@ const ProductsPage = () => {
       setLoading(false); 
     }
   }, [isAdmin, router]);
+
 
   // Estados
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -117,6 +121,7 @@ const ProductsPage = () => {
     setNotificationMessage(message);
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
+
   };
 
   const handleErrorNotification = (errorMessage: string) => {
@@ -124,6 +129,7 @@ const ProductsPage = () => {
     setShowErrorNotification(true);
     setTimeout(() => setShowErrorNotification(false), 3000);
   };
+
 
   const handleDeleteProduct = (id: string) => {
     setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));

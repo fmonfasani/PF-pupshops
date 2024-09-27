@@ -72,11 +72,19 @@ export interface IButtonProps {
   disabled?: boolean;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
 export interface IUserResponse {
   login: boolean;
   user: IUser | null;
   token: string;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
 
 
 export interface IAppointment {
