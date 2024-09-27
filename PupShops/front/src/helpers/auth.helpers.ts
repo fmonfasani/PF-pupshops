@@ -3,7 +3,7 @@ import { ILoginProps, IRegisterProps } from "../Interfaces/types";
 const APIURL = process.env.NEXT_PUBLIC_API_URL;
 export async function register(userData: IRegisterProps) {
   try {
-    const res = await fetch(${APIURL}/users/register, {
+    const res = await fetch(`${APIURL}/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -22,7 +22,7 @@ export async function register(userData: IRegisterProps) {
 
 export async function login(userData: ILoginProps) {
   try {
-    const res = await fetch(${APIURL}/auth/signin, {
+    const res = await fetch(`${APIURL}/auth/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
