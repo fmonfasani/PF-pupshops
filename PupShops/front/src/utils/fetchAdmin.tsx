@@ -25,7 +25,7 @@ export const fetchUploadProduct = async (product:IUploadProduct) => {
 export const fetchDeleteProduct = async (id: string) => {
   
   try {
-    const response = await fetch(`http://localhost:3000/products/${id}`, {
+    const response = await fetch(`http://localhost:3001/products/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
@@ -49,7 +49,7 @@ export const fetchDeleteProduct = async (id: string) => {
 
  //Obtener producto por id  
 export const fetchProductById = async (id:string) => {
-  const response = await fetch(`http://localhost:3000/products/${id}`);
+  const response = await fetch(`http://localhost:3001/products/${id}`);
   if (!response.ok) {
     throw new Error(`Error al obtener el producto: ${response.statusText}`);
   }
@@ -59,7 +59,7 @@ export const fetchProductById = async (id:string) => {
 
 //Modificar producto
 export const fetchUpdateProduct = async(id:string, product:IProduct) => {
-  const response = await fetch(`http://localhost:3000/products/${id}`, {
+  const response = await fetch(`http://localhost:3001/products/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
