@@ -11,12 +11,11 @@ export async function register(userData: IRegisterProps) {
     }
 
     const res = await fetch(`${APIURL}/users/register`, {
-      
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(userData)
     });
 
     if (res.ok) {
@@ -45,9 +44,9 @@ export async function login(userData: ILoginProps) {
       // Aquí se corrige la interpolación
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(userData)
     });
 
     if (res.ok) {
