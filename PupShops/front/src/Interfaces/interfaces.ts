@@ -72,10 +72,15 @@ export interface IButtonProps {
   disabled?: boolean;
 }
 
+export interface IUserResponse {
+  login: boolean;
+  user: IUser | null;
+  token: string;
+}
 
 
 export interface IAppointment {
-  id?:string;
+  id?: string;
   date: string;
-  time:string
+  time: string;
 }

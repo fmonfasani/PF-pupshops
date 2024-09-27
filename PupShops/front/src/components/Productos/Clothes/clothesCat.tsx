@@ -16,11 +16,14 @@ const ClothesCat: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const categoryId = "2c5d9c21-1997-4311-b7ca-e9362c05aa2a";
 
+  // Cambiamos el estado quantity para ser un objeto
+  const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/products/child/${categoryId}`
+          `http://localhost:3001/products/child/${categoryId}`
         );
 
         if (!response.ok) {
@@ -30,13 +33,18 @@ const ClothesCat: React.FC = () => {
 
         const data: IProduct[] = await response.json();
 
-        // Asegúrate de que el precio sea un número
         const formattedData = data.map((product) => ({
           ...product,
-          price: Number(product.price), // Convertir a número
+          price: Number(product.price),
         }));
 
         setProducts(formattedData);
+        // Inicializamos la cantidad para cada producto
+        const initialQuantity = formattedData.reduce((acc, product) => {
+          acc[product.id] = 1; // Inicializamos la cantidad en 1
+          return acc;
+        }, {} as { [key: number]: number });
+        setQuantity(initialQuantity);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
       } finally {
@@ -56,6 +64,20 @@ const ClothesCat: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  // Función para incrementar o disminuir la cantidad de un producto específico
+  const updateQuantity = (
+    productId: number,
+    operation: "increment" | "decrement"
+  ) => {
+    setQuantity((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]:
+        operation === "increment"
+          ? (prevQuantities[productId] || 1) + 1
+          : Math.max((prevQuantities[productId] || 1) - 1, 1),
+    }));
   };
 
   return (
@@ -79,22 +101,52 @@ const ClothesCat: React.FC = () => {
               <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
               <p className="text-gray-700 mb-2">{product.description}</p>
               <p className="text-green-600 font-bold mb-2">
-                ${product.price.toFixed(2)} {/* Muestra el precio */}
+                ${product.price.toFixed(2)}
               </p>
+              {/* Sección de cantidad */}
+              <div className="flex items-center space-x-4 mb-4">
+                <button
+                  className="px-3 py-1 bg-gray-300 rounded"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateQuantity(product.id, "decrement");
+                  }}
+                >
+                  -
+                </button>
+                <span>{quantity[product.id] || 1}</span>{" "}
+                {/* Mostrar la cantidad específica */}
+                <button
+                  className="px-3 py-1 bg-gray-300 rounded"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateQuantity(product.id, "increment");
+                  }}
+                >
+                  +
+                </button>
+              </div>
             </div>
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
                 e.stopPropagation();
-                const success = await addToCart(product.id); // Cambiado para usar name
+                const success = await addToCart(
+                  product.id,
+                  quantity[product.id] || 1
+                ); // Pasar cantidad específica a la función addToCart
                 if (success) {
-                  alert(`${product.name} ha sido agregado al carrito`);
+                  alert(
+                    `${quantity[product.id] || 1} unidades de ${
+                      product.name
+                    } han sido agregadas al carrito`
+                  );
                 } else {
-                  alert(`${product.id} ya está en el carrito`);
+                  alert(`${product.name} ya está en el carrito`);
                 }
               }}
             >
-              Agregar al Carrito
+              Agregar {quantity[product.id] || 1} al Carrito
             </button>
           </div>
         ))}
