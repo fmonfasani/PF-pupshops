@@ -2,7 +2,7 @@ import { IAppointment } from "@/Interfaces/interfaces";
 
 // Obtener los turnos
 export const fetchAppointments = async (): Promise<IAppointment[]> => {
-    const res = await fetch("http://localhost:3000/appointments");
+    const res = await fetch("http://localhost:3001/appointments");
     if (!res.ok) {
       throw new Error("Failed to fetch appointments");
     }
@@ -14,7 +14,7 @@ export const fetchAppointments = async (): Promise<IAppointment[]> => {
     scheduledAppointments: IAppointment[], 
     historicalAppointments: IAppointment[] 
   }> => {
-    const res = await fetch("http://localhost:3000/appointments/user"); // Ruta para obtener turnos del usuario
+    const res = await fetch("http://localhost:3001/appointments/user"); // Ruta para obtener turnos del usuario
   
     if (!res.ok) {
       throw new Error("Failed to fetch user appointments");

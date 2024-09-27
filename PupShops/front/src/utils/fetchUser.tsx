@@ -40,7 +40,7 @@ export const fetchLoginUser = async (userData: ILoginUser) => {
 };
 
 export const fetchAppointment = async (appointment: IAppointment) => {
-  const response = await fetch(`http://localhost:3000/appointments/`, {
+  const response = await fetch(`http://localhost:3001/appointments/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
