@@ -44,11 +44,12 @@ jobs:
         run: |
           docker push fmonfasani/pupshops-frontend:latest
 
-      # Instala Render CLI
+      # Instala Render CLI desde el repositorio oficial
       - name: Install Render CLI
         run: |
-          curl -L https://github.com/renderinc/cli/releases/download/v0.1.0/render-cli_linux_amd64 -o /usr/local/bin/render
-          chmod +x /usr/local/bin/render
+          curl -L https://github.com/renderinc/cli/releases/download/v0.1.2/render-cli_linux_amd64 -o render
+          chmod +x render
+          sudo mv render /usr/local/bin/render
 
       # Loguea en Render
       - name: Log in to Render
