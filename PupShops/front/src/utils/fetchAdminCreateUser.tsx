@@ -1,7 +1,8 @@
-import { IAdminRegisterUser } from "@/Interfaces/interfaces";
+import { IAdminRegisterUser, IUser } from "@/Interfaces/interfaces";
 
+//Crear usuario como administrador
 export const fetchAdminCreateUser = async (user: IAdminRegisterUser) => {
-    const response = await fetch(`http://localhost:3000/auth/signup`, {
+    const response = await fetch(`http://localhost:3001/admin/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -15,3 +16,20 @@ export const fetchAdminCreateUser = async (user: IAdminRegisterUser) => {
 
   return response.json();
 };
+
+//Ver usuarios registrados
+export const fetchGetUsers = async (token: string): Promise<IUser[]> => {
+  const response = await fetch(`http://localhost:3001/admin/users`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `${token}`, // Asegúrate de que el administrador esté autenticado
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch users');
+  }
+
+  return await response.json(); 
+}
+
