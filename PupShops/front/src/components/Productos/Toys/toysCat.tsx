@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cartContext } from "@/context/cartContext";
-import { IProduct } from "@/Interfaces/ICart"; // Asegúrate de que la ruta sea correcta
+import { IProduct } from "@/Interfaces/ICart";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -16,11 +16,15 @@ const ClothesCat: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const categoryId = "8d194513-3186-44d7-9da5-21682c506f60";
 
+  const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
+
           `http://localhost:3001/products/child/${categoryId}`
+
         );
 
         if (!response.ok) {
@@ -30,13 +34,17 @@ const ClothesCat: React.FC = () => {
 
         const data: IProduct[] = await response.json();
 
-        // Asegúrate de que el precio sea un número
         const formattedData = data.map((product) => ({
           ...product,
-          price: Number(product.price), // Convertir a número
+          price: Number(product.price),
         }));
 
         setProducts(formattedData);
+        const initialQuantity = formattedData.reduce((acc, product) => {
+          acc[product.id] = 1; // Inicializamos la cantidad en 1
+          return acc;
+        }, {} as { [key: number]: number });
+        setQuantity(initialQuantity);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
       } finally {
@@ -58,13 +66,26 @@ const ClothesCat: React.FC = () => {
     setCurrentPage(page);
   };
 
+  const updateQuantity = (
+    productId: number,
+    operation: "increment" | "decrement"
+  ) => {
+    setQuantity((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]:
+        operation === "increment"
+          ? (prevQuantities[productId] || 1) + 1
+          : Math.max((prevQuantities[productId] || 1) - 1, 1),
+    }));
+  };
+
   return (
     <div className="container mx-auto p-4 bg-slate-50">
-      <h1 className="text-2xl text-center font-bold mb-4">Ropa para Gatos</h1>
+      <h1 className="text-2xl text-center font-bold mb-4">Juguetes para Gatos</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
           <div
-            key={product.id} // Usa product.id como clave si es único
+            key={product.id}
             className="border p-4 rounded-lg shadow-md cursor-pointer flex flex-col justify-between h-full"
             onClick={() => router.push("/Categorias/Ropa/Gato")}
           >
@@ -76,39 +97,64 @@ const ClothesCat: React.FC = () => {
                 height={300}
                 className="object-contain rounded-md w-full h-60 mb-4"
               />
-              <h2 className="text-lg font-semibold mb-2">{product.id}</h2>
+              <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
               <p className="text-gray-700 mb-2">{product.description}</p>
               <p className="text-green-600 font-bold mb-2">
-                ${product.price.toFixed(2)} {/* Muestra el precio */}
+                ${product.price.toFixed(2)}
               </p>
+              <div className="flex items-center space-x-4 mb-4">
+                <button
+                  className="px-3 py-1 bg-gray-300 rounded"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateQuantity(product.id, "decrement");
+                  }}
+                >
+                  -
+                </button>
+                <span>{quantity[product.id] || 1}</span>
+                <button
+                  className="px-3 py-1 bg-gray-300 rounded"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateQuantity(product.id, "increment");
+                  }}
+                >
+                  +
+                </button>
+              </div>
             </div>
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
-                e.stopPropagation();
-                const success = await addToCart(product.id); // Cambiado para usar name
+                e.stopPropagation(); // Previene el evento de click en el contenedor
+                const currentQuantity = quantity[product.id] || 1; // Asegúrate de que quantity esté definido
+                console.log("Adding to cart:", product.id, currentQuantity);
+                const success = await addToCart(product.id, currentQuantity); // Aquí
                 if (success) {
-                  alert(`${product.id} ha sido agregado al carrito`);
+                  alert(
+                    `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito`
+                  );
                 } else {
-                  alert(`${product.id} ya está en el carrito`);
+                  alert("Error al agregar al carrito");
                 }
               }}
             >
-              Agregar al Carrito
+              Agregar al carrito
             </button>
           </div>
         ))}
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center space-x-2 mt-4">
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index}
             onClick={() => handlePageChange(index + 1)}
-            className={`mx-3 px-3 py-1 rounded-md ${
+            className={`px-3 py-1 rounded-md ${
               currentPage === index + 1
                 ? "bg-teal-600 text-white"
-                : "bg-gray-300"
+                : "bg-gray-200 text-gray-800"
             }`}
           >
             {index + 1}

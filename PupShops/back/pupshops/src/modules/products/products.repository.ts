@@ -111,6 +111,7 @@ export class ProductsRepository {
     return this.productsRepository.save(product);
   }
 
+  // Obtener productos por categoría hija
   async getProductsByChildCategory(categoryId: string): Promise<Products[]> {
     return this.productsRepository.find({
       where: { category: { id: categoryId } },
