@@ -1,30 +1,49 @@
 version: "3.8"
-
 services:
-  frontend:
-    container_name: nextjs-frontend
-    build:
-      context: ./front # Ruta al proyecto de Next
-      dockerfile: Dockerfile # Dockerfile que se usa para construir el frontend
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: DB_pupshops
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
     ports:
-      - "3000:3000"
-    # Mapea el puerto del contenedor al puerto local
+      - "5432:5432"
     volumes:
-      - ./front:/app # Sincroniza el código local con el contenedor
-    command: npm run dev # Comando para ejecutar Next
+      - ./postgres-data:/var/lib/postgresql/data
     networks:
       - pupshops-network
 
   backend:
-    container_name: node-backend
-    build:
-      context: ./back/pupshops # Ruta al proyecto del backend
-      dockerfile: Dockerfile # Dockerfile que se usa para construir el backend
+    build: ./back/pupshops
+    container_name: nest_backend
+    environment:
+      DB_NAME: DB_pupshops
+      DB_HOST: db # Aquí cambiamos a 'db', el nombre del servicio en lugar de 'localhost'
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 1234
+      JWT_SECRET: pupshops
+      MERCADO_PAGO_ACCESS_TOKEN: APP_USR-1158358512957720-092318-dfe5d1ec04ecb9c1622a5ea8adf71220-1994103886
+      CLOUDINARY_CLOUD_NAME: dncbavrxt
+      CLOUDINARY_API_KEY: 887721685277851
+      CLOUDINARY_API_SECRET: JQhdfiBIGwQKNZdLgspWYK_07TY
     ports:
-      - "3001:3001" # Puerto para el backend
-    volumes:
-      - ./back/pupshops:/app # Sincroniza el código local con el contenedor
-    command: npm run start:dev # Comando para iniciar el backend en modo desarrollo
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - pupshops-network
+
+  frontend:
+    build: ./front
+    container_name: nextjs_frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000 # Cambia esta URL según la configuración de tu API
+    ports:
+      - "3001:3000" # Puedes cambiar los puertos si es necesario
+    depends_on:
+      - backend
     networks:
       - pupshops-network
 
