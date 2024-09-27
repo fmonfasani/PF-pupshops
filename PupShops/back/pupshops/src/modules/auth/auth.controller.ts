@@ -16,8 +16,6 @@ export class AuthController {
     @Body() user: CreateUserDto,
     @Req() request: Request & { now: string },
   ) {
-    delete user.isAdmin;
-
     console.log('Usuario creado a las: ', request.now);
     const nuevoUsuario = await this.authService.signUp(user);
     return plainToClass(CreateUserDto, nuevoUsuario, {

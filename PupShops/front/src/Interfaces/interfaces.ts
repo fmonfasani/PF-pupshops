@@ -52,6 +52,19 @@ export interface IUserRegister {
   phone: number;
 }
 
+export interface IAdminRegisterUser {
+  name: string;
+  lastname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  country: string;
+  city: string;
+  address: string;
+  phone: number;
+  isAdmin:boolean;
+}
+
 export interface IButtonProps {
   text: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
