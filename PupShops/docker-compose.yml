@@ -1,16 +1,4 @@
-version: "3.8"
-
 services:
-  frontend:
-    build:
-      context: ./front # La ruta donde se encuentra el Dockerfile del frontend
-    ports:
-      - "3001:3001"
-    depends_on:
-      - db
-    networks:
-      - pupshops-network
-
   frontend:
     build: ./front
     container_name: nextjs_frontend
