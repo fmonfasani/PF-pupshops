@@ -8,6 +8,7 @@ dotenvConfig({ path: '.env.development' });
 
 const config: DataSourceOptions = {
   type: 'postgres',
+  url: process.env.DATABASE_URL,
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT as unknown as number,
