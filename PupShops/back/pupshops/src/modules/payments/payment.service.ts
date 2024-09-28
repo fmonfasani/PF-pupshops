@@ -25,9 +25,8 @@ export class PaymentsService {
       'MERCADO_PAGO_ACCESS_TOKEN',
     );
   }
-  private readonly baseUrl = 'https://pupshops-backend.onrender.com';
 
-  //private readonly ngrokBaseUrl = 'https://pupshops-backend.onrender.com/';
+  private readonly baseUrl = 'https://pupshops-backend.onrender.com';
 
   // Método auxiliar para realizar solicitudes HTTP
   private async httpRequest(url: string, options: any) {
@@ -54,6 +53,7 @@ export class PaymentsService {
       throw error;
     }
   }
+
   async getPaymentsByUser(userId: string): Promise<Payment[]> {
     // Primero buscamos todas las órdenes asociadas al usuario
     const orders = await this.ordersRepository.find({
@@ -139,7 +139,12 @@ export class PaymentsService {
         throw new Error('Error en la creación de la preferencia');
       }
 
-      return await response.json();
+      const data = await response.json();
+
+      // Retornar solo el campo `init_point` de la respuesta
+      return {
+        init_point: data.init_point,
+      };
     } catch (error) {
       console.error(
         'Error en la solicitud HTTP:',
@@ -156,7 +161,7 @@ export class PaymentsService {
     const paymentResponse = await this.httpRequest(url, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${this.accessToken}`, // Asegúrate de pasar el token correcto
+        Authorization: `Bearer ${this.accessToken}`, 
       },
     });
 
@@ -171,7 +176,6 @@ export class PaymentsService {
     return paymentResponse;
   }
 
-  // payments.service.ts
   async getPaymentInfo(resource: string) {
     if (
       resource.startsWith(
@@ -192,6 +196,7 @@ export class PaymentsService {
       throw new Error('URL de recurso inválida o no reconocida');
     }
   }
+
   async getOrderInfo(resource: string) {
     try {
       // Hacer la solicitud a la URL proporcionada en el resource
@@ -216,6 +221,7 @@ export class PaymentsService {
       throw error;
     }
   }
+
   async processPaymentNotification(paymentId: string) {
     const paymentResponse = await this.getPaymentStatus(paymentId);
 
@@ -257,24 +263,12 @@ export class PaymentsService {
 
     return paymentResponse;
   }
+
   async handlePaymentNotification(paymentResponse: any) {
     const payment = new Payment();
     payment.id = paymentResponse.id; // ID del pago de Mercado Pago
     payment.status = paymentResponse.status; // Estado del pago ('approved', 'rejected', etc.)
 
-    // Extraer el método de pago desde la respuesta
-    // if (paymentResponse.payment_method && paymentResponse.payment_method.id) {
-    //  payment.paymentMethod = paymentResponse.payment_method.id; // Asignar el ID del método de pago
-    //    console.log('Método de pago:', paymentResponse.payment_method.id);
-    //  } else {
-    //   throw new Error('Método de pago no encontrado en la respuesta');
-    // }
-
-    //  payment.transactionAmount = paymentResponse.transaction_amount; // Monto total de la transacción
-    //  payment.external_reference = paymentResponse.external_reference; // Referencia de la orden
-    //  payment.email = paymentResponse.payer.email; // Email del pagador
-
-    // Buscar la orden en la base de datos
     payment.order = await this.ordersRepository.findOne({
       where: { id: paymentResponse.external_reference },
     });
