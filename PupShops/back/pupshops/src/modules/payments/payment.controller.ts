@@ -20,13 +20,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Payment } from './entities/payment.entity';
-@ApiTags('Payments') // Etiqueta para agrupar los endpoints
+@ApiTags('Payments') 
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
-
-  // payments.controller.ts
-  // payments.controller.ts
+  
   @Get('/user/:userId/payments')
   @ApiOperation({ summary: 'Obtener los pagos realizados por un usuario' }) // Descripción del endpoint
   @ApiParam({
@@ -61,7 +59,7 @@ export class PaymentsController {
     description: 'Preferencia de pago creada exitosamente',
     schema: {
       example: {
-        message: 'Pago creado exitosamente',
+        message: 'Preferencia de pagos creada exitosamente',
         payment: {
           id: '123456789',
           init_point: 'https://www.mercadopago.com/checkout/v1/payment',
@@ -84,7 +82,7 @@ export class PaymentsController {
       const payment =
         await this.paymentsService.createPayment(createPaymentDto);
       return {
-        message: 'Pago creado exitosamente',
+        message: 'Preferencia de pago creada exitosamente',
         payment,
       };
     } catch (error) {
