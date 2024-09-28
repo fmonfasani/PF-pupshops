@@ -25,8 +25,6 @@ import { Payment } from './entities/payment.entity';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  // payments.controller.ts
-  // payments.controller.ts
   @Get('/user/:userId/payments')
   @ApiOperation({ summary: 'Obtener los pagos realizados por un usuario' }) // Descripción del endpoint
   @ApiParam({
