@@ -25,8 +25,9 @@ export class PaymentsService {
       'MERCADO_PAGO_ACCESS_TOKEN',
     );
   }
+  private readonly baseUrl = 'https://pupshops-backend.onrender.com/';
 
-  private readonly ngrokBaseUrl = 'https://1bdf-201-231-240-116.ngrok-free.app';
+  //private readonly ngrokBaseUrl = 'https://pupshops-backend.onrender.com/';
 
   // Método auxiliar para realizar solicitudes HTTP
   private async httpRequest(url: string, options: any) {
@@ -107,11 +108,11 @@ export class PaymentsService {
       external_reference: orderId,
 
       back_urls: {
-        success: `${this.ngrokBaseUrl}/success`,
-        failure: `${this.ngrokBaseUrl}/failure`,
-        pending: `${this.ngrokBaseUrl}/pending`,
+        success: `${this.baseUrl}/payments/success`,
+        failure: `${this.baseUrl}/payments/failure`,
+        pending: `${this.baseUrl}/payments/pending`,
       },
-      notification_url: `${this.ngrokBaseUrl}/payments/webhook`,
+      notification_url: `${this.baseUrl}/payments/webhook`,
       auto_return: 'approved',
       payment_methods: {
         installments: 6, // Permitir hasta 6 cuotas
