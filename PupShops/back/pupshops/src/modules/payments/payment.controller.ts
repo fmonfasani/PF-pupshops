@@ -96,7 +96,7 @@ export class PaymentsController {
   }
 
   // Manejar redirección de pago exitoso
-  @ApiOperation({ summary: 'Manejar redirección de pago exitoso' })
+  /*@ApiOperation({ summary: 'Manejar redirección de pago exitoso' })
   @ApiQuery({
     name: 'payment_id',
     required: true,
@@ -114,7 +114,7 @@ export class PaymentsController {
     required: true,
     description: 'Referencia externa (orderId)',
     example: '73b56cfb-d8e5-4097-b93e-e3b59de0e4f3',
-  })
+  })*/
   @Get('success')
   handleSuccess(@Query() query, @Res() res: Response) {
     const { payment_id, status, external_reference } = query;
@@ -137,7 +137,7 @@ export class PaymentsController {
     console.log('Pago pendiente:', query);
     res.send('Tu pago está en proceso. Espera la confirmación.');
   }
-
+  /*
   @ApiOperation({ summary: 'Recibir notificaciones de Mercado Pago (Webhook)' })
   @ApiResponse({
     status: 200,
@@ -146,7 +146,7 @@ export class PaymentsController {
   @ApiResponse({
     status: 500,
     description: 'Error al procesar la notificación',
-  })
+  })*/
 
   // Webhook para recibir notificaciones de Mercado Pago
   @Post('/webhook')
