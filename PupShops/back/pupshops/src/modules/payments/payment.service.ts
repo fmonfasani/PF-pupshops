@@ -25,7 +25,8 @@ export class PaymentsService {
       'MERCADO_PAGO_ACCESS_TOKEN',
     );
   }
-  private readonly baseUrl = 'https://pupshops-backend.onrender.com/';
+
+  private readonly baseUrl = 'https://pupshops-backend.onrender.com';
 
   //private readonly ngrokBaseUrl = 'https://pupshops-backend.onrender.com/';
 
