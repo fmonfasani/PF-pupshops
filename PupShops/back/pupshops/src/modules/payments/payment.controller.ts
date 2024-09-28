@@ -20,7 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Payment } from './entities/payment.entity';
-@ApiTags('Payments')
+@ApiTags('Payments') // Etiqueta para agrupar los endpoints
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
