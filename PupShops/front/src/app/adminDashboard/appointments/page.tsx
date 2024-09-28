@@ -22,12 +22,8 @@ export default function adminAppointments() {
     if (!isAdmin) {
       setNotificationMessage(`Debes ser administrador para ver turnos`);
       setShowNotification(true);
-      setLoading(false)
-
-      setTimeout(() => {
-        setShowNotification(false);
-        router.push("/home");
-                }, 2000);
+       router.push("/home");
+              
      } else {
       setLoading(false); 
     }

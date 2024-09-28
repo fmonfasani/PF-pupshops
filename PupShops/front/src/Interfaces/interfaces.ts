@@ -30,7 +30,7 @@ export interface IUserContextType {
   //   getOrders: () => Promise<void>;
   // setOrders: (orders: IOrderResponse[]) => void;
   // orders: IOrderResponse[] | [];
-  //  logOut: () => void;
+  logOut: () => void;
 }
 
 export interface ILoginUser {
@@ -54,17 +54,8 @@ export interface IUserRegister {
   phone: number;
 }
 
-export interface IAdminRegisterUser {
-  name: string;
-  lastname: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  country: string;
-  city: string;
-  address: string;
-  phone: number;
-  isAdmin:boolean;
+export interface IAdminRegisterUser extends IUserRegister {
+    isAdmin:boolean;
 }
 
 export interface IButtonProps {
@@ -74,11 +65,6 @@ export interface IButtonProps {
   disabled?: boolean;
 }
 
-export interface IUserResponse {
-  login: boolean;
-  user: IUser | null;
-  token: string;
-}
 
 export interface IAppointment {
   id?: string;

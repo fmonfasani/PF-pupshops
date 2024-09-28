@@ -124,7 +124,7 @@ function LoginPage() {
           <p className="mt-10 text-center text-sm text-gray-500">
             ¿No eres miembro?{" "}
             <a
-              href="/register"
+              href="/userDashboard/register"
               className="font-semibold leading-6 text-teal-600 hover:text-teal-300"
             >
               Regístrate aquí
