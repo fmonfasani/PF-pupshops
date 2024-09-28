@@ -1,10 +1,10 @@
 "use client"; // Asegúrate de que esta línea esté al principio del archivo
 
-import { useUserContext } from '@/context/userContext';
+import {  UserContext } from '@/context/userContext';
 import { IUser } from '@/Interfaces/interfaces';
 import { fetchGetUsers } from '@/utils/fetchAdminCreateUser';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 // Array ficticio de usuarios
 const mockUsers = [
@@ -67,7 +67,7 @@ const mockUsers = [
 
 
 export default function AdminUsersDataComponent() {
-  const { user } = useUserContext(); // Obtiene el usuario del contexto
+  const { user } = useContext(UserContext);
   const [users, setUsers] = useState<IUser[]>(mockUsers); // Inicializa con mockUsers
     const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda
   const token = user?.token; // Token del contexto

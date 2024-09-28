@@ -1,8 +1,11 @@
 import { IAdminRegisterUser, IUser } from "@/Interfaces/interfaces";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
 //Crear usuario como administrador
 export const fetchAdminCreateUser = async (user: IAdminRegisterUser) => {
-    const response = await fetch(`http://localhost:3001/admin/users/register`, {
+    const response = await fetch(`${API_URL}/admin/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -19,10 +22,10 @@ export const fetchAdminCreateUser = async (user: IAdminRegisterUser) => {
 
 //Ver usuarios registrados
 export const fetchGetUsers = async (token: string): Promise<IUser[]> => {
-  const response = await fetch(`http://localhost:3001/admin/users`, {
+  const response = await fetch(`${API_URL}/admin/users`, {
     method: 'GET',
     headers: {
-      'Authorization': `${token}`, // Asegúrate de que el administrador esté autenticado
+      'Authorization': `Bearer ${token}`,
     },
   });
 

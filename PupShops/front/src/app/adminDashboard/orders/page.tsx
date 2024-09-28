@@ -1,14 +1,13 @@
  "use client";
-import React from 'react'
-import { useUserContext } from '@/context/userContext';
+import React, { useContext } from 'react'
+import { UserContext } from '@/context/userContext';
 import { useEffect,useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 import AdminOrdersComponent from '@/components/AdminOrdersComponent/AdminOrdersComponent'
 
 export default function AdminOrders() {
-  const { user } = useUserContext(); 
-  const isAdmin = user?.user?.isAdmin;
+  const { isAdmin } = useContext(UserContext);
   const router = useRouter()
 
   const [showNotification, setShowNotification] = useState(false);

@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 import { ButtonForms } from '@/components/Buttons/ButtonsForms';
 import { validationAdminCreateUSer } from '@/utils/validationAdminCreateUser';
 import { IAdminRegisterUser } from '@/Interfaces/interfaces';
-import { fetchRegisterUser } from '@/utils/fetchUser';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 import { NotificationError } from '@/components/Notifications/NotificationError';
 import { fetchAdminCreateUser } from '@/utils/fetchAdminCreateUser';
-import { useUserContext } from '@/context/userContext';
+import { UserContext } from '@/context/userContext';
+
 
 
 export default function AdminAccesControlComponent() {
@@ -44,8 +44,8 @@ const isValidCountry = (country: string): country is Country => {
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
         const [showErrorNotification, setShowErrorNotification] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const { user } = useUserContext(); 
-    const isAdmin = user?.user?.isAdmin;
+    const { user, isAdmin } = useContext(UserContext)
+   
   
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');

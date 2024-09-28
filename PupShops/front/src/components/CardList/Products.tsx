@@ -1,6 +1,6 @@
 "use client";
-import { useUserContext } from "@/context/userContext";
-import { useEffect, useState } from "react";
+import { UserContext} from "@/context/userContext";
+import { useContext, useEffect, useState } from "react";
 import { getAllProducts } from "@/helpers/product.helper";
 import Link from "next/link";
 import { ButtonForms } from "../Buttons/ButtonsForms";
@@ -26,7 +26,7 @@ export interface IProduct {
 
 const ProductsPage = () => {
 
-  const { isAdmin } = useUserContext(); 
+  const { isAdmin } = useContext(UserContext);
   
 
   // Estados

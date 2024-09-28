@@ -6,7 +6,7 @@ import {
   IUserResponse
 } from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
-import { fetchLoginUser, fetchRegisterUser } from "@/utils/fetchUser";
+import { login, fetchRegisterUser } from "@/utils/fetchUser";
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Creamos el contexto con un valor inicial
@@ -87,32 +87,34 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   // Función para iniciar sesión
   const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     try {
-      const data = await fetchLoginUser(credentials);
-      if (data.login) {
-        const userData = {
-          login: data.login,
-          token: data.token,
-          user: data.findUser
-        };
+        const data = await login(credentials);
+        if (data.login) {
+            const userData = {
+                login: data.login,
+                token: data.token,
+                user: data.findUser
+            };
 
-        if (typeof window !== "undefined") {
-          localStorage.setItem("user", JSON.stringify(userData));
-          localStorage.setItem("token", data.token);
+            // Actualizar los estados aquí
+            setUser(userData.user);
+            setIsLogged(true);
+            setIsAdmin(userData.user.isAdmin);
+
+            if (typeof window !== "undefined") {
+                localStorage.setItem("user", JSON.stringify(userData));
+                localStorage.setItem("token", data.token);
+            }
+
+            return true;
+        } else {
+            return false;
         }
-
-        setUser(userData);
-        setIsLogged(true);
-        setIsAdmin(userData.user.isAdmin); // Establecemos si el usuario es admin
-
-        return true;
-      } else {
-        return false;
-      }
     } catch (error) {
-      console.error("Error during sign in:", error);
-      return false;
+        console.error("Error during sign in:", error);
+        return false;
     }
-  };
+};
+
 
   // Función para registrarse
   const signUp = async (user: IUserRegister): Promise<boolean> => {
@@ -130,42 +132,44 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  /* //OBTENER ORDENES DE COMPRA
+    const getOrders = useCallback(async () => {
+        try {
+          const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+          const data = await fetchUserOrders(token);
+          setOrders(data);
+          localStorage.setItem("orders", JSON.stringify(data));
+        } catch (error) {
+          console.error("Error al obtener las órdenes:", error);
+        }
+      }, [setOrders]);*/
+
    // Efecto para cargar el estado del usuario desde localStorage al montar
    useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
-      const token = localStorage.getItem("token");
-
-      if (storedUser) {
+      const storedUserSession = localStorage.getItem("userSession");
+      
+      if (storedUserSession) {
         try {
-          const parsedUser: IUserResponse = JSON.parse(storedUser);
-          console.log("Parsed user from localStorage:", parsedUser);
-
-          // Verificamos que parsedUser y parsedUser.user no sean null antes de acceder a ellos
-          if (parsedUser && parsedUser.user) {
-            setUser(parsedUser);
-            setIsLogged(Boolean(token));
-            setIsAdmin(parsedUser.user.isAdmin); // Aseguramos que user no sea null
-          } else {
-            // Si no hay usuario, reseteamos los estados
-            setUser(null);
-            setIsLogged(false);
-            setIsAdmin(false);
+          const parsedSession = JSON.parse(storedUserSession);
+          const { token, user } = parsedSession;
+  
+          if (user) {
+            setUser(user); // Almacena el usuario
+            setIsLogged(Boolean(token)); // Verifica que haya un token válido
+            setIsAdmin(user.isAdmin); // Asigna si es admin
           }
         } catch (error) {
-          console.error("Error parsing stored user:", error);
+          console.error("Error al parsear userSession:", error);
+          // Resetea los valores si hay un error
           setUser(null);
           setIsLogged(false);
           setIsAdmin(false);
         }
-      } else {
-        // Si no hay un usuario guardado, reseteamos los estados
-        setUser(null);
-        setIsLogged(false);
-        setIsAdmin(false);
       }
     }
   }, []);
+  
 
  //CERRAR SESION DE USUARIO
  const logOut = () => {
@@ -196,11 +200,3 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Hook para usar el contexto
-export const useUserContext = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUserContext debe ser usado dentro de un UserProvider");
-  }
-  return context;
-};

@@ -33,6 +33,10 @@ export interface IUserContextType {
   logOut: () => void;
 }
 
+export interface ILoginClientProps {
+  setToken: (token: string | null) => void;
+}
+
 export interface ILoginUser {
   email: string;
   password: string;

@@ -1,12 +1,13 @@
 "use client"
-import { useUserContext } from "@/context/userContext";
+import {UserContext } from "@/context/userContext";
 import NavbarAdminComponent from "./NavbarAdmin";
 import Navbar from "./Navbar";
+import { useContext } from "react";
 
 
 const NavbarContainer = () => {
-    const { user } = useUserContext(); 
-    const isAdmin = user?.user?.isAdmin || false; 
+  const { user,isAdmin } = useContext(UserContext);
+     
   
     return isAdmin ? <NavbarAdminComponent /> : <Navbar />; 
   };

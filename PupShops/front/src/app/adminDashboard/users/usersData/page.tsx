@@ -1,12 +1,12 @@
 "use client";
 import AdminUsersDataComponent from '@/components/AdminUsersData/AdminUsersDataComponent';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
-import { useUserContext } from '@/context/userContext';
+import { UserContext } from '@/context/userContext';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 export default function AdminUsersData() {
-  const { isAdmin } = useUserContext(); 
+  const { isAdmin } = useContext(UserContext); 
   const router = useRouter();
 
   const [showNotification, setShowNotification] = useState(false);
