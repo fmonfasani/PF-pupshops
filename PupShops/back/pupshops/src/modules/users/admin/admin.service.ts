@@ -1,10 +1,15 @@
-import { Injectable, NotFoundException, InternalServerErrorException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { AdminCreateUserDto } from './dto/admin-create-user.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
-import * as bcryptjs from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AdminService {
@@ -45,7 +50,9 @@ export class AdminService {
       console.log(`Usuario encontrado: ${user}`);
       return user;
     } catch (error) {
-      throw new InternalServerErrorException('Error al buscar el usuario por email');
+      throw new InternalServerErrorException(
+        'Error al buscar el usuario por email',
+      );
     }
   }
 
@@ -62,37 +69,45 @@ export class AdminService {
       }
       return user;
     } catch (error) {
-      throw new InternalServerErrorException('Error al buscar el usuario por ID');
+      throw new InternalServerErrorException(
+        'Error al buscar el usuario por ID',
+      );
     }
   }
 
   async createUser(user: AdminCreateUserDto): Promise<User> {
     try {
       const findUser = await this.getEmailLogin(user.email);
-    if (findUser) {
-      throw new BadRequestException('Email existente');
-    }
-    if (user.password !== user.confirmPassword) {
-      throw new BadRequestException('Las contraseñas no coinciden');
-    }
+      if (findUser) {
+        throw new BadRequestException('Email existente');
+      }
+      if (user.password !== user.confirmPassword) {
+        throw new BadRequestException('Las contraseñas no coinciden');
+      }
 
-    const hashedPassword = await bcryptjs.hash(user.password, 10);
-    if (!hashedPassword) {
-      throw new Error('Error en la encriptación de la contraseña');
-    }
-    console.log('Datos antes de guardar:', {
-      ...user,
-      password: hashedPassword,
-    });
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+      if (!hashedPassword) {
+        throw new Error('Error en la encriptación de la contraseña');
+      }
+      console.log('Datos antes de guardar:', {
+        ...user,
+        password: hashedPassword,
+      });
 
-    const newUser = await this.usersRepository.save({...user, password:hashedPassword});
-    return newUser;
+      const newUser = await this.usersRepository.save({
+        ...user,
+        password: hashedPassword,
+      });
+      return newUser;
     } catch (error) {
       throw new InternalServerErrorException('Error al crear el usuario');
     }
   }
 
-  async updateUser(id: string, user: AdminUpdateUserDto): Promise<Partial<User>> {
+  async updateUser(
+    id: string,
+    user: AdminUpdateUserDto,
+  ): Promise<Partial<User>> {
     try {
       await this.usersRepository.update(id, user);
       const updatedUser = await this.usersRepository.findOneBy({ id });
