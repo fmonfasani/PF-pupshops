@@ -25,8 +25,9 @@ export class PaymentsService {
       'MERCADO_PAGO_ACCESS_TOKEN',
     );
   }
+  private readonly baseUrl = 'https://pupshops-backend.onrender.com';
 
-  private readonly ngrokBaseUrl = 'https://fcc3-190-17-115-142.ngrok-free.app';
+  //private readonly ngrokBaseUrl = 'https://pupshops-backend.onrender.com/';
 
   // Método auxiliar para realizar solicitudes HTTP
   private async httpRequest(url: string, options: any) {
@@ -53,9 +54,35 @@ export class PaymentsService {
       throw error;
     }
   }
+  async getPaymentsByUser(userId: string): Promise<Payment[]> {
+    // Primero buscamos todas las órdenes asociadas al usuario
+    const orders = await this.ordersRepository.find({
+      where: { user: { id: userId } },
+      relations: ['payments'], // Cargar los pagos asociados a las órdenes
+    });
+
+    if (!orders.length) {
+      throw new NotFoundException(
+        `No se encontraron órdenes para el usuario con ID ${userId}`,
+      );
+    }
+
+    // Luego extraemos todos los pagos asociados a esas órdenes
+    const payments = orders.reduce((acc, order) => {
+      return acc.concat(order.payments);
+    }, []);
+
+    if (!payments.length) {
+      throw new NotFoundException(
+        `No se encontraron pagos para el usuario con ID ${userId}`,
+      );
+    }
+
+    return payments;
+  }
 
   async createPayment(createPaymentDto: CreatePaymentDto) {
-    const { type, title, totalAmount, orderId } = createPaymentDto;
+    const { type, title, quantity, unit_price, orderId } = createPaymentDto;
 
     // Buscar la orden de compra en la base de datos
     const order = await this.ordersRepository.findOne({
@@ -69,25 +96,32 @@ export class PaymentsService {
       items: [
         {
           title: title,
-          quantity: 1,
+          quantity: quantity,
           currency_id: 'ARS',
-          unit_price: totalAmount,
+          unit_price: unit_price,
           id: type === 'service' ? 'service_1234' : 'product_1234',
+          imgUrl: 'https://via.placeholder.com/150',
+          description: 'pelota para perro',
         },
       ],
 
       external_reference: orderId,
 
       back_urls: {
-        success: `${this.ngrokBaseUrl}/success`,
-        failure: `${this.ngrokBaseUrl}/failure`,
-        pending: `${this.ngrokBaseUrl}/pending`,
+        success: `${this.baseUrl}/payments/success`,
+        failure: `${this.baseUrl}/payments/failure`,
+        pending: `${this.baseUrl}/payments/pending`,
       },
-      notification_url: `${this.ngrokBaseUrl}/payments/webhook`,
+      notification_url: `${this.baseUrl}/payments/webhook`,
       auto_return: 'approved',
-
+      payment_methods: {
+        installments: 6, // Permitir hasta 6 cuotas
+        excluded_payment_methods: [
+          { id: 'visa' }, // Excluir Visa
+        ],
+      },
       metadata: {
-        integrator_id: 'dev_24c65fb163bf11ea96500242ac130004',
+        integrator_id: 'dev_24c65fb163bf11ea96500242ac130004', // Incluir el Integrator ID
       },
     };
 
@@ -118,11 +152,11 @@ export class PaymentsService {
   }
 
   async getPaymentStatus(paymentId: string) {
-    const url = `https://api.mercadopago.com/v1/payments/${paymentId}`;
+    const url = `https://api.mercadopago.com/v1/payments/${paymentId}`; // URL para obtener el estado del pago
     const paymentResponse = await this.httpRequest(url, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${this.accessToken}`,
+        Authorization: `Bearer ${this.accessToken}`, // Asegúrate de pasar el token correcto
       },
     });
 
@@ -137,35 +171,119 @@ export class PaymentsService {
     return paymentResponse;
   }
 
+  // payments.service.ts
   async getPaymentInfo(resource: string) {
     if (
       resource.startsWith(
-        'https://api.mercadopago.com/collections/notifications/',
+        'https://api.mercadolibre.com/collections/notifications/',
       )
     ) {
       const paymentId = resource.split('/').pop(); // Extrae el ID del pago desde la URL
       if (paymentId) {
-        return await this.getPaymentStatus(paymentId);
+        return await this.getPaymentStatus(paymentId); // Usa el paymentId para obtener el estado del pago
       } else {
         throw new Error('No se pudo extraer el ID del pago desde el recurso');
       }
     } else if (
-      resource.startsWith('https://api.mercadopago.com/merchant_orders/')
+      resource.startsWith('https://api.mercadolibre.com/merchant_orders/')
     ) {
       return this.getOrderInfo(resource);
     } else {
       throw new Error('URL de recurso inválida o no reconocida');
     }
   }
-
   async getOrderInfo(resource: string) {
-    const orderResponse = await this.httpRequest(resource, {
-      method: 'GET',
+    try {
+      // Hacer la solicitud a la URL proporcionada en el resource
+      const orderResponse = await this.httpRequest(resource, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`, // Incluye tu token de Mercado Pago
+        },
+      });
+
+      // Verificar si se recibió una respuesta válida
+      if (!orderResponse || !orderResponse.id) {
+        throw new Error('Respuesta inválida: no se encontró el ID de la orden');
+      }
+
+      return orderResponse; // Devuelve la respuesta de la orden
+    } catch (error) {
+      console.error(
+        'Error al obtener la información de la orden:',
+        error.message,
+      );
+      throw error;
+    }
+  }
+  async processPaymentNotification(paymentId: string) {
+    const paymentResponse = await this.getPaymentStatus(paymentId);
+
+    if (!paymentResponse || !paymentResponse.id) {
+      throw new Error('No se encontró el pago con el ID proporcionado');
+    }
+
+    const orderId = paymentResponse.external_reference; // ID de la orden
+    const status = paymentResponse.status; // Estado del pago (approved, rejected, etc.)
+    const transactionAmount = paymentResponse.transaction_amount; // Monto de la transacción
+
+    // Buscar la orden en la base de datos
+    const order = await this.ordersRepository.findOne({
+      where: { id: orderId },
+      relations: ['payments'],
     });
 
-    if (!orderResponse || !orderResponse.id) {
-      throw new Error('Respuesta inválida: no se encontró el ID de la orden');
+    if (!order) {
+      throw new Error('Orden no encontrada');
     }
-    return orderResponse;
+
+    // Actualizar el estado de la orden basado en el estado del pago
+    if (status === 'approved') {
+      order.status = 'paid'; // Cambiar a 'paid' si el pago es aprobado
+    } else if (status === 'rejected') {
+      order.status = 'payment_failed'; // Cambiar a 'payment_failed' si el pago es rechazado
+    }
+
+    // Guardar los detalles del pago en la base de datos
+    const payment = new Payment();
+    payment.id = paymentResponse.id;
+    payment.status = paymentResponse.status;
+    payment.transactionAmount = paymentResponse.transaction_amount;
+    payment.order = order;
+
+    // Guardar la orden y el pago en la base de datos
+    await this.ordersRepository.save(order);
+    await this.paymentRepository.save(payment);
+
+    return paymentResponse;
+  }
+  async handlePaymentNotification(paymentResponse: any) {
+    const payment = new Payment();
+    payment.id = paymentResponse.id; // ID del pago de Mercado Pago
+    payment.status = paymentResponse.status; // Estado del pago ('approved', 'rejected', etc.)
+
+    // Extraer el método de pago desde la respuesta
+    // if (paymentResponse.payment_method && paymentResponse.payment_method.id) {
+    //  payment.paymentMethod = paymentResponse.payment_method.id; // Asignar el ID del método de pago
+    //    console.log('Método de pago:', paymentResponse.payment_method.id);
+    //  } else {
+    //   throw new Error('Método de pago no encontrado en la respuesta');
+    // }
+
+    //  payment.transactionAmount = paymentResponse.transaction_amount; // Monto total de la transacción
+    //  payment.external_reference = paymentResponse.external_reference; // Referencia de la orden
+    //  payment.email = paymentResponse.payer.email; // Email del pagador
+
+    // Buscar la orden en la base de datos
+    payment.order = await this.ordersRepository.findOne({
+      where: { id: paymentResponse.external_reference },
+    });
+
+    if (!payment.order) {
+      throw new NotFoundException('Orden no encontrada');
+    }
+
+    // Guardar el pago en la base de datos
+    await this.paymentRepository.save(payment);
   }
 }

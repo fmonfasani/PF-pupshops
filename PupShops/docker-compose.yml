@@ -1,13 +1,11 @@
-version: "3.8"
-
 services:
   frontend:
-    build:
-      context: ./front # La ruta donde se encuentra el Dockerfile del frontend
-    ports:
-      - "3000:3000"
+    build: ./front
+    container_name: nextjs_frontend
     environment:
-      - NODE_ENV=production
+      NEXT_PUBLIC_API_URL: http://localhost:3000 # Cambia esta URL según la configuración de tu API
+    ports:
+      - "3000:3000" # Puedes cambiar los puertos si es necesario
     depends_on:
       - backend # Asegúrate de que el backend esté disponible antes de iniciar el frontend
 

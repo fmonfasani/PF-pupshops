@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cartContext } from "@/context/cartContext";
-import { IProduct } from "@/Interfaces/ICart"; // Asegúrate de que la ruta sea correcta
+import { IProduct } from "@/Interfaces/ICart";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -17,7 +17,6 @@ const ClothesCat: React.FC = () => {
   const categoryId = "2c5d9c21-1997-4311-b7ca-e9362c05aa2a";
 
 
-  // Cambiamos el estado quantity para ser un objeto
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
 
@@ -44,7 +43,6 @@ const ClothesCat: React.FC = () => {
         }));
 
         setProducts(formattedData);
-        // Inicializamos la cantidad para cada producto
         const initialQuantity = formattedData.reduce((acc, product) => {
           acc[product.id] = 1; // Inicializamos la cantidad en 1
           return acc;
@@ -72,7 +70,6 @@ const ClothesCat: React.FC = () => {
     setCurrentPage(page);
   };
 
-  // Función para incrementar o disminuir la cantidad de un producto específico
   const updateQuantity = (
     productId: number,
     operation: "increment" | "decrement"
@@ -92,7 +89,7 @@ const ClothesCat: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
           <div
-            key={product.id} // Usa product.id como clave si es único
+            key={product.id}
             className="border p-4 rounded-lg shadow-md cursor-pointer flex flex-col justify-between h-full"
             onClick={() => router.push("/Categorias/Ropa/Gato")}
           >
@@ -110,7 +107,6 @@ const ClothesCat: React.FC = () => {
 
                 ${product.price.toFixed(2)}
               </p>
-              {/* Sección de cantidad */}
               <div className="flex items-center space-x-4 mb-4">
                 <button
                   className="px-3 py-1 bg-gray-300 rounded"
@@ -121,8 +117,7 @@ const ClothesCat: React.FC = () => {
                 >
                   -
                 </button>
-                <span>{quantity[product.id] || 1}</span>{" "}
-                {/* Mostrar la cantidad específica */}
+                <span>{quantity[product.id] || 1}</span>
                 <button
                   className="px-3 py-1 bg-gray-300 rounded"
                   onClick={(e) => {
@@ -138,39 +133,38 @@ const ClothesCat: React.FC = () => {
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
-                e.stopPropagation();
 
-                const success = await addToCart(
-                  product.id,
-                  quantity[product.id] || 1
-                ); // Pasar cantidad específica a la función addToCart
+                e.stopPropagation(); // Previene el evento de click en el contenedor
+                const currentQuantity = quantity[product.id] || 1; // Asegúrate de que quantity esté definido
+                console.log("Adding to cart:", product.id, currentQuantity);
+                const success = await addToCart(product.id, currentQuantity); // Aquí
+
                 if (success) {
                   alert(
-                    `${quantity[product.id] || 1} unidades de ${
-                      product.name
-                    } han sido agregadas al carrito`
+                    `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito`
                   );
                 } else {
-                  alert(`${product.name} ya está en el carrito`);
+
+                  alert("Error al agregar al carrito");
 
                 }
               }}
             >
-              Agregar {quantity[product.id] || 1} al Carrito
+              Agregar al carrito
             </button>
           </div>
         ))}
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center space-x-2 mt-4">
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index}
             onClick={() => handlePageChange(index + 1)}
-            className={`mx-3 px-3 py-1 rounded-md ${
+            className={`px-3 py-1 rounded-md ${
               currentPage === index + 1
                 ? "bg-teal-600 text-white"
-                : "bg-gray-300"
+                : "bg-gray-200 text-gray-800"
             }`}
           >
             {index + 1}

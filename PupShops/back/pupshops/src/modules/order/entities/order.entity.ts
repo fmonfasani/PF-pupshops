@@ -36,4 +36,7 @@ export class Orders {
 
   @OneToMany(() => Payment, (payment) => payment.order)
   payments: Payment[];
+
+  @Column({ type: 'varchar', length: 50, default: 'pending' })
+  status: string;
 }

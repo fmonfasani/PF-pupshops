@@ -1,7 +1,7 @@
 import { IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class PaymentStatusDto {
-  @IsUUID()
+  @IsString()
   paymentId: string;
 
   @IsString()

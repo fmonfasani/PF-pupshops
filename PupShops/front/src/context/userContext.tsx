@@ -3,7 +3,7 @@
 import {
   ILoginUser,
   IUserRegister,
-  IUserResponse,
+  IUserResponse
 } from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
 import { fetchLoginUser, fetchRegisterUser } from "@/utils/fetchUser";
