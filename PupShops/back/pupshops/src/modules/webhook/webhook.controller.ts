@@ -7,7 +7,6 @@ export class WebhookController {
   handleWebhook(@Body() body: any) {
     console.log('Webhook recibido:', body);
 
-    // Aquí puedes procesar la información que recibes desde Mercado Pago
     return { received: true };
   }
 }
