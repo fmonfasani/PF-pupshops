@@ -161,7 +161,7 @@ export class PaymentsService {
     const paymentResponse = await this.httpRequest(url, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${this.accessToken}`, // Asegúrate de pasar el token correcto
+        Authorization: `Bearer ${this.accessToken}`, 
       },
     });
 
