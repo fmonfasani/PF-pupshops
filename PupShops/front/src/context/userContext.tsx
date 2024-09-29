@@ -3,11 +3,11 @@
 import {
   ILoginUser,
   IUserRegister,
-  IUserResponse
+  IUserResponse,
 } from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
 import { login, fetchRegisterUser } from "@/utils/fetchUser";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 
 // Creamos el contexto con un valor inicial
 export const UserContext = createContext<IUserContextType>({
@@ -22,12 +22,20 @@ export const UserContext = createContext<IUserContextType>({
   logOut: () => {},
 });
 
+export const useUserContext = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUserContext debe ser usado dentro de un UserProvider");
+  }
+  return context;
+};
+
 // Provider para el contexto
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   // Inicializa el usuario ficticio
- /* const initialUser: IUserResponse = {
+  /* const initialUser: IUserResponse = {
     login: true,
     token: "token_simulado",
     user: {
@@ -87,34 +95,33 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   // Función para iniciar sesión
   const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     try {
-        const data = await login(credentials);
-        if (data.login) {
-            const userData = {
-                login: data.login,
-                token: data.token,
-                user: data.findUser
-            };
+      const data = await login(credentials);
+      if (data.login) {
+        const userData = {
+          login: data.login,
+          token: data.token,
+          user: data.findUser,
+        };
 
-            // Actualizar los estados aquí
-            setUser(userData.user);
-            setIsLogged(true);
-            setIsAdmin(userData.user.isAdmin);
+        // Actualizar los estados aquí
+        setUser(userData.user);
+        setIsLogged(true);
+        setIsAdmin(userData.user.isAdmin);
 
-            if (typeof window !== "undefined") {
-                localStorage.setItem("user", JSON.stringify(userData));
-                localStorage.setItem("token", data.token);
-            }
-
-            return true;
-        } else {
-            return false;
+        if (typeof window !== "undefined") {
+          localStorage.setItem("user", JSON.stringify(userData));
+          localStorage.setItem("token", data.token);
         }
-    } catch (error) {
-        console.error("Error during sign in:", error);
-        return false;
-    }
-};
 
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error during sign in:", error);
+      return false;
+    }
+  };
 
   // Función para registrarse
   const signUp = async (user: IUserRegister): Promise<boolean> => {
@@ -144,16 +151,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       }, [setOrders]);*/
 
-   // Efecto para cargar el estado del usuario desde localStorage al montar
-   useEffect(() => {
+  // Efecto para cargar el estado del usuario desde localStorage al montar
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUserSession = localStorage.getItem("userSession");
-      
+
       if (storedUserSession) {
         try {
           const parsedSession = JSON.parse(storedUserSession);
           const { token, user } = parsedSession;
-  
+
           if (user) {
             setUser(user); // Almacena el usuario
             setIsLogged(Boolean(token)); // Verifica que haya un token válido
@@ -169,17 +176,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }
   }, []);
-  
 
- //CERRAR SESION DE USUARIO
- const logOut = () => {
-  if (typeof window !== "undefined") {
+  //CERRAR SESION DE USUARIO
+  const logOut = () => {
+    if (typeof window !== "undefined") {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       setUser(null);
       setIsLogged(false);
-  }
-};
+    }
+  };
 
   return (
     <UserContext.Provider
@@ -199,4 +205,3 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     </UserContext.Provider>
   );
 };
-

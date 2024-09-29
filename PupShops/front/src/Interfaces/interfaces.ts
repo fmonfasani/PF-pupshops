@@ -8,7 +8,7 @@ export interface IUser {
   city: string;
   address: string;
   phone: number;
-  isAdmin: boolean; 
+  isAdmin: boolean;
   //  orders?: IOrderResponse[];
 }
 
@@ -22,7 +22,7 @@ export interface IUserContextType {
   user: IUserResponse | null;
   setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
   isLogged: boolean;
-  isAdmin:boolean;
+  isAdmin: boolean;
   setIsAdmin: (isLogged: boolean) => void;
   setIsLogged: (isLogged: boolean) => void;
   signIn: (credentials: ILoginUser) => Promise<boolean>;
@@ -59,7 +59,7 @@ export interface IUserRegister {
 }
 
 export interface IAdminRegisterUser extends IUserRegister {
-    isAdmin:boolean;
+  isAdmin: boolean;
 }
 
 export interface IButtonProps {
@@ -68,10 +68,11 @@ export interface IButtonProps {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
 }
-
-
 export interface IAppointment {
   id?: string;
-  date: string;
-  time: string;
+  appointmentDate: string;
+  appointmentTime: string;
+  serviceName: string;
+  status: "reserved" | "canceled";
+  isDeleted?: boolean;
 }

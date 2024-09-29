@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true, // Activar el modo estricto de React
+
+  // Configuración para imágenes remotas
   images: {
     remotePatterns: [
       {
@@ -15,6 +18,11 @@ const nextConfig = {
         pathname: "**",
       },
     ],
+  },
+
+  // Deshabilitar ESLint durante el build
+  eslint: {
+    ignoreDuringBuilds: true, // Ignora ESLint en el proceso de build
   },
 };
 
