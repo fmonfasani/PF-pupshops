@@ -1,18 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {config as auth0config} from './config/auth0.config'
+import { auth } from 'express-openid-connect';
+
+
 
 const port = 3001;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Configuración CORS ajustada
+  app.use(auth(auth0config))
+
+
+  
+
   app.enableCors({
-    origin: 'http://localhost:3000', 
+    origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept, Authorization',
-    credentials: true, 
+    allowedHeaders: 'Content-Type, Accept',
+    credentials: true,
   });
 
   // Swagger setup
@@ -25,8 +33,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
-
-  await app.listen(port);
+  app.listen(port);
   console.log(`Application is running on: ${port}`);
 }
 

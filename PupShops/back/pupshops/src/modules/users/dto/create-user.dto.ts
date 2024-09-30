@@ -6,9 +6,9 @@ import {
   IsInt,
   Length,
   IsStrongPassword,
-  IsEmpty,
+  IsOptional,
 } from 'class-validator';
-import { Column } from 'typeorm';
+
 
 export class CreateUserDto {
   @IsString()
@@ -102,5 +102,7 @@ export class CreateUserDto {
   })
   address: string;
 
+  @IsOptional()
+  isActive:boolean
  
 }

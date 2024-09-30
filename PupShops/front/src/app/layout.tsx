@@ -34,6 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <UserProvider>
+
           <UserProviderContext>
             <CartProvider>
               <NavbarContainer />
@@ -41,6 +42,7 @@ export default function RootLayout({
               <Footer />
             </CartProvider>
           </UserProviderContext>
+
         </UserProvider>
       </body>
     </html>

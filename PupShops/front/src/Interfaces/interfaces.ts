@@ -65,6 +65,9 @@ export interface IButtonProps {
 
 export interface IAppointment {
   id?: string;
-  date: string;
-  time: string;
+  appointmentDate: string;
+  appointmentTime: string;
+  serviceName: string;
+  status: "reserved" | "canceled";
+  isDeleted?: boolean;
 }

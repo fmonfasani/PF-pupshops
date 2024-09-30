@@ -22,6 +22,14 @@ export const UserContext = createContext<IUserContextType>({
   logOut: () => {},
 });
 
+export const useUserContext = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUserContext debe ser usado dentro de un UserProvider");
+  }
+  return context;
+};
+
 // Provider para el contexto
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -49,18 +57,15 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const data = await response.json();
 
-      
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      
       if (data.user?.id == null || typeof data.user.phone !== "number") {
         throw new Error(
           "El usuario no tiene un ID válido o el número de teléfono no es válido"
         );
       }
 
-      
       setUser({
         login: true,
         user: {

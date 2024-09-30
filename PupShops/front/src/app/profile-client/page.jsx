@@ -1,11 +1,15 @@
+
 "use client";
 
 import { useUser } from "@auth0/nextjs-auth0/client";
 
+
 export default function ProfileClient() {
   const { user, error, isLoading } = useUser();
 
+
   if (isLoading) return <div className="mt-32">Loading...</div>;
+
   if (error) return <div>{error.message}</div>;
 
   return (
@@ -16,7 +20,9 @@ export default function ProfileClient() {
             <h2 className="text-2xl font-bold text-blue-950 mb-4">
               Perfil de Usuario
             </h2>
+
             <div className="mt-32 text-center">
+
               {user.picture && (
                 <div className="flex justify-center">
                   <img
@@ -37,6 +43,7 @@ export default function ProfileClient() {
                 </p>
               </div>
             </div>
+
             <div>
               <a
                 href="/api/auth/logout"
@@ -45,9 +52,11 @@ export default function ProfileClient() {
                 Cerrar sesión
               </a>
             </div>
+
           </div>
         </div>
       </section>
     )
   );
 }
+

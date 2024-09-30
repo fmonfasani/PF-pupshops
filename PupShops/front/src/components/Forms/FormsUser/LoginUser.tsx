@@ -1,5 +1,4 @@
 "use client";
-
 import { login } from "@/utils/fetchUser";
 import { validateLoginForm } from "../../../helpers/validate";
 import { ILoginError, ILoginProps } from "../../../Interfaces/types";
@@ -59,6 +58,9 @@ function LoginPage() {
     setErrors(errors);
   }, [dataUser]);
 
+
+
+  
   return (
     <section className="bg-gray-100 p-4 mt-16">
       <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
@@ -70,6 +72,7 @@ function LoginPage() {
               </h1>
             </div>
             <div>
+
               <div>
                 <a
                   href="/api/auth/login"
@@ -79,6 +82,7 @@ function LoginPage() {
                 </a>
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="email"

@@ -1,10 +1,11 @@
-import { Controller, Post, Body, HttpCode, Req } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, Req, Get } from '@nestjs/common';
 
 import { plainToClass } from 'class-transformer';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './loginUserDto';
+import { Request } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -27,5 +28,11 @@ export class AuthController {
   @HttpCode(200)
   async signIn(@Body() login: LoginUserDto) {
     return this.authService.signIn(login);
+  }
+
+  @Get('/auth0/login')
+  getAuth0Protected(@Req() req:Request){
+    console.log(req.oidc);    
+    return JSON.stringify(req.oidc.user)
   }
 }
