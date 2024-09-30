@@ -19,7 +19,7 @@ export class CreateAppointmentDto {
   appointmentTime: string;
 
   @IsString()
-  @IsNotEmpty() // Asegúrate de que serviceName no esté vacío
+  @IsNotEmpty() 
   @ApiProperty({
     description: 'Nombre del servicio',
     example: 'Peluquería',
