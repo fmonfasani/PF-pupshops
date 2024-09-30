@@ -4,7 +4,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export const getAllProducts = async (page: number = 1, limit: number = 10) => {
   try {
-    const res = await fetch(`${BASE_URL}/products?page=${page}&limit=${limit}`);
+    const res = await fetch(`http://localhost:3001/products?page=${page}&limit=${limit}`);
     if (!res.ok) {
       throw new Error("Failed to fetch products");
     }
@@ -17,7 +17,7 @@ export const getAllProducts = async (page: number = 1, limit: number = 10) => {
 
 export async function fetchProductDetail(id: string): Promise<IProductDetail> {
   try {
-    const response = await fetch(`${BASE_URL}/products/${id}`, {
+    const response = await fetch(`http://localhost:3001/products/${id}`, {
       cache: "no-cache",
     });
     if (!response.ok) {

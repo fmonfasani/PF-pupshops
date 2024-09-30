@@ -9,6 +9,12 @@ export interface IUser {
   address: string;
   phone: number;
   isAdmin: boolean;
+  isActive: boolean; // Se puede agregar aquí si se quiere hacer opcional
+}
+
+export interface IAdminRegisterUser extends IUserRegister {
+  isAdmin: boolean;
+  isActive?: boolean; // Asumimos que esto es true por defecto
 }
 
 export interface IUserResponse {
@@ -23,6 +29,7 @@ export interface IUserResponse {
     address: string;
     phone: number; // Asegúrate de que sea 'number'
     isAdmin: boolean; // Asegúrate de que esto sea del tipo correcto
+    isActive: true; // Esto también debe ser true por defecto al crear el usuario
   };
   token: string; // Este también debe ser el tipo correcto
 }
@@ -54,6 +61,7 @@ export interface IUserRegister {
   city: string;
   address: string;
   phone: number;
+  isActive?: boolean; // Esto indica que el usuario está activo por defecto
 }
 
 export interface IButtonProps {
