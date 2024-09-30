@@ -1,13 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+import {config as auth0config} from './config/auth0.config'
+import { auth } from 'express-openid-connect';
 const port = 3001;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // Configuración CORS ajustada
+  app.use(auth(auth0config))
   app.enableCors({
     origin: 'https://pupshops-frontend.onrender.com',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

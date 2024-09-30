@@ -16,13 +16,16 @@ export class AuthService {
   async signUp(user: CreateUserDto) {
     const findUser = await this.usersService.getEmailLogin(user.email);
     if (findUser) {
+      if (findUser.isActive === false) {
+        throw new BadRequestException('Cuenta inhabilitada');
+      }
       throw new BadRequestException('Email existente');
     }
     if (user.password !== user.confirmPassword) {
       throw new BadRequestException('Las contraseñas no coinciden');
     }
-
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    
+    const hashedPassword = await bcryptjs.hash(user.password, 10);
     if (!hashedPassword) {
       throw new Error('Error en la encriptación de la contraseña');
     }
@@ -34,14 +37,20 @@ export class AuthService {
     const newUser = await this.usersService.createUser({
       ...user,
       password: hashedPassword,
+      isActive:true
     });
     delete newUser.password;
+    delete newUser.isActive
 
     return newUser;
   }
 
   async signIn(login: LoginUserDto) {
     const findUser = await this.usersService.getEmailLogin(login.email);
+
+    if(findUser.isActive===false){
+      throw new BadRequestException('Cuenta inhabilitada')
+    }
     console.log('Usuario encontrado:', findUser.email);
     if (!findUser) {
       throw new BadRequestException('Email y/o contraseña incorrectos');
