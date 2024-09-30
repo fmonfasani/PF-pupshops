@@ -3,61 +3,89 @@
 import {
   ILoginUser,
   IUserRegister,
-  IUserResponse
+  IUserResponse,
 } from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
-import { fetchLoginUser, fetchRegisterUser } from "@/utils/fetchUser";
-import { createContext, useContext, useEffect, useState } from "react";
+import { login, fetchRegisterUser } from "@/utils/fetchUser";
+import { createContext, useEffect, useState } from "react";
 
 // Creamos el contexto con un valor inicial
 export const UserContext = createContext<IUserContextType>({
   user: null,
   setUser: () => {},
   isLogged: false,
+  isAdmin: false,
+  setIsAdmin: () => {},
   setIsLogged: () => {},
   signIn: async () => false,
-  signUp: async () => false
+  signUp: async () => false,
+  logOut: () => {},
 });
 
 // Provider para el contexto
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
-  children
+  children,
 }) => {
   const [user, setUser] = useState<IUserResponse | null>(null);
   const [isLogged, setIsLogged] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false); // Estado para el rol de admin
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
-  // Función para iniciar sesión
   const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     try {
-      const data = await fetchLoginUser(credentials);
-      if (data.login) {
-        const userData = {
-          login: data.login,
-          token: data.token,
-          user: data.findUser
-        };
-
-        if (typeof window !== "undefined") {
-          localStorage.setItem("user", JSON.stringify(userData));
-          localStorage.setItem("token", data.token);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
         }
+      );
 
-        setUser(userData);
-        setIsLogged(true);
-        setIsAdmin(userData.user.isAdmin); // Establecemos si el usuario es admin
-
-        return true;
-      } else {
-        return false;
+      if (!response.ok) {
+        throw new Error("Error en la autenticación");
       }
+
+      const data = await response.json();
+
+      
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      
+      if (data.user?.id == null || typeof data.user.phone !== "number") {
+        throw new Error(
+          "El usuario no tiene un ID válido o el número de teléfono no es válido"
+        );
+      }
+
+      
+      setUser({
+        login: true,
+        user: {
+          id: Number(data.user.id), // Aseguramos que sea un número
+          name: data.user.name,
+          lastname: data.user.lastname,
+          email: data.user.email,
+          country: data.user.country,
+          city: data.user.city,
+          address: data.user.address,
+          phone: Number(data.user.phone), // Aseguramos que sea un número
+          isAdmin: data.user.isAdmin,
+        },
+        token: data.token,
+      });
+
+      setIsLogged(true);
+      setIsAdmin(data.user.isAdmin); // Asegúrate de establecer el estado de isAdmin
+      return true;
     } catch (error) {
-      console.error("Error during sign in:", error);
+      console.error("Error al iniciar sesión:", error);
       return false;
     }
   };
 
-  // Función para registrarse
   const signUp = async (user: IUserRegister): Promise<boolean> => {
     try {
       const data = await fetchRegisterUser(user);
@@ -65,50 +93,44 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         await signIn({ email: user.email, password: user.password });
         return true;
       }
-      console.error("Registration failed:", data);
       return false;
     } catch (error) {
-      console.error("Error during sign up:", error);
+      console.error("Error durante el registro:", error);
       return false;
     }
   };
 
-  // Efecto para cargar el estado del usuario desde localStorage al montar
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
-      const token = localStorage.getItem("token");
+      const storedToken = localStorage.getItem("token");
 
       if (storedUser) {
         try {
-          const parsedUser: IUserResponse = JSON.parse(storedUser);
-          console.log("Parsed user from localStorage:", parsedUser);
-
-          // Verificamos que parsedUser y parsedUser.user no sean null antes de acceder a ellos
-          if (parsedUser && parsedUser.user) {
-            setUser(parsedUser);
-            setIsLogged(Boolean(token));
-            setIsAdmin(parsedUser.user.isAdmin); // Aseguramos que user no sea null
-          } else {
-            // Si no hay usuario, reseteamos los estados
-            setUser(null);
-            setIsLogged(false);
-            setIsAdmin(false);
-          }
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          setIsLogged(Boolean(storedToken));
+          setIsAdmin(parsedUser.user?.isAdmin || false);
+          console.log("Usuario recuperado del localStorage:", parsedUser); // Debug
         } catch (error) {
-          console.error("Error parsing stored user:", error);
+          console.error("Error al parsear el usuario:", error);
           setUser(null);
           setIsLogged(false);
           setIsAdmin(false);
         }
-      } else {
-        // Si no hay un usuario guardado, reseteamos los estados
-        setUser(null);
-        setIsLogged(false);
-        setIsAdmin(false);
       }
     }
   }, []);
+
+  const logOut = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      setUser(null);
+      setIsLogged(false);
+      setIsAdmin(false);
+    }
+  };
 
   return (
     <UserContext.Provider
@@ -117,20 +139,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         setUser,
         isLogged,
         setIsLogged,
+        isAdmin,
+        setIsAdmin,
         signIn,
-        signUp
+        signUp,
+        logOut,
       }}
     >
       {children}
     </UserContext.Provider>
   );
-};
-
-// Hook para usar el contexto
-export const useUserContext = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUserContext debe ser usado dentro de un UserProvider");
-  }
-  return context;
 };

@@ -7,7 +7,11 @@ import { OrdersRepository } from './order.repository';
 export class OrderService {
   constructor(private readonly orderRepository: OrdersRepository) {}
 
-  async create(userId: string, products: Array<{ id: string, quantity: number }>) {
+  async create(
+    userId: string,
+    products: Array<{ id: string; quantity: number }>,
+  ) {
+    console.log('Creando orden para usuario:', userId);
     return await this.orderRepository.addOrder(userId, products);
   }
 

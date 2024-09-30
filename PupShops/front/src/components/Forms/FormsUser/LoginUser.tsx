@@ -1,6 +1,6 @@
 "use client";
 
-import { login } from "@/helpers/auth.helpers";
+import { login } from "@/utils/fetchUser";
 import { validateLoginForm } from "../../../helpers/validate";
 import { ILoginError, ILoginProps } from "../../../Interfaces/types";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ function LoginPage() {
   const router = useRouter();
   const initialState = {
     email: "",
-    password: ""
+    password: "",
   };
   const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
   const [errors, setErrors] = useState<ILoginError>(initialState);
@@ -28,18 +28,29 @@ function LoginPage() {
 
       if (response && response.token && response.findUser) {
         const { token, findUser } = response;
+
+        // Guardar el token y el usuario en localStorage
         localStorage.setItem(
           "userSession",
           JSON.stringify({ token, user: findUser })
         );
 
-        router.push("/");
+        // Actualiza el estado del contexto (opcional si usas Context API)
+        // Verificar si el usuario es admin y redirigirlo a la página correspondiente
+        if (findUser.isAdmin) {
+          router.push("/products"); // Página de admin
+        } else {
+          router.push("/home"); // Página de usuario
+        }
       } else {
-        setErrors({ ...errors, email: "Invalid login credentials." });
+        setErrors({
+          ...errors,
+          email: "Credenciales de inicio de sesión inválidas.",
+        });
       }
     } catch (error: any) {
-      const errors = validateLoginForm(dataUser);
-      setErrors(errors);
+      const validationErrors = validateLoginForm(dataUser);
+      setErrors(validationErrors);
     }
   };
 
@@ -57,6 +68,16 @@ function LoginPage() {
               <h1 className="text-2xl font-bold text-center text-blue-950 ">
                 Iniciar sesión en tu cuenta
               </h1>
+            </div>
+            <div>
+              <div>
+                <a
+                  href="/api/auth/login"
+                  className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Iniciar sesion con tu email
+                </a>
+              </div>
             </div>
             <div>
               <label

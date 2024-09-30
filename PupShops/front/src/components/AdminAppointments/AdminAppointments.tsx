@@ -1,7 +1,6 @@
-
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
-import { fetchAppointments, fetchUserAppointments } from '@/utils/fetchAdminAppointments'; // Funciones de fetch
+import { fetchAppointments, fetchUserAppointments } from '@/utils/fetchAdminAppointments';
 import { IAppointment } from '@/Interfaces/interfaces';
 import { useUserContext } from '@/context/userContext';
 import { useRouter } from 'next/navigation';
@@ -11,24 +10,7 @@ import { NotificationError } from '../Notifications/NotificationError';
 const AdminAppointments = () => {
   const { user } = useUserContext(); 
   const isAdmin = user?.user?.isAdmin;
-  const router = useRouter();
-
-     //Ruta privada
-  useEffect(() => {
-    if (!isAdmin) {
-      setNotificationMessage(`Debes ser administrador para editar productos`);
-      setShowNotification(true);
-      setLoading(false)
-
-      setTimeout(() => {
-        setShowNotification(false);
-        router.push("/home");
-                }, 2000);
-     } else {
-      setLoading(false); 
-    }
-  }, [isAdmin, router]);
-  const [loading, setLoading] = useState(true);
+  
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showNotification, setShowNotification] = useState(false);
@@ -36,16 +18,10 @@ const AdminAppointments = () => {
 
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [userAppointments, setUserAppointments] = useState<{scheduledAppointments: IAppointment[], historicalAppointments: IAppointment[]}>({ scheduledAppointments: [], historicalAppointments: [] });
-  const [filter, setFilter] = useState('all'); // Estado para manejar el filtro
-  const [statusFilter, setStatusFilter] = useState<string | null>(null); // Estado para el filtro por estado (reserved, completed, etc.)
+  const [filter, setFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Cargar todos los turnos por defecto
-    fetchAppointments().then(setAppointments).catch(console.error);
-
-    // Cargar los turnos del usuario por defecto
-    fetchUserAppointments().then(setUserAppointments).catch(console.error);
-  }, []);
+  
 
   // Filtrar los turnos según el filtro seleccionado en el dropdown
   const filteredAppointments = () => {
@@ -63,7 +39,6 @@ const AdminAppointments = () => {
     <div className="max-w-4xl mx-auto mt-36 mb-36 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Turnos Reservados</h2>
 
-     
       <div className="mb-4 hover:cursor-pointer">
         <select
           value={filter}
@@ -75,7 +50,6 @@ const AdminAppointments = () => {
         </select>
       </div>
 
-      
       {filter === 'user' && (
         <div className="mb-4">
           <select
@@ -86,7 +60,6 @@ const AdminAppointments = () => {
             <option value="">Todos los Estados</option>
             <option value="reserved">Reservado</option>
             <option value="completed">Completado</option>
-          
           </select>
         </div>
       )}
@@ -107,13 +80,11 @@ const AdminAppointments = () => {
       </div>
 
       {showNotification && <NotificationRegister message={notificationMessage} />}
-          {showErrorNotification && (
-            <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />
-          )}
-
+      {showErrorNotification && (
+        <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />
+      )}
     </div>
   );
 };
 
 export default AdminAppointments;
-

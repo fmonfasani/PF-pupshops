@@ -6,11 +6,16 @@ const port = 3001;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Configuración CORS ajustada
   app.enableCors({
-    origin: '*',
+    origin: 'http://localhost:3000', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+    credentials: true, 
   });
+
+  // Swagger setup
   const swaggerConfig = new DocumentBuilder()
     .setTitle('PupShops')
     .setDescription('Documentación referida al E-Commerce PupShops')
@@ -20,7 +25,9 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
+
   await app.listen(port);
   console.log(`Application is running on: ${port}`);
 }
+
 bootstrap();

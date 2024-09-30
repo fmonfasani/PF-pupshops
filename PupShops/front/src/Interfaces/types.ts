@@ -16,8 +16,6 @@ export interface IRegisterProps {
   phone: string;
 }
 
-export type IRegisterError = Partial<IRegisterProps>;
-
 export interface IUserSession {
   token: string;
   user: {
