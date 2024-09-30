@@ -13,6 +13,7 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Response } from 'express';
 import {
   ApiBody,
+  ApiExcludeEndpoint,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -20,7 +21,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Payment } from './entities/payment.entity';
-@ApiTags('Payments') 
+@ApiTags('Payments')
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
@@ -113,6 +114,7 @@ export class PaymentsController {
     example: '73b56cfb-d8e5-4097-b93e-e3b59de0e4f3',
   })*/
   @Get('success')
+  @ApiExcludeEndpoint()
   handleSuccess(@Query() query, @Res() res: Response) {
     const { payment_id, status, external_reference } = query;
     console.log('Pago exitoso:', { payment_id, status, external_reference });
@@ -122,6 +124,7 @@ export class PaymentsController {
   // Manejar redirección de pago fallido
   @ApiOperation({ summary: 'Manejar redirección de pago fallido' })
   @Get('failure')
+  @ApiExcludeEndpoint()
   handleFailure(@Query() query, @Res() res: Response) {
     console.log('Pago fallido:', query);
     res.send('Hubo un error con tu pago. Intenta nuevamente.');
@@ -130,6 +133,7 @@ export class PaymentsController {
   // Manejar redirección de pago pendiente
   @ApiOperation({ summary: 'Manejar redirección de pago pendiente' })
   @Get('pending')
+  @ApiExcludeEndpoint()
   handlePending(@Query() query, @Res() res: Response) {
     console.log('Pago pendiente:', query);
     res.send('Tu pago está en proceso. Espera la confirmación.');
@@ -147,6 +151,7 @@ export class PaymentsController {
 
   // Webhook para recibir notificaciones de Mercado Pago
   @Post('/webhook')
+  @ApiExcludeEndpoint()
   async handleNotification(@Body() body: any, @Res() res: Response) {
     const topic = body.topic || body.type;
     const resource =
