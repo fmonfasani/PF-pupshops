@@ -13,13 +13,10 @@ async function bootstrap() {
 
   app.use(auth(auth0config))
 
-
-  
-
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept',
+    allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
   });
 

@@ -30,9 +30,9 @@ export class AuthController {
     return this.authService.signIn(login);
   }
 
-  @Get('/auth0/login')
+/*   @Get('/auth0/login')
   getAuth0Protected(@Req() req:Request){
     console.log(req.oidc);    
     return JSON.stringify(req.oidc.user)
-  }
+  } */
 }
