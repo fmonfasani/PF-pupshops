@@ -1,5 +1,4 @@
 "use client";
-
 import { login } from "@/utils/fetchUser";
 import { validateLoginForm } from "../../../helpers/validate";
 import { ILoginError, ILoginProps } from "../../../Interfaces/types";
@@ -55,6 +54,9 @@ function LoginPage() {
     setErrors(errors);
   }, [dataUser]);
 
+
+
+  
   return (
     <section className="bg-gray-100 p-4 mt-16">
       <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
@@ -65,6 +67,9 @@ function LoginPage() {
                 Iniciar sesión en tu cuenta
               </h1>
             </div>
+            <div>
+              <div><a  href="/api/auth/login"  className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Iniciar sesion con tu email</a></div>
+                </div>
             <div>
               <label
                 htmlFor="email"

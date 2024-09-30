@@ -1,27 +1,30 @@
 import {
-  BadRequestException,
+  Injectable,
   CanActivate,
   ExecutionContext,
-  Injectable,
   UnauthorizedException,
   ForbiddenException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
 
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = request.headers['authorization']?.split(' ')[1] ?? '';
 
-    if (!token) {
-      throw new BadRequestException('Token de autenticación erróneo/faltante');
+    const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers.authorization;
+
+    if (!authHeader) {
+      throw new UnauthorizedException(
+        'Token de autenticación erróneo/faltante',
+      );
     }
+
 
     try {
       const secret = process.env.JWT_SECRET;
@@ -37,7 +40,9 @@ export class AuthGuard implements CanActivate {
       request.user = payload;
 
       return true;
+
     } catch (error) {
+      console.error('Error de validación del token:', error);
       throw new UnauthorizedException('Token Inválido');
     }
   }

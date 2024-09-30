@@ -1,9 +1,8 @@
 import { IProduct } from "@/Interfaces/ICart";
 
-
 const BASE_URL = "http://localhost:3001/products";
 
-
+// Función para obtener un producto por su ID
 export const fetchProductsById = async (
   productId: number
 ): Promise<IProduct> => {
@@ -23,48 +22,26 @@ export const fetchProductsById = async (
   }
 };
 
-export const fetchProductsByCategoryId = async (
-  categoryId: string
-): Promise<IProduct[]> => {
-  try {
-    const response = await fetch(`${BASE_URL}/child/${categoryId}`);
-    if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(`Error ${response.status}: ${errorMessage}`);
-    }
-
-    const products: IProduct[] = await response.json();
-    const formattedProducts = products.map((product) => ({
-      ...product,
-      price: Number(product.price),
-    }));
-
-    return formattedProducts;
-  } catch (error) {
-    console.error("Error en fetchProductsByCategoryId:", error);
-    throw error;
-  }
-};
-
+// Función para agregar productos al carrito
 export const addToCart = async (
   userId: string,
-  products: IProduct[]
+  products: IProduct[],
+  token: string
 ): Promise<void> => {
   try {
     const orderData = {
       userId,
       products: products.map((product) => ({
         id: product.id,
-        quantity: product.quantity || 1, // Asegúrate de incluir quantity
+        quantity: product.quantity || 1,
       })),
     };
 
-
     const response = await fetch("http://localhost:3001/orders", {
-
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(orderData),
     });
@@ -74,9 +51,9 @@ export const addToCart = async (
       throw new Error(`Error ${response.status}: ${errorMessage}`);
     }
 
-    console.log("Productos agregados al carrito con éxito");
+    console.log("Productos agregados al carrito en el servidor.");
   } catch (error) {
-    console.error("Error al agregar productos al carrito:", error);
+    console.error("Error al agregar al carrito en el servidor:", error);
     throw error;
   }
 };

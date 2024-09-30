@@ -7,7 +7,7 @@ import {
 } from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
 import { login, fetchRegisterUser } from "@/utils/fetchUser";
-import { createContext, useEffect, useState, useContext } from "react";
+import { createContext, useEffect, useState } from "react";
 
 // Creamos el contexto con un valor inicial
 export const UserContext = createContext<IUserContextType>({
@@ -34,96 +34,63 @@ export const useUserContext = () => {
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // Inicializa el usuario ficticio
-  /* const initialUser: IUserResponse = {
-    login: true,
-    token: "token_simulado",
-    user: {
-      id: 1,
-      name: "Admin",
-      lastname: "User",
-      email: "admin@ejemplo.com",
-      password: "hashedpassword",
-      country: "País",
-      city: "Ciudad",
-      address: "Dirección",
-      phone: 123456789,
-      isAdmin: true, // Establece isAdmin como true para pruebas
-    },
-    const [user, setUser] = useState<IUserResponse | null>(initialUser);
-      const [isLogged, setIsLogged] = useState<boolean>(true); // Suponemos que el usuario está logueado por defecto
-  const [isAdmin, setIsAdmin] = useState<boolean>(true); // Inicializa isAdmin como true para pruebas
-  // Función para iniciar sesión
-  const signIn = async (credentials: ILoginUser): Promise<boolean> => {
-    try {
-      const data = await fetchLoginUser(credentials);
-      if (data.login) {
-        const userData: IUserResponse = {
-          login: data.login,
-          token: data.token,
-          user: data.findUser,
-        };
-
-        // Establecemos el estado de isAdmin
-        setIsAdmin(userData.user?.isAdmin ?? false);
-
-        if (typeof window !== "undefined") {
-          localStorage.setItem("user", JSON.stringify(userData));
-          localStorage.setItem("token", data.token);
-        }
-
-        setUser(userData);
-        setIsLogged(true);
-
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.error("Error during sign in:", error);
-      return false;
-    }
-  };
-
-  };*/
-
-  // Inicializa el estado del usuario
   const [user, setUser] = useState<IUserResponse | null>(null);
   const [isLogged, setIsLogged] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false); // Estado para el rol de admin
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
-  // Función para iniciar sesión
   const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     try {
-      const data = await login(credentials);
-      if (data.login) {
-        const userData = {
-          login: data.login,
-          token: data.token,
-          user: data.findUser,
-        };
-
-        // Actualizar los estados aquí
-        setUser(userData.user);
-        setIsLogged(true);
-        setIsAdmin(userData.user.isAdmin);
-
-        if (typeof window !== "undefined") {
-          localStorage.setItem("user", JSON.stringify(userData));
-          localStorage.setItem("token", data.token);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
         }
+      );
 
-        return true;
-      } else {
-        return false;
+      if (!response.ok) {
+        throw new Error("Error en la autenticación");
       }
+
+      const data = await response.json();
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      if (data.user?.id == null || typeof data.user.phone !== "number") {
+        throw new Error(
+          "El usuario no tiene un ID válido o el número de teléfono no es válido"
+        );
+      }
+
+      setUser({
+        login: true,
+        user: {
+          id: Number(data.user.id), // Aseguramos que sea un número
+          name: data.user.name,
+          lastname: data.user.lastname,
+          email: data.user.email,
+          country: data.user.country,
+          city: data.user.city,
+          address: data.user.address,
+          phone: Number(data.user.phone), // Aseguramos que sea un número
+          isAdmin: data.user.isAdmin,
+        },
+        token: data.token,
+      });
+
+      setIsLogged(true);
+      setIsAdmin(data.user.isAdmin); // Asegúrate de establecer el estado de isAdmin
+      return true;
     } catch (error) {
-      console.error("Error during sign in:", error);
+      console.error("Error al iniciar sesión:", error);
       return false;
     }
   };
 
-  // Función para registrarse
   const signUp = async (user: IUserRegister): Promise<boolean> => {
     try {
       const data = await fetchRegisterUser(user);
@@ -131,44 +98,27 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         await signIn({ email: user.email, password: user.password });
         return true;
       }
-      console.error("Registration failed:", data);
       return false;
     } catch (error) {
-      console.error("Error during sign up:", error);
+      console.error("Error durante el registro:", error);
       return false;
     }
   };
 
-  /* //OBTENER ORDENES DE COMPRA
-    const getOrders = useCallback(async () => {
-        try {
-          const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-          const data = await fetchUserOrders(token);
-          setOrders(data);
-          localStorage.setItem("orders", JSON.stringify(data));
-        } catch (error) {
-          console.error("Error al obtener las órdenes:", error);
-        }
-      }, [setOrders]);*/
-
-  // Efecto para cargar el estado del usuario desde localStorage al montar
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedUserSession = localStorage.getItem("userSession");
+      const storedUser = localStorage.getItem("user");
+      const storedToken = localStorage.getItem("token");
 
-      if (storedUserSession) {
+      if (storedUser) {
         try {
-          const parsedSession = JSON.parse(storedUserSession);
-          const { token, user } = parsedSession;
-
-          if (user) {
-            setUser(user); // Almacena el usuario
-            setIsLogged(Boolean(token)); // Verifica que haya un token válido
-            setIsAdmin(user.isAdmin); // Asigna si es admin
-          }
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          setIsLogged(Boolean(storedToken));
+          setIsAdmin(parsedUser.user?.isAdmin || false);
+          console.log("Usuario recuperado del localStorage:", parsedUser); // Debug
         } catch (error) {
-          console.error("Error al parsear userSession:", error);
-          // Resetea los valores si hay un error
+          console.error("Error al parsear el usuario:", error);
           setUser(null);
           setIsLogged(false);
           setIsAdmin(false);
@@ -177,13 +127,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  //CERRAR SESION DE USUARIO
   const logOut = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       setUser(null);
       setIsLogged(false);
+      setIsAdmin(false);
     }
   };
 

@@ -7,15 +7,13 @@ export interface ILoginError {
   email?: string;
   password?: string;
 }
-export interface IRegisterError {
-  name?: string;
-  email?: string;
-  password?: string;
-}
+
 export interface IRegisterProps {
-  name: string;
   email: string;
   password: string;
+  name: string;
+  address: string;
+  phone: string;
 }
 
 export interface IUserSession {
