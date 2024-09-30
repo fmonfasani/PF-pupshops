@@ -19,22 +19,23 @@ import {
   ApiTags,
   ApiParam,
   ApiBody,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
-import { RolesGuard } from '../auth/roles/roles.guard';
 import { Roles } from '../auth/roles/roles.decorator';
 import { Role } from '../auth/roles/roles.enum';
+import { RolesGuard } from '../auth/roles/roles.guard';
 
-@ApiTags('Appointments') // Agrupa las operaciones de Appointment en Swagger
+@ApiTags('Appointments') 
 @Controller('appointments')
-@UseGuards(AuthGuard, RolesGuard)
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Post()
-  @Roles(Role.User)
-  @ApiOperation({ summary: 'Crear un nuevo turno para un servicio' }) // Descripción para Swagger
-  @ApiBody({ type: CreateAppointmentDto }) // Define el tipo de datos en el cuerpo de la solicitud
+  @ApiOperation({ summary: 'Crear un nuevo turno para un servicio' }) 
+  @ApiBody({ type: CreateAppointmentDto }) 
   @ApiResponse({
     status: 201,
     description: 'Turno creado exitosamente.',
@@ -62,24 +63,24 @@ export class AppointmentsController {
     userId: string;
     userName: string;
   }> {
-    const user = req.user as User; // Obtener el usuario autenticado desde el request
+    const user = req.user as User; 
     return this.appointmentsService.create(createAppointmentDto, user);
   }
 
   @Get()
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   @ApiOperation({ summary: 'Obtener todos los turnos' })
   @ApiResponse({
     status: 200,
     description: 'Lista de todos los turnos.',
-    type: [Appointment], // Define el tipo de respuesta
+    type: [Appointment], 
   })
   async findAll(): Promise<Appointment[]> {
     return this.appointmentsService.findAll();
   }
 
   @Get('user')
-  @Roles(Role.User)
   @ApiOperation({ summary: 'Obtener turnos del usuario autenticado' })
   @ApiResponse({
     status: 200,
@@ -120,7 +121,6 @@ export class AppointmentsController {
   }
 
   @Patch(':id/status')
-  @Roles(Role.User)
   @ApiOperation({ summary: 'Actualizar el estado de un turno' })
   @ApiParam({ name: 'id', description: 'ID del turno a actualizar' }) // Parámetro del ID del turno
   @ApiBody({
@@ -142,7 +142,7 @@ export class AppointmentsController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Eliminar un turno (borrado lógico)' })
-  @ApiParam({ name: 'id', description: 'ID del turno a eliminar' }) // Parámetro del ID del turno
+  @ApiParam({ name: 'id', description: 'ID del turno a eliminar' }) 
   @ApiResponse({
     status: 200,
     description: 'El turno ha sido eliminado exitosamente.',
