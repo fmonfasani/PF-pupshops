@@ -2,24 +2,24 @@
 
 import { useContext } from "react";
 import { cartContext } from "@/context/cartContext";
-import CartItem from "@/components/CartItem/cartItem";
-import CartBuy from "@/components/CartBuy/cartBuy";
+import CartItem from "../CartItem/cartItem";
+import CartBuy from "../CartBuy/cartBuy";
 
-const CartContent = () => {
-  const { cartItems, total } = useContext(cartContext);
+const CartContent: React.FC = () => {
+  const { cartItems } = useContext(cartContext);
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-lg font-bold">Carrito de Compras</h2>
-      <ul>
-        {cartItems.map((item) => (
-          <CartItem key={item.id} item={item} />
-        ))}
-      </ul>
-      <div className="mt-4">
-        <span className="font-bold">Total: ${total.toFixed(2)}</span>
-      </div>
-      <CartBuy />
+    <div className="cart-content">
+      {cartItems.length > 0 ? (
+        <>
+          {cartItems.map((item) => (
+            <CartItem key={item.id} item={item} />
+          ))}
+          <CartBuy />
+        </>
+      ) : (
+        <p className="text-gray-500 text-center mt-4">Tu carrito está vacío.</p>
+      )}
     </div>
   );
 };

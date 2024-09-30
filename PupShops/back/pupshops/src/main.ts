@@ -1,19 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
-const port = process.env.PORT || 3001;
+const port = 3001;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Configuración CORS ajustada
   app.enableCors({
     origin: 'https://pupshops-frontend.onrender.com',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept',
     credentials: true,
   });
+
+  // Swagger setup
   const swaggerConfig = new DocumentBuilder()
     .setTitle('PupShops')
     .setDescription('Documentación referida al E-Commerce PupShops')
@@ -26,4 +28,5 @@ async function bootstrap() {
   app.listen(port);
   console.log(`Application is running on: ${port}`);
 }
+
 bootstrap();
