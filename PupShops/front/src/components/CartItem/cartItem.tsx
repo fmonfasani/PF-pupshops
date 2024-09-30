@@ -1,9 +1,10 @@
 "use client";
 
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { cartContext } from "@/context/cartContext";
 import { IProduct } from "@/Interfaces/ICart";
-import Image from "next/image";
+import Image from "next/image"; // Importa el componente Image de Next.js
+import { FaTrash } from "react-icons/fa"; // Asegúrate de tener react-icons instalado
 
 interface CartItemProps {
   item: IProduct;
@@ -12,27 +13,34 @@ interface CartItemProps {
 const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { removeFromCart } = useContext(cartContext);
 
+  const handleRemoveClick = () => {
+    removeFromCart(item.id);
+  };
+
   return (
-    <li className="flex justify-between items-center py-2 border-b">
+    <div className="cart-item flex items-center border-b p-4">
       <Image
         src={item.imgUrl}
         alt={item.name}
-        width={64}
-        height={64}
-        className="mr-4"
+        width={100} // Aumenta el tamaño de la imagen
+        height={100} // Aumenta el tamaño de la imagen
+        className="rounded-md mr-4"
       />
-      <span className="flex-1">{item.name}</span>
-      <span>${item.price}</span>
-      <input
-        type="number"
-        value={item.id}
-        readOnly
-        className="w-16 text-center"
-      />
-      <button onClick={() => removeFromCart(item.id)} className="text-red-500">
-        Eliminar
+      <div className="flex-grow">
+        <h3 className="text-lg font-semibold">{item.name}</h3>
+        <p className="text-gray-600">{item.description}</p>
+        <p className="text-lg font-bold">
+          Precio:{" "}
+          <span className="text-teal-600">${item.price.toFixed(2)}</span>
+        </p>
+      </div>
+      <button
+        onClick={handleRemoveClick}
+        className="ml-4 text-teal-600 hover:text-orange-300 transition"
+      >
+        <FaTrash size={24} /> {/* Icono de papelera */}
       </button>
-    </li>
+    </div>
   );
 };
 

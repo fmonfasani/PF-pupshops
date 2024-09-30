@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
 import { UserProvider } from "@/context/userContext";
-import ShowComponent from "@/components/ShowComponent/ShowComponet";
+
 import NavbarContainer from "@/components/Navbar/NavbarContainer";
 import { CartProvider } from "@/context/cartContext";
 
