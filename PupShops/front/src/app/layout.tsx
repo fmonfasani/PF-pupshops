@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
-import { UserProvider } from "@/context/userContext";
-
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { UserProvider as UserProviderContext } from "@/context/userContext";
 import NavbarContainer from "@/components/Navbar/NavbarContainer";
 import { CartProvider } from "@/context/cartContext";
 
@@ -34,11 +34,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <UserProvider>
-          <CartProvider>
-            <NavbarContainer />
-            {children}
-            <Footer />
-          </CartProvider>
+
+          <UserProviderContext>
+            <CartProvider>
+              <NavbarContainer />
+              {children}
+              <Footer />
+            </CartProvider>
+          </UserProviderContext>
+
         </UserProvider>
       </body>
     </html>

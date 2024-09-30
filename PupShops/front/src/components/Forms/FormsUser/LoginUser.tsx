@@ -24,13 +24,16 @@ function LoginPage() {
     try {
       const response = await login(dataUser);
       console.log(response);
-  
+
       if (response && response.token && response.findUser) {
         const { token, findUser } = response;
-  
+
         // Guardar el token y el usuario en localStorage
-        localStorage.setItem("userSession", JSON.stringify({ token, user: findUser }));
-  
+        localStorage.setItem(
+          "userSession",
+          JSON.stringify({ token, user: findUser })
+        );
+
         // Actualiza el estado del contexto (opcional si usas Context API)
         // Verificar si el usuario es admin y redirigirlo a la página correspondiente
         if (findUser.isAdmin) {
@@ -39,15 +42,16 @@ function LoginPage() {
           router.push("/home"); // Página de usuario
         }
       } else {
-        setErrors({ ...errors, email: "Credenciales de inicio de sesión inválidas." });
+        setErrors({
+          ...errors,
+          email: "Credenciales de inicio de sesión inválidas.",
+        });
       }
     } catch (error: any) {
       const validationErrors = validateLoginForm(dataUser);
       setErrors(validationErrors);
     }
   };
-  
-  
 
   useEffect(() => {
     const errors = validateLoginForm(dataUser);
@@ -68,8 +72,17 @@ function LoginPage() {
               </h1>
             </div>
             <div>
-              <div><a  href="/api/auth/login"  className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Iniciar sesion con tu email</a></div>
-                </div>
+
+              <div>
+                <a
+                  href="/api/auth/login"
+                  className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Iniciar sesion con tu email
+                </a>
+              </div>
+            </div>
+
             <div>
               <label
                 htmlFor="email"
