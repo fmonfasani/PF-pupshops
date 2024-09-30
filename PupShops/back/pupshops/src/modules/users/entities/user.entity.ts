@@ -17,6 +17,9 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({type:'boolean',nullable:false, default:true})
+  isActive:boolean
+
   @Column({ type: 'varchar', length: 50, nullable: false })
   name: string;
 

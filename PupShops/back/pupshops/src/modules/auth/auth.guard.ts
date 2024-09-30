@@ -3,6 +3,7 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -10,7 +11,11 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
 
-  canActivate(context: ExecutionContext): boolean {
+
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers.authorization;
 
@@ -20,12 +25,22 @@ export class AuthGuard implements CanActivate {
       );
     }
 
-    const token = authHeader.split(' ')[1]; // Obtiene el token del encabezado
 
     try {
-      const decoded = this.jwtService.verify(token);
-      request.user = decoded; // Almacena el usuario decodificado en la solicitud
-      return true; // Permitir el acceso
+      const secret = process.env.JWT_SECRET;
+      const payload = this.jwtService.verify(token, { secret });
+
+      
+      if (!payload.isActive===false) {
+        throw new ForbiddenException('Este usuario está inactivo y no puede acceder a esta ruta');
+      }
+
+      payload.iat = new Date(payload.iat * 1000);
+      payload.exp = new Date(payload.exp * 1000);
+      request.user = payload;
+
+      return true;
+
     } catch (error) {
       console.error('Error de validación del token:', error);
       throw new UnauthorizedException('Token Inválido');
