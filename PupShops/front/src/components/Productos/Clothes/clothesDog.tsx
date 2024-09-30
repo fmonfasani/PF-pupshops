@@ -32,8 +32,8 @@ const ClothesCat: React.FC = () => {
             onClick={() => router.push("/Categorias/Ropa/Gato")}
           >
             <Image
-              src={product.imgUrl}
-              alt={product.id}
+              src={product.image}
+              alt={String(product.id)}
               width={200}
               height={200}
               className="object-cover rounded-md"

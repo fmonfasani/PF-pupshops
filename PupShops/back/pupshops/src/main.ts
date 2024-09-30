@@ -9,9 +9,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(auth(auth0config))
   app.enableCors({
-    origin: '*',
+    origin: 'https://pupshops-frontend.onrender.com',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept',
+    credentials: true,
   });
   const swaggerConfig = new DocumentBuilder()
     .setTitle('PupShops')
@@ -22,7 +23,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
-  await app.listen(port);
+  app.listen(port);
   console.log(`Application is running on: ${port}`);
 }
 bootstrap();

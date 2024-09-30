@@ -13,7 +13,9 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from '../auth/roles/roles.decorator';
+import { Role } from '../auth/roles/roles.enum';
 
 @ApiTags('Products')
 @Controller('products')
@@ -40,16 +42,22 @@ export class ProductsController {
   }
 
   @Put(':id')
+  @ApiBearerAuth()
+  @Roles(Role.Admin)
   updateProduct(@Param('id', ParseUUIDPipe) id: string, @Body() product) {
     return this.productsService.updateProduct(id, product);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @Roles(Role.Admin)
   remove(@Param('id') id: string) {
     return this.productsService.deleteProduct(id);
   }
 
   @Post()
+  @ApiBearerAuth()
+  @Roles(Role.Admin)
   async createProduct(@Body() createProductDto: CreateProductDto) {
     return this.productsService.createProduct(createProductDto);
   }

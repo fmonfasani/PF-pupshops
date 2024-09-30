@@ -20,7 +20,7 @@ const weights = ['sin especificar','2kg', '7kg', '15kg'];
 export default function UploadProductComponent() {
 
   const { user } = useUserContext(); 
-  const isAdmin = user?.user?.isAdmin;
+  const { isAdmin } = useUserContext(); 
  
   if (!isAdmin) {
     return <p className='mt-20'>No tienes permisos para cargar productos.</p>; // Si no es administrador, mostramos un mensaje

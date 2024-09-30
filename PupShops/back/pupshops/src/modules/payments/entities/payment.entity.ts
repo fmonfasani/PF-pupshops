@@ -1,35 +1,16 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Orders } from '../../order/entities/order.entity';
 
 @Entity('payments')
 export class Payment {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryColumn({ type: 'varchar' }) // Cambiado de 'PrimaryGeneratedColumn' a 'PrimaryColumn' de tipo 'string'
+  id: string; // Usar 'string' para manejar el ID largo que recibes de Mercado Pago
 
-  @Column({ type: 'varchar', length: 50, nullable: false })
-  status: string; // Estado del pago: 'approved', 'pending', 'rejected'
-
-  @Column({ type: 'varchar', length: 50, nullable: false })
-  paymentMethod: string; // Tipo de pago: 'credit_card', 'cash', etc.
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  status: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
   transactionAmount: number;
-
-  @Column({ type: 'varchar', length: 100 })
-  email: string; // Correo del usuario que realizó el pago
-
-  @CreateDateColumn()
-  dateCreated: Date;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  external_reference: string; // Referencia externa con el orderID
 
   @ManyToOne(() => Orders, (order) => order.payments, { nullable: false })
   @JoinColumn({ name: 'order_id' })
