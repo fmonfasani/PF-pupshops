@@ -1,4 +1,5 @@
 "use client";
+import { loginWithAuth0 } from "@/utils/auth0"; // Ajusta la ruta según corresponda
 
 import { login } from "@/utils/fetchUser";
 import { validateLoginForm } from "../../../helpers/validate";
@@ -55,6 +56,18 @@ function LoginPage() {
     setErrors(errors);
   }, [dataUser]);
 
+  const handleLogin = async () => {
+    console.log("Intentando iniciar sesión con Auth0"); // Esto debería aparecer en la consola
+    try {
+      await loginWithAuth0();
+    } catch (error) {
+      console.error("Error al iniciar sesión con Auth0:", error);
+    }
+  };
+  
+
+  
+  
   return (
     <section className="bg-gray-100 p-4 mt-16">
       <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
@@ -65,6 +78,18 @@ function LoginPage() {
                 Iniciar sesión en tu cuenta
               </h1>
             </div>
+            <div className="mt-6 text-center">
+            <button
+    onClick={(event) => {
+        event.preventDefault(); // Esto es importante para evitar que se envíe el formulario
+        handleLogin(); // Asegúrate de que esto se llame
+    }}
+    className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300"
+>
+    Iniciar sesión con Auth0
+</button>
+
+          </div>
             <div>
               <label
                 htmlFor="email"
