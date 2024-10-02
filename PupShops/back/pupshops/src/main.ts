@@ -25,6 +25,7 @@ async function bootstrap() {
         callback(new Error('No permitido por CORS'));
       }
     },
+
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true
