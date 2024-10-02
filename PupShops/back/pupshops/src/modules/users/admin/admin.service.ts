@@ -97,6 +97,7 @@ export class AdminService {
       const newUser = await this.usersRepository.save({
         ...user,
         password: hashedPassword,
+        isActive: user.isActive ?? true,
       });
       return newUser;
     } catch (error) {
