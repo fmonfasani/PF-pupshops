@@ -29,10 +29,10 @@ jobs:
           tags: fmonfasani/pupshops-backend:latest
 
       # Build and push frontend
-    #  - name: Build and push frontend
-    #    uses: docker/build-push-action@v5
-    #    with:
-    #      context: ./PupShops/front
-    #      file: ./PupShops/front/Dockerfile
-    #      push: true
-    #      tags: fmonfasani/pupshops-frontend:latest
+      - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./PupShops/front
+          file: ./PupShops/front/Dockerfile
+          push: true
+          tags: fmonfasani/pupshops-frontend:latest
