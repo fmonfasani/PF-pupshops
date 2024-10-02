@@ -42,7 +42,7 @@ export class AuthService {
     delete newUser.password;
     delete newUser.isActive
 
-    return newUser;
+    return (`Cuenta creada correctamente ${newUser.name} ${newUser.lastname}`);
   }
 
   async signIn(login: LoginUserDto) {

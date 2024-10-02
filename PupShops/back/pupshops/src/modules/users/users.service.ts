@@ -13,7 +13,12 @@ export class UsersService {
  
   async getEmailLogin(email: string): Promise<User> {
     const user = await this.usersRepository.findOneBy({ email });
-    console.log(`usuario encontrado ${user}`);
+    if(!user){console.log("Usuario no encontrado/Mail disponible");
+    }
+    else{
+      console.log(`usuario encontrado ${user}`);
+
+    }
     return user;
   }
   async createUser(user: CreateUserDto): Promise<Partial<User>> {
