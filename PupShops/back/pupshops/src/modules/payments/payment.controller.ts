@@ -83,7 +83,6 @@ export class PaymentsController {
         await this.paymentsService.createPayment(createPaymentDto);
       return {
         message: 'Preferencia de pago creada exitosamente',
-        message: 'Preferencia de pago creada exitosamente',
         payment,
       };
     } catch (error) {
