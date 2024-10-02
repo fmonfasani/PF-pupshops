@@ -13,6 +13,7 @@ import {
   UseGuards,
   InternalServerErrorException,
   Post,
+  BadRequestException,
 } from '@nestjs/common';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -51,7 +52,7 @@ export class AdminController {
     try {
       return await this.adminService.getUserByEmail(email);
     } catch (error) {
-      throw new InternalServerErrorException('Error al buscar el usuario por email');
+      throw new NotFoundException('Error al buscar el usuario por email');
     }
   }
 
@@ -65,7 +66,7 @@ export class AdminController {
       }
       return user;
     } catch (error) {
-      throw new InternalServerErrorException('Error al buscar el usuario por ID');
+      throw new NotFoundException('Error al buscar el usuario por ID');
     }
   }
   @Post('users/register')
@@ -73,13 +74,19 @@ export class AdminController {
   async signUp(
     @Body() user: AdminCreateUserDto,
     @Req() request: Request & { now: string },
-  ) {
-    console.log('Usuario creado a las: ', request.now);
-    const nuevoUsuario = await this.adminService.createUser(user);
-    return plainToClass(AdminCreateUserDto, nuevoUsuario, {
-      excludeExtraneousValues: true,
-    });
-  }
+  ){try {
+    {
+      console.log('Usuario creado a las: ', request.now);
+      const nuevoUsuario = await this.adminService.createUser(user);
+      return plainToClass(AdminCreateUserDto, nuevoUsuario, {
+        excludeExtraneousValues: true,
+      });
+    }
+    
+  } catch (error) {
+    throw new BadRequestException('Error al crear el usuario');
+    
+  } }
 
 
   @HttpCode(200)
@@ -90,14 +97,14 @@ export class AdminController {
     @Req() req: any,
   ) {
     try {
-      const currentUser = req.user;
+    
       const updatedUser = await this.adminService.updateUser(id, user);
       if (!updatedUser) {
         throw new NotFoundException('Usuario no encontrado');
       }
       return updatedUser;
     } catch (error) {
-      throw new InternalServerErrorException('Error al actualizar el usuario');
+      throw new BadRequestException('Error al actualizar el usuario');
     }
   }
 
@@ -111,7 +118,7 @@ export class AdminController {
       }
       return { message: 'Usuario eliminado con éxito' };
     } catch (error) {
-      throw new InternalServerErrorException('Error al eliminar el usuario');
+      throw new BadRequestException('Error al eliminar el usuario');
     }
   }
 }
