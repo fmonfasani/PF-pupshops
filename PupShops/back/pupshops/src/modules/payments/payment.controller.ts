@@ -13,6 +13,7 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Response } from 'express';
 import {
   ApiBody,
+  ApiExcludeEndpoint,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -24,7 +25,6 @@ import { Payment } from './entities/payment.entity';
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
-
   @Get('/user/:userId/payments')
   @ApiOperation({ summary: 'Obtener los pagos realizados por un usuario' }) // Descripción del endpoint
   @ApiParam({
@@ -59,7 +59,7 @@ export class PaymentsController {
     description: 'Preferencia de pago creada exitosamente',
     schema: {
       example: {
-        message: 'Pago creado exitosamente',
+        message: 'Preferencia de pagos creada exitosamente',
         payment: {
           id: '123456789',
           init_point: 'https://www.mercadopago.com/checkout/v1/payment',
@@ -82,7 +82,7 @@ export class PaymentsController {
       const payment =
         await this.paymentsService.createPayment(createPaymentDto);
       return {
-        message: 'Pago creado exitosamente',
+        message: 'Preferencia de pago creada exitosamente',
         payment,
       };
     } catch (error) {
@@ -114,6 +114,7 @@ export class PaymentsController {
     example: '73b56cfb-d8e5-4097-b93e-e3b59de0e4f3',
   })*/
   @Get('success')
+  @ApiExcludeEndpoint()
   handleSuccess(@Query() query, @Res() res: Response) {
     const { payment_id, status, external_reference } = query;
     console.log('Pago exitoso:', { payment_id, status, external_reference });
@@ -123,6 +124,7 @@ export class PaymentsController {
   // Manejar redirección de pago fallido
   @ApiOperation({ summary: 'Manejar redirección de pago fallido' })
   @Get('failure')
+  @ApiExcludeEndpoint()
   handleFailure(@Query() query, @Res() res: Response) {
     console.log('Pago fallido:', query);
     res.send('Hubo un error con tu pago. Intenta nuevamente.');
@@ -131,6 +133,7 @@ export class PaymentsController {
   // Manejar redirección de pago pendiente
   @ApiOperation({ summary: 'Manejar redirección de pago pendiente' })
   @Get('pending')
+  @ApiExcludeEndpoint()
   handlePending(@Query() query, @Res() res: Response) {
     console.log('Pago pendiente:', query);
     res.send('Tu pago está en proceso. Espera la confirmación.');
@@ -148,6 +151,7 @@ export class PaymentsController {
 
   // Webhook para recibir notificaciones de Mercado Pago
   @Post('/webhook')
+  @ApiExcludeEndpoint()
   async handleNotification(@Body() body: any, @Res() res: Response) {
     const topic = body.topic || body.type;
     const resource =

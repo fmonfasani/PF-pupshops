@@ -1,11 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, LessThanOrEqual, MoreThan, Repository } from 'typeorm';
 import { Appointment } from './entities/appointment.entity';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { User } from '../../modules/users/entities/user.entity';
 import { Service } from '../../modules/service/entities/services.entity';
-import { AppointmentStatus } from '../appointments/entities/appointment-status.enum';
+import { AppointmentStatus } from './entities/appointment-status.enum';
 
 @Injectable()
 export class AppointmentsService {
@@ -32,14 +36,19 @@ export class AppointmentsService {
     const { appointmentDate, appointmentTime, serviceName } =
       createAppointmentDto;
 
+    // Validar que serviceName esté definido
+    if (!serviceName) {
+      throw new BadRequestException('El nombre del servicio es obligatorio.');
+    }
+
     // Combinar la fecha y la hora en un objeto Date
     const combinedDateTime = new Date(
       `${appointmentDate}T${appointmentTime}:00`,
     );
 
-    // Buscar el servicio en la base de datos usando el nombre del servicio
+    // Buscar el servicio en la base de datos usando el nombre del servicio en minúsculas
     const service = await this.serviceRepository.findOne({
-      where: { name: serviceName },
+      where: { name: serviceName.toLowerCase() },
     });
 
     if (!service) {
@@ -60,8 +69,6 @@ export class AppointmentsService {
     const fullUser = await this.userRepository.findOne({
       where: { id: user.id },
     });
-    console.log('Usuario completo:', fullUser);
-
     if (!fullUser) {
       throw new BadRequestException('Usuario no encontrado');
     }
@@ -70,14 +77,14 @@ export class AppointmentsService {
     const appointment = this.appointmentRepository.create({
       appointmentDate: combinedDateTime,
       status: AppointmentStatus.RESERVED,
-      user: { id: user.id }, // Usar el id del usuario autenticado
+      user: fullUser, // Usar el objeto completo del usuario
       service,
     });
 
     const savedAppointment = await this.appointmentRepository.save(appointment);
 
     return {
-      message: `UD. Se ha reservado un turno de ${service.name} a las ${combinedDateTime.toLocaleTimeString()} con fecha ${combinedDateTime.toLocaleDateString()} exitosamente!`,
+      message: `Se ha reservado un turno de ${service.name} a las ${combinedDateTime.toLocaleTimeString()} con fecha ${combinedDateTime.toLocaleDateString()} exitosamente!`,
       appointmentId: appointment.id,
       serviceId: service.id,
       serviceName: service.name,
@@ -100,14 +107,14 @@ export class AppointmentsService {
     });
 
     if (!appointment) {
-      throw new Error('Turno no encontrado');
+      throw new NotFoundException('Turno no encontrado');
     }
 
     // Convertir el estado a un valor válido del enum AppointmentStatus
     if (status === 'reserved' || status === 'canceled') {
       appointment.status = status as AppointmentStatus; // Asigna el valor del enum
     } else {
-      throw new Error('Estado no válido');
+      throw new BadRequestException('Estado no válido');
     }
 
     return await this.appointmentRepository.save(appointment); // Guarda el turno con el nuevo estado
@@ -119,7 +126,7 @@ export class AppointmentsService {
     });
 
     if (!appointment) {
-      throw new Error('Turno no encontrado');
+      throw new NotFoundException('Turno no encontrado');
     }
 
     // Borrado lógico

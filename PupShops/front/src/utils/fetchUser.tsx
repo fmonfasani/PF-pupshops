@@ -3,9 +3,12 @@ import {
   ILoginUser,
   IUserRegister,
 } from "@/Interfaces/interfaces";
+import { ILoginProps } from "../Interfaces/types";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const fetchRegisterUser = async (user: IUserRegister) => {
-  const response = await fetch(`http://localhost:3001/auth/signup`, {
+  const response = await fetch(`${API_URL}/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,27 +23,29 @@ export const fetchRegisterUser = async (user: IUserRegister) => {
   return response.json();
 };
 
-export const fetchLoginUser = async (userData: ILoginUser) => {
-  const response = await fetch("http://localhost:3001/auth/signin", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
 
-  if (!response.ok) {
-    throw new Error("Error al iniciar sesión");
+// Función para iniciar sesión
+export async function login(userData: ILoginProps) {
+  try {
+    const res = await fetch(`${API_URL}/auth/signin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userData)
+    });
+    if (res.ok) {
+      return res.json();
+    } else {
+      throw Error("Failed to Login");
+    }
+  } catch (error: any) {
+    throw new Error(error);
   }
-
-  const data = await response.json();
-  // Guardar el token y los datos del usuario en localStorage o en un contexto
-  localStorage.setItem("token", data.token);
-  return data.findUser; // Retorna los datos del usuario
-};
+}
 
 export const fetchAppointment = async (appointment: IAppointment) => {
-  const response = await fetch(`http://localhost:3000/appointments/`, {
+  const response = await fetch(`http://localhost:3001/appointments/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

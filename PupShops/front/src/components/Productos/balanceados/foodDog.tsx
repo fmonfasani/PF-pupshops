@@ -20,7 +20,7 @@ export default function BalanceadosPerros() {
           >
             <Image
               src={product.imgUrl}
-              alt={product.id}
+              alt={product.imgUrl}
               width={300}
               height={300}
               className="object-cover rounded-md"

@@ -13,10 +13,10 @@ const AppointmentForm = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showErrorNotification, setShowErrorNotification] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+
   //TODO Obtener las fechas mínima y máxima permitidas
 
   const { minDate, maxDate } = getMinAndMaxDates();
@@ -42,36 +42,41 @@ const AppointmentForm = () => {
     setSelectedTime(e.target.value);
   };
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(
       `Día seleccionado: ${selectedDate}, Horario seleccionado: ${selectedTime}`
     );
-    const appointment : IAppointment = {
-      date: selectedDate,
-      time: selectedTime
-    }
-    
-      const success = true;
-      //await fetchAppointment(appointment)
-      if(success) {
-        setNotificationMessage(`Turno registrado. Dia: ${appointment.date}, Hora: ${appointment.time}`);
-        setShowNotification(true);
-        setTimeout(() => {
+    const appointment: IAppointment = {
+      appointmentDate: selectedDate, // La fecha seleccionada por el usuario
+      appointmentTime: selectedTime, // La hora seleccionada por el usuario
+      serviceName: "Peluquería",
+      status: "reserved", // Estado predeterminado
+      isDeleted: false, // Valor predeterminado
+    };
+
+    const success = true;
+    //await fetchAppointment(appointment)
+    if (success) {
+      setNotificationMessage(
+        `Turno registrado. Dia: ${appointment.appointmentDate}, Hora: ${appointment.appointmentTime}`
+      );
+      setShowNotification(true);
+      setTimeout(() => {
         setShowNotification(false);
-                         }, 5000);
-        setSelectedDate('');
-        setSelectedTime('')
-      } else {
-        setErrors({ ...errors, general: "Error al sacar turno" });
-      }
+      }, 5000);
+      setSelectedDate("");
+      setSelectedTime("");
+    } else {
+      setErrors({ ...errors, general: "Error al sacar turno" });
+    }
     /* catch (error) {
       console.error("Error durante el registro:", error);
       setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
       setShowErrorNotification(true); 
       setTimeout(() => setShowErrorNotification(false), 3000); 
   }*/
-};
+  };
 
   return (
     <form
@@ -123,11 +128,16 @@ const AppointmentForm = () => {
       >
         Reservar Turno
       </button>
-      {showNotification && <NotificationRegister message={notificationMessage} />}
-      {showErrorNotification && <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />}
-
+      {showNotification && (
+        <NotificationRegister message={notificationMessage} />
+      )}
+      {showErrorNotification && (
+        <NotificationError
+          message={errors.general || "Error al sacar turno"}
+          onClose={() => setShowErrorNotification(false)}
+        />
+      )}
     </form>
-    
   );
 };
 

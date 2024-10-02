@@ -1,6 +1,6 @@
 "use client";
 
-import { login } from "@/helpers/auth.helpers";
+import { login } from "@/utils/fetchUser";
 import { validateLoginForm } from "../../../helpers/validate";
 import { ILoginError, ILoginProps } from "../../../Interfaces/types";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ function LoginPage() {
   const router = useRouter();
   const initialState = {
     email: "",
-    password: ""
+    password: "",
   };
   const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
   const [errors, setErrors] = useState<ILoginError>(initialState);
@@ -25,23 +25,30 @@ function LoginPage() {
     try {
       const response = await login(dataUser);
       console.log(response);
-
+  
       if (response && response.token && response.findUser) {
         const { token, findUser } = response;
-        localStorage.setItem(
-          "userSession",
-          JSON.stringify({ token, user: findUser })
-        );
-
-        router.push("/");
+  
+        // Guardar el token y el usuario en localStorage
+        localStorage.setItem("userSession", JSON.stringify({ token, user: findUser }));
+  
+        // Actualiza el estado del contexto (opcional si usas Context API)
+        // Verificar si el usuario es admin y redirigirlo a la página correspondiente
+        if (findUser.isAdmin) {
+          router.push("/products"); // Página de admin
+        } else {
+          router.push("/home"); // Página de usuario
+        }
       } else {
-        setErrors({ ...errors, email: "Invalid login credentials." });
+        setErrors({ ...errors, email: "Credenciales de inicio de sesión inválidas." });
       }
     } catch (error: any) {
-      const errors = validateLoginForm(dataUser);
-      setErrors(errors);
+      const validationErrors = validateLoginForm(dataUser);
+      setErrors(validationErrors);
     }
   };
+  
+  
 
   useEffect(() => {
     const errors = validateLoginForm(dataUser);
