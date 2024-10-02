@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 export interface IUser {
   id: number; // ID del usuario
   name: string;
@@ -45,6 +44,10 @@ export interface IUserContextType {
   setIsLogged: (isLogged: boolean) => void;
   signIn: (credentials: ILoginUser) => Promise<boolean>;
   signUp: (user: IUserRegister) => Promise<boolean>;
+  signUpRegister: (user: IUserRegister) => Promise<boolean>;
+  //   getOrders: () => Promise<void>;
+  // setOrders: (orders: IOrderResponse[]) => void;
+  // orders: IOrderResponse[] | [];
   logOut: () => void;
 }
 
@@ -66,7 +69,6 @@ export interface IUserRegister {
   isActive?: boolean; // Esto indica que el usuario está activo por defecto
 }
 
->>>>>>> 77c5e74702047ca028192da01607975073a16252
 export interface IButtonProps {
     text: string;
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;

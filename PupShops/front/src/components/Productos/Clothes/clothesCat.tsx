@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cartContext } from "@/context/cartContext";
 import { IProduct } from "@/Interfaces/ICart";
-import Swal from "sweetalert2"; // Importa SweetAlert2
-
+import Swal from "sweetalert2";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -16,7 +15,7 @@ const ClothesCat: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const categoryId = "53a2dc07-b3d0-4608-b2c4-28b7531d614d";
+  const categoryId = "0a983688-a5a1-43d1-8576-95d42b1662a1";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -41,7 +40,7 @@ const ClothesCat: React.FC = () => {
 
         setProducts(formattedData);
         const initialQuantity = formattedData.reduce((acc, product) => {
-          acc[product.id] = 1; // Inicializamos la cantidad en 1
+          acc[product.id] = 1; 
           return acc;
         }, {} as { [key: number]: number });
         setQuantity(initialQuantity);
@@ -127,15 +126,15 @@ const ClothesCat: React.FC = () => {
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
-                e.stopPropagation(); // Previene el evento de click en el contenedor
-                const currentQuantity = quantity[product.id] || 1; // Asegúrate de que quantity esté definido
+                e.stopPropagation();
+                const currentQuantity = quantity[product.id] || 1; 
                 console.log("Adding to cart:", product.id, currentQuantity);
-                const success = await addToCart(product.id, currentQuantity); // Aquí
+                const success = await addToCart(product.id, currentQuantity);
 
                 if (success) {
-                  // Alerta de SweetAlert en caso de éxito
+                  
                   Swal.fire({
-                    title: "¡Producto Agregado!",
+                    title: "Â¡Producto Agregado!",
                     text: `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito.`,
                     icon: "success",
                     confirmButtonText: "Aceptar",

@@ -11,8 +11,8 @@ async function bootstrap() {
   app.enableCors({
     origin: 'https://pupshops-frontend.onrender.com',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept',
-    credentials: true,
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials:true
   });
 
   // Swagger setup

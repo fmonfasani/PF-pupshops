@@ -22,7 +22,6 @@ export const fetchProductsById = async (
   }
 };
 
-// Función para agregar productos al carrito
 export const addToCart = async (
   userId: string,
   products: IProduct[],
@@ -41,7 +40,7 @@ export const addToCart = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization:`Bearer ${token}`,
       },
       body: JSON.stringify(orderData),
     });

@@ -16,12 +16,16 @@ export const fetchRegisterUser = async (user: IUserRegister) => {
     body: JSON.stringify(user),
   });
 
+  const data = await response.json();
+  console.log("Respuesta del servidor:", data); // Log para ver el cuerpo de la respuesta
+
   if (!response.ok) {
     throw new Error("Error en el registro. Por favor, verifica los datos.");
   }
 
-  return response.json();
+  return data;
 };
+
 
 
 // Función para iniciar sesión
