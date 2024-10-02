@@ -8,7 +8,7 @@ import { ILoginProps } from "../Interfaces/types";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const fetchRegisterUser = async (user: IUserRegister) => {
-  const response = await fetch(`${API_URL}/auth/signup`, {
+  const response = await fetch(`http://localhost:3001/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

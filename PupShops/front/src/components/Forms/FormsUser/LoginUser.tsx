@@ -54,8 +54,11 @@ function LoginPage({ setToken }: ILoginClientProps) {
             router.push("/home");
           }
         } else {
-          setErrorMessage("Usuario inválido"); 
-        setShowErrorNotification(true); 
+           setErrorMessage("Usuario inválido");
+          setShowErrorNotification(true); 
+          setTimeout(() => {
+            setShowErrorNotification(false); 
+          }, 3000);
         }
       } catch(error) {
         console.error("Error durante el registro:", error);
