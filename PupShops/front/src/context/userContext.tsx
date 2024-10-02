@@ -1,13 +1,10 @@
 "use client";
 
-import {
-  ILoginUser,
-  IUserRegister,
-  IUserResponse
-} from "@/Interfaces/interfaces";
+import { ILoginUser, IUserRegister, IUserResponse} from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
 import { login, fetchRegisterUser } from "@/utils/fetchUser";
 import { createContext, useContext, useEffect, useState } from "react";
+import { fetchAdminCreateUser } from "@/utils/fetchAdminCreateUser";
 
 // Creamos el contexto con un valor inicial
 export const UserContext = createContext<IUserContextType>({
@@ -19,6 +16,7 @@ export const UserContext = createContext<IUserContextType>({
   setIsLogged: () => {},
   signIn: async () => false,
   signUp: async () => false,
+  signUpRegister: async () => false,
   logOut: () => {},
 });
 
@@ -132,6 +130,36 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+
+  // Función para registrar nuevo administrador
+  const signUpRegister = async (userAdmin: IUserRegister): Promise<boolean> => {
+  try {
+    const token = user?.token;
+    
+      if (!token) {
+          console.error("No se encontró un token válido para realizar el registro.");
+          return false;
+      }
+
+      // Llamada a la fetch con el token
+      const data = await fetchAdminCreateUser(userAdmin, token);
+
+      if (data.id) {
+          // Realiza el signIn automáticamente después de registrar el administrador
+          await signIn({ email: userAdmin.email, password: userAdmin.password });
+          return true;
+      } else {
+          console.error("Registro fallido:", data);
+          return false;
+      }
+  } catch (error) {
+      console.error("Error durante el registro de administrador:", error);
+      return false;
+  }
+};
+
+
+
   /* //OBTENER ORDENES DE COMPRA
     const getOrders = useCallback(async () => {
         try {
@@ -192,6 +220,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsAdmin,
         signIn,
         signUp,
+        signUpRegister,
         logOut,
       }}
     >
@@ -199,4 +228,3 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     </UserContext.Provider>
   );
 };
-

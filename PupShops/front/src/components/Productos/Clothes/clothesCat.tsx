@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cartContext } from "@/context/cartContext";
 import { IProduct } from "@/Interfaces/ICart";
+import Swal from "sweetalert2";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -14,19 +15,15 @@ const ClothesCat: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const categoryId = "2c5d9c21-1997-4311-b7ca-e9362c05aa2a";
-
+  const categoryId = "0a983688-a5a1-43d1-8576-95d42b1662a1";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
-
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-
           `http://localhost:3001/products/child/${categoryId}`
-
         );
 
         if (!response.ok) {
@@ -36,7 +33,6 @@ const ClothesCat: React.FC = () => {
 
         const data: IProduct[] = await response.json();
 
-
         const formattedData = data.map((product) => ({
           ...product,
           price: Number(product.price),
@@ -44,11 +40,10 @@ const ClothesCat: React.FC = () => {
 
         setProducts(formattedData);
         const initialQuantity = formattedData.reduce((acc, product) => {
-          acc[product.id] = 1; // Inicializamos la cantidad en 1
+          acc[product.id] = 1; 
           return acc;
         }, {} as { [key: number]: number });
         setQuantity(initialQuantity);
-
       } catch (error) {
         console.error("Error al obtener los productos:", error);
       } finally {
@@ -104,7 +99,6 @@ const ClothesCat: React.FC = () => {
               <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
               <p className="text-gray-700 mb-2">{product.description}</p>
               <p className="text-green-600 font-bold mb-2">
-
                 ${product.price.toFixed(2)}
               </p>
               <div className="flex items-center space-x-4 mb-4">
@@ -128,25 +122,25 @@ const ClothesCat: React.FC = () => {
                   +
                 </button>
               </div>
-
             </div>
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
-
-                e.stopPropagation(); // Previene el evento de click en el contenedor
-                const currentQuantity = quantity[product.id] || 1; // Asegúrate de que quantity esté definido
+                e.stopPropagation();
+                const currentQuantity = quantity[product.id] || 1; 
                 console.log("Adding to cart:", product.id, currentQuantity);
-                const success = await addToCart(product.id, currentQuantity); // Aquí
+                const success = await addToCart(product.id, currentQuantity);
 
                 if (success) {
-                  alert(
-                    `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito`
-                  );
+                  
+                  Swal.fire({
+                    title: "Â¡Producto Agregado!",
+                    text: `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito.`,
+                    icon: "success",
+                    confirmButtonText: "Aceptar",
+                  });
                 } else {
-
                   alert("Error al agregar al carrito");
-
                 }
               }}
             >

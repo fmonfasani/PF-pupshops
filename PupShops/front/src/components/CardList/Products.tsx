@@ -117,7 +117,7 @@ const ProductsPage = () => {
     setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
   };
   
-
+  
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">

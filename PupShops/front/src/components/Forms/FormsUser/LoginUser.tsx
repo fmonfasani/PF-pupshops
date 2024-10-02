@@ -1,18 +1,28 @@
 "use client";
-import { login } from "@/utils/fetchUser";
 import { validateLoginForm } from "../../../helpers/validate";
 import { ILoginError, ILoginProps } from "../../../Interfaces/types";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { UserContext } from "@/context/userContext";
+import { ButtonForms } from "@/components/Buttons/ButtonsForms";
+import { ILoginClientProps } from "@/Interfaces/interfaces";
+import NotificationLogin from "@/components/Notifications/NotificationLogin";
+import { NotificationError } from "@/components/Notifications/NotificationError";
+import { NotificationRegister } from "@/components/Notifications/NotificationRegister";
 
-function LoginPage() {
+function LoginPage({ setToken }: ILoginClientProps) {
   const router = useRouter();
   const initialState = {
     email: "",
     password: "",
   };
   const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
-  const [errors, setErrors] = useState<ILoginError>(initialState);
+  const [errors, setErrors] = useState({} as { [key: string]: string });
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { signIn } = useContext(UserContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -21,41 +31,47 @@ function LoginPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const response = await login(dataUser);
-      console.log(response);
-  
-      if (response && response.token && response.findUser) {
-        const { token, findUser } = response;
-  
-        // Guardar el token y el usuario en localStorage
-        localStorage.setItem("userSession", JSON.stringify({ token, user: findUser }));
-  
-        // Actualiza el estado del contexto (opcional si usas Context API)
-        // Verificar si el usuario es admin y redirigirlo a la página correspondiente
-        if (findUser.isAdmin) {
-          router.push("/products"); // Página de admin
+    const { formIsValid, errors } = validateLoginForm(dataUser);
+
+    if(formIsValid) {
+      const credentials = {
+        email: dataUser.email,
+        password: dataUser.password
+      };
+      try {
+        const success = await signIn(credentials); 
+                 
+        if (success) {
+          setNotificationMessage(`Bienvenido`);
+          setShowNotification(true);
+          setTimeout(() => {
+              setShowNotification(false);
+              router.push("/home");
+          }, 3000);
+          const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+          if (token) {
+            setToken(token); 
+            router.push("/home");
+          }
         } else {
-          router.push("/home"); // Página de usuario
+          setErrorMessage("Usuario inválido"); 
+        setShowErrorNotification(true); 
         }
-      } else {
-        setErrors({ ...errors, email: "Credenciales de inicio de sesión inválidas." });
+      } catch(error) {
+        console.error("Error durante el registro:", error);
+        setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
+        setShowErrorNotification(true); 
+        setTimeout(() => setShowErrorNotification(false), 3000); 
       }
-    } catch (error: any) {
-      const validationErrors = validateLoginForm(dataUser);
-      setErrors(validationErrors);
+    } else {
+      setErrors(errors); 
     }
   };
+ 
   
-  
-
-  useEffect(() => {
-    const errors = validateLoginForm(dataUser);
-    setErrors(errors);
-  }, [dataUser]);
-
-
-
+  const handleRegisterRedirect = () => {
+    router.push("/userDashboard/register");
+}
   
   return (
     <section className="bg-gray-100 p-4 mt-16">
@@ -134,16 +150,12 @@ function LoginPage() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            ¿No eres miembro?{" "}
-            <a
-              href="/register"
-              className="font-semibold leading-6 text-teal-600 hover:text-teal-300"
-            >
-              Regístrate aquí
-            </a>
+          <ButtonForms text="¿No posees una cuenta? Haz click aqui para registrarse" onClick={handleRegisterRedirect} /> 
           </p>
         </div>
       </div>
+      {showNotification && <NotificationRegister message={notificationMessage} />}
+      {showErrorNotification && <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />}
     </section>
   );
 }

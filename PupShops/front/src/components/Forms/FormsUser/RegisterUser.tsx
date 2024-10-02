@@ -7,6 +7,7 @@ import { IUserRegister } from '@/Interfaces/interfaces';
 import { fetchRegisterUser } from '@/utils/fetchUser';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 import { NotificationError } from '@/components/Notifications/NotificationError';
+import { UserContext } from '@/context/userContext';
 
 
 type Country = "Argentina" | "Chile" | "Colombia" | "México";
@@ -41,6 +42,7 @@ export default function RegisterUser() {
     const [notificationMessage, setNotificationMessage] = useState('');
     const [showErrorNotification, setShowErrorNotification] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const {signUp} = useContext(UserContext);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -78,7 +80,7 @@ export default function RegisterUser() {
         console.log('User que se está enviando:', user);
         
         try {
-            const success = await fetchRegisterUser(user);
+            const success = await signUp(user);
             
             if (success) {
                 setNotificationMessage(`Registro exitoso. Bienvenido/a ${userRegister.name}`);

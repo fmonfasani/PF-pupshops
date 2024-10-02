@@ -1,38 +1,9 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import { ICartContextType, IProduct } from "@/Interfaces/ICart";
 import { fetchProductsById } from "@/lib/servers/serverCart";
-
-
-
-
-const addItemToCart = async (
-  cartItems: IProduct[],
-  productId: number,
-  quantity: number
-): Promise<IProduct[]> => {
-  const existingProduct = cartItems.find((item) => item.id === productId);
-
-  if (existingProduct) {
-  
-    return cartItems.map((item) =>
-      item.id === productId
-        ? { ...item, quantity: (item.quantity || 1) + quantity }
-        : item
-    );
-  }
-
-  
-  const data = await fetchProductsById(productId);
-  return [...cartItems, { ...data, quantity }];
-
-};
-
-const removeItem = (cartItems: IProduct[], productId: number) => {
-  return cartItems.filter((item) => item.id !== productId);
-};
-
+import { UserContext } from "@/context/userContext";
 
 export const cartContext = createContext<ICartContextType>({
   cartItems: [],
@@ -47,8 +18,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<IProduct[]>([]);
   const [total, setTotal] = useState(0);
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
+    setIsClient(true);
     const storedCartItems = localStorage.getItem("cartItems");
     const storedPurchasedItems = localStorage.getItem("purchasedItems");
 
@@ -62,19 +37,21 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (isClient) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems, isClient]);
 
   useEffect(() => {
-    localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
-  }, [purchasedItems]);
-
+    if (isClient) {
+      localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
+    }
+  }, [purchasedItems, isClient]);
 
   const addToCart = async (
     productId: number,
     quantity: number = 1
   ): Promise<boolean> => {
-
     try {
       const existingProduct = cartItems.find((item) => item.id === productId);
       let updatedCartItems;
@@ -82,7 +59,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       if (existingProduct) {
         updatedCartItems = cartItems.map((item) =>
           item.id === productId
-            ? { ...item, quantity: (existingProduct.quantity ?? 0) + quantity }
+            ? { ...item, quantity: (existingProduct.quantity || 0) + quantity }
             : item
         );
       } else {
@@ -96,7 +73,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Error al agregar al carrito:", error);
       return false;
     }
-
   };
 
   const removeFromCart = (productId: number) => {
@@ -106,53 +82,51 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const proceedToBuy = async () => {
     try {
+      const storedUserSession = localStorage.getItem("userSession");
+      if (!storedUserSession)
+        throw new Error("No se encontró la sesión del usuario.");
 
-      const products = cartItems.map((item) => ({
-        id: item.id,
-        quantity: item.quantity || 1,
-      }));
+      const { token, user } = JSON.parse(storedUserSession);
 
-      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token no disponible");
 
-      if (!token) {
-        alert("Debes estar logueado para realizar la compra");
-        return;
-      }
+      const userId = user.id; // Ahora obtenemos el ID directamente del usuario
+      if (!userId) throw new Error("ID de usuario no disponible");
 
+      const response = await fetch(
+        `http://localhost:3001/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId, products: cartItems }),
+        }
+      );
 
-      const response = await fetch("http://localhost:3001/orders", {
-
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ userId: token, products }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        alert("Compra realizada con éxito");
-        setPurchasedItems(result);
-        setCartItems([]);
-      } else {
+      if (!response.ok) {
         const errorMessage = await response.text();
-        throw new Error(`Error en la compra: ${errorMessage}`);
+        throw new Error(
+          `Error en la compra: ${response.statusText} - ${errorMessage}`
+        );
       }
+
+      setPurchasedItems([...purchasedItems, ...cartItems]);
+      setCartItems([]);
+      alert("Compra realizada con éxito!");
     } catch (error) {
       console.error("Error al proceder a la compra:", error);
-      alert("Error al realizar la compra");
+      alert("Hubo un problema al realizar la compra. Inténtalo de nuevo.");
     }
   };
 
   useEffect(() => {
-
     const newTotal = cartItems.reduce(
-      (acc, item) => acc + item.price * (item.quantity || 1),
+      (sum, item) => sum + item.price * (item.quantity || 1),
       0
     );
     setTotal(newTotal);
-
   }, [cartItems]);
 
   return (

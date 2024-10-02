@@ -1,3 +1,4 @@
+
 export interface IUser {
   id: number;
   name: string;
@@ -27,6 +28,7 @@ export interface IUserContextType {
   setIsLogged: (isLogged: boolean) => void;
   signIn: (credentials: ILoginUser) => Promise<boolean>;
   signUp: (user: IUserRegister) => Promise<boolean>;
+  signUpRegister: (user: IUserRegister) => Promise<boolean>;
   //   getOrders: () => Promise<void>;
   // setOrders: (orders: IOrderResponse[]) => void;
   // orders: IOrderResponse[] | [];
@@ -58,9 +60,6 @@ export interface IUserRegister {
   phone: number;
 }
 
-export interface IAdminRegisterUser extends IUserRegister {
-    isAdmin:boolean;
-}
 
 export interface IButtonProps {
   text: string;

@@ -1,3 +1,5 @@
+import { IUserRegister } from "./interfaces";
+
 export interface ICategory {
     id?: string;
     name: string;
@@ -25,3 +27,4 @@ export interface ICategory {
 export interface IUploadProductComponentProps {
   onPreview?: (product: IUploadProduct) => void;
 }
+
