@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import * as bcrypt from 'bcryptjs';
+import * as bcryptjs from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './loginUserDto';
@@ -56,7 +56,7 @@ export class AuthService {
       throw new BadRequestException('Email y/o contraseña incorrectos');
     }
 
-    const comparedPasswords = await bcrypt.compare(
+    const comparedPasswords = await bcryptjs.compare(
       login.password,
       findUser.password,
     );

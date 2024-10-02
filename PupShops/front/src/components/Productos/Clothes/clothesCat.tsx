@@ -7,6 +7,7 @@ import { cartContext } from "@/context/cartContext";
 import { IProduct } from "@/Interfaces/ICart";
 import Swal from "sweetalert2"; // Importa SweetAlert2
 
+
 const ITEMS_PER_PAGE = 5;
 
 const ClothesCat: React.FC = () => {
@@ -15,7 +16,7 @@ const ClothesCat: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const categoryId = "2c5d9c21-1997-4311-b7ca-e9362c05aa2a";
+  const categoryId = "53a2dc07-b3d0-4608-b2c4-28b7531d614d";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 

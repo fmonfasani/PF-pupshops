@@ -1,25 +1,9 @@
 import {
   ILoginError,
   ILoginProps,
-  IRegisterError,
-  IRegisterProps
+/*   IRegisterError,
+  IRegisterProps */
 } from "../Interfaces/types";
-
-/*export function validateLoginForm(values: ILoginProps) {
-  const errors: ILoginError = {};
-
-  if (!values.email) {
-    errors.email = "Email is required";
-  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-    errors.email = "Email is invalid";
-  }
-
-  if (!values.password) {
-    errors.password = "Password is required";
-  }
-
-  return errors;
-}*/
 
 export function validateLoginForm(values: ILoginProps) {
   const errors: ILoginError = {};
@@ -37,7 +21,23 @@ export function validateLoginForm(values: ILoginProps) {
   return errors;
 }
 
-export function validateRegisterForm(values: IRegisterProps) {
+export function validateLoginForm(values: ILoginProps) {
+  const errors: ILoginError = {};
+
+  if (!values.email) {
+    errors.email = "Email is required";
+  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+    errors.email = "Email is invalid";
+  }
+
+  if (!values.password) {
+    errors.password = "Password is required";
+  }
+
+  return errors;
+}
+
+/* export function validateRegisterForm(values: IRegisterProps) {
   const errors: IRegisterError = {};
 
   if (!values.name) {
@@ -63,4 +63,4 @@ export function validateRegisterForm(values: IRegisterProps) {
   }
 
   return errors;
-}
+} */
