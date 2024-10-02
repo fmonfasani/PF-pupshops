@@ -75,3 +75,14 @@ export interface IButtonProps {
     type?: "button" | "submit" | "reset";
     disabled?:boolean;
 }
+
+
+export interface ILoginClientProps {
+  setToken: (token: string | null) => void;
+}
+
+export interface IAppointment {
+  id?: string;
+  date: string;
+  time: string;
+}

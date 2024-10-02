@@ -6,7 +6,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/userContext";
 import { ButtonForms } from "@/components/Buttons/ButtonsForms";
 import { ILoginClientProps } from "@/Interfaces/interfaces";
-import NotificationLogin from "@/components/Notifications/NotificationLogin";
 import { NotificationError } from "@/components/Notifications/NotificationError";
 import { NotificationRegister } from "@/components/Notifications/NotificationRegister";
 
