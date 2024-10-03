@@ -9,6 +9,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Appointment } from '../../appointments/entities/appointment.entity';
+import { Ticket } from '../../ticket/entities/ticket.entity';
+
 
 @Entity({
   name: 'users',
@@ -56,4 +58,8 @@ export class User {
   @OneToMany(() => Orders, (order) => order.user)
   @JoinColumn({ name: 'orders_id' })
   orders: Orders[];
+
+  @OneToMany(() => Ticket, ticket => ticket.user)
+  tickets: Ticket[]; 
 }
+
