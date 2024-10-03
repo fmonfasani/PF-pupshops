@@ -82,53 +82,62 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false); // Estado para el rol de admin
 
-  // Función para iniciar sesión
-  const signIn = async (credentials: ILoginUser): Promise<boolean> => {
-    try {
-        const data = await login(credentials);
-        if (data.login) {
-            const userData = {
-                login: data.login,
-                token: data.token,
-                user: data.findUser
-            };
+ 
+ // Función para iniciar sesión
+ const signIn = async (credentials: ILoginUser): Promise<boolean> => {
+  try {
+    const data = await login(credentials); // Llamada a la API para login
 
-            // Actualizar los estados aquí
-            setUser(userData.user);
-            setIsLogged(true);
-            setIsAdmin(userData.user.isAdmin);
+    if (data.login) { // Verifica si el login fue exitoso
+      if (typeof window !== "undefined") {
+        // Guarda los datos del usuario en localStorage
+        localStorage.setItem("user", JSON.stringify(data.user)); // Guarda el objeto del usuario
+        localStorage.setItem("token", data.token); // Guarda el token
 
-            if (typeof window !== "undefined") {
-                localStorage.setItem("user", JSON.stringify(userData));
-                localStorage.setItem("token", data.token);
-            }
+        // Actualiza el estado del usuario en el contexto
+        setUser({
+          login: true,
+          token: data.token,
+          user: data.user,
+        });
 
-            return true;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        console.error("Error during sign in:", error);
-        return false;
+        setIsLogged(true); // Indica que el usuario ha iniciado sesión
+        setIsAdmin(data.user.isAdmin); // Uso directo de data.user
+
+        return true; // Login exitoso
+      } else {
+        return false; // Si `window` no está disponible
+      }
+    } else {
+      console.error("Login failed. User may not exist.");
+      return false; // Si el login falló
     }
+  } catch (error) {
+    console.error("Error during sign in:", error);
+    return false; // Si ocurre un error durante el proceso
+  }
 };
 
 
-  // Función para registrarse
-  const signUp = async (user: IUserRegister): Promise<boolean> => {
-    try {
+//Funcion para registrarse
+const signUp = async (user: IUserRegister): Promise<boolean> => {
+  try {
       const data = await fetchRegisterUser(user);
-      if (data.id) {
-        await signIn({ email: user.email, password: user.password });
-        return true;
+
+      if (data) { 
+          await signIn({ email: user.email, password: user.password });
+          return true;
       }
-      console.error("Registration failed:", data);
+
+      console.error(`Registration failed: ${JSON.stringify(data)}`);
       return false;
-    } catch (error) {
-      console.error("Error during sign up:", error);
-      return false;
-    }
-  };
+  } catch (error) {
+      console.error(`Error during sign up: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(error instanceof Error ? error.message : 'Error desconocido'); // Lanza el error para que pueda ser capturado en onSubmit
+  }
+};
+
+
 
 
   // Función para registrar nuevo administrador

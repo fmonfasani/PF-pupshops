@@ -1,7 +1,3 @@
-export interface ILoginProps {
-  email: string;
-  password: string;
-}
 
 export interface ILoginError {
   email?: string;

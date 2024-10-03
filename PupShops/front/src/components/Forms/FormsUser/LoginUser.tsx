@@ -1,6 +1,5 @@
 "use client";
 import { validateLoginForm } from "../../../helpers/validate";
-import { ILoginError, ILoginProps } from "../../../Interfaces/types";
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/userContext";
@@ -11,21 +10,23 @@ import { NotificationRegister } from "@/components/Notifications/NotificationReg
 
 function LoginPage({ setToken }: ILoginClientProps) {
   const router = useRouter();
-  const initialState = {
+  const { signIn } = useContext(UserContext);
+  const [dataUser, setDataUser] = useState({
     email: "",
     password: "",
-  };
-  const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
+  });
+
   const [errors, setErrors] = useState({} as { [key: string]: string });
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { signIn } = useContext(UserContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setDataUser({ ...dataUser, [name]: value });
+    const {formIsValid,errors} = validateLoginForm({...dataUser, [name]:value})
+    setErrors(errors);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -41,16 +42,16 @@ function LoginPage({ setToken }: ILoginClientProps) {
         const success = await signIn(credentials); 
                  
         if (success) {
-          setNotificationMessage(`Bienvenido`);
-          setShowNotification(true);
-          setTimeout(() => {
-              setShowNotification(false);
-              router.push("/home");
-          }, 3000);
+          
           const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
           if (token) {
             setToken(token); 
+            setNotificationMessage(`Bienvenido`);
+            setShowNotification(true);
+            setTimeout(() => {
+            setShowNotification(false);
             router.push("/home");
+          }, 3000);
           }
         } else {
            setErrorMessage("Usuario inválido");
