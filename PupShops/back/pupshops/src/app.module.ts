@@ -15,6 +15,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { WebhookModule } from './modules/webhook/webhook.module';
 import { PaymentsModule } from './modules/payments/payment.module';
 import { TicketsModule } from './modules/ticket/ticket.module';
+import { CuponModule } from './modules/cupones/cupones.module';
 
 
 @Module({
@@ -37,6 +38,7 @@ import { TicketsModule } from './modules/ticket/ticket.module';
     OrderModule,
     AuthModule,
     TicketsModule,
+    CuponModule,
     JwtModule.register({
       global: true,
       signOptions: {
