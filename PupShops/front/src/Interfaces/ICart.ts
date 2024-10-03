@@ -7,8 +7,7 @@ export interface IProduct {
   imgUrl: string;
   categoryName: string;
   quantity?: number;
-
-
+  orderId?: string; 
 }
 
 export interface ICartContextType {
@@ -19,5 +18,5 @@ export interface ICartContextType {
 
   total: number;
   proceedToBuy: () => Promise<void>;
-  purchasedItems: IProduct[];
+  purchasedItems: IProduct[]; 
 }

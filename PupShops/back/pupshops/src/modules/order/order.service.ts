@@ -1,33 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { CreateOrderDto } from './dto/order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { OrdersRepository } from './order.repository';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly orderRepository: OrdersRepository) {}
+  constructor(private readonly ordersRepository: OrdersRepository) {}
 
   async create(
     userId: string,
     products: Array<{ id: string; quantity: number }>,
   ) {
-    console.log('Creando orden para usuario:', userId);
-    return await this.orderRepository.addOrder(userId, products);
+    const order = await this.ordersRepository.addOrder(userId, products);
+    return { orderId: order.orderId };
   }
 
   async findAll() {
-    return await this.orderRepository.getAllOrders();
+    return await this.ordersRepository.getAllOrders();
   }
 
   async findOne(id: string) {
-    return await this.orderRepository.getOrder(id);
+    const order = await this.ordersRepository.getOrder(id);
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+    return order;
   }
 
   async update(id: string, updateOrderDto: any) {
-    return await this.orderRepository.updateOrder(id, updateOrderDto);
+    return await this.ordersRepository.updateOrder(id, updateOrderDto);
   }
 
   async remove(id: string) {
-    return await this.orderRepository.removeOrder(id);
+    return await this.ordersRepository.removeOrder(id);
   }
 }
