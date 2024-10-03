@@ -147,7 +147,7 @@ export class AppointmentsController {
     status: 200,
     description: 'El turno ha sido eliminado exitosamente.',
   })
-  remove(@Param('id') id: string): Promise<void> {
+  remove(@Param('id') id: string): Promise<string> {
     return this.appointmentsService.remove(id);
   }
 }

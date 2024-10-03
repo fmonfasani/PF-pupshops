@@ -8,6 +8,7 @@ import {
   IsStrongPassword,
   
   IsBoolean,
+  IsOptional,
 } from 'class-validator';
 
 
@@ -105,4 +106,6 @@ export class AdminCreateUserDto {
 
   @IsBoolean()
   isAdmin: boolean;
+  @IsOptional()
+  isActive:boolean
 }

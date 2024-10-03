@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { cartContext } from "@/context/cartContext";
 import { IProduct } from "@/Interfaces/ICart";
 import Image from "next/image";
-import { FaTrash } from "react-icons/fa"; // Asegúrate de tener react-icons instalado
+import { FaTrash } from "react-icons/fa"; 
 
 interface CartItemProps {
   item: IProduct;

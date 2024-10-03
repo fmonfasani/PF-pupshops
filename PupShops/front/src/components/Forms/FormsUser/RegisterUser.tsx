@@ -7,6 +7,7 @@ import { IUserRegister } from '@/Interfaces/interfaces';
 import { fetchRegisterUser } from '@/utils/fetchUser';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 import { NotificationError } from '@/components/Notifications/NotificationError';
+import { UserContext } from '@/context/userContext';
 
 
 type Country = "Argentina" | "Chile" | "Colombia" | "México";
@@ -24,6 +25,7 @@ const isValidCountry = (country: string): country is Country => {
 
 export default function RegisterUser() {
     const router = useRouter();
+    const {signUp, signIn} = useContext(UserContext);
     const [userRegister, setUserRegister] = useState<IUserRegister>({
         name: "",
         lastname: "",
@@ -41,10 +43,11 @@ export default function RegisterUser() {
     const [notificationMessage, setNotificationMessage] = useState('');
     const [showErrorNotification, setShowErrorNotification] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [generalError, setGeneralError] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        
+       
         const updatedUser = {
             ...userRegister,
             [name]: value 
@@ -62,7 +65,7 @@ export default function RegisterUser() {
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+    
         const user: IUserRegister = {
             name: userRegister.name,
             lastname: userRegister.lastname,
@@ -74,19 +77,32 @@ export default function RegisterUser() {
             country: userRegister.country,
             city: userRegister.city,
         };
-        
-        console.log('User que se está enviando:', user);
-        
+    
+        console.log('Datos del usuario a enviar:', user);
+    
         try {
-            const success = await fetchRegisterUser(user);
-            
-            if (success) {
-                setNotificationMessage(`Registro exitoso. Bienvenido/a ${userRegister.name}`);
-                setShowNotification(true);
-                setTimeout(() => {
-                    setShowNotification(false);
-                    router.push("/home");
-                }, 3000);
+            const isRegistered = await signUp(user); // Llama a la función de registro
+    
+            if (isRegistered) {
+                // Aquí llamamos a signIn para iniciar sesión automáticamente
+                const isLoggedIn = await signIn({
+                    email: userRegister.email,
+                    password: userRegister.password,
+                });
+    
+                if (isLoggedIn) {
+                    // Si el inicio de sesión fue exitoso
+                    setNotificationMessage(`Registro y login exitoso. Bienvenido/a ${userRegister.name}`);
+                    setShowNotification(true);
+                    setTimeout(() => {
+                        setShowNotification(false);
+                        router.push("/home"); // Redirige a la página de inicio
+                    }, 3000);
+                } else {
+                    setGeneralError("El registro fue exitoso, pero el inicio de sesión falló. Por favor, intenta nuevamente.");
+                }
+    
+                // Restablece el estado después del registro e inicio de sesión exitoso
                 setUserRegister({
                     name: "",
                     lastname: "",
@@ -99,15 +115,18 @@ export default function RegisterUser() {
                     city: ""
                 });
             } else {
-                setErrors({ ...errors, general: "Registro inválido" });
+                setGeneralError("Registro inválido. Por favor, revisa los datos ingresados.");
             }
         } catch (error) {
             console.error("Error durante el registro:", error);
-            setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
-            setShowErrorNotification(true); 
-            setTimeout(() => setShowErrorNotification(false), 3000); 
+            setErrorMessage(error instanceof Error ? error.message : "Error desconocido.");
+            setShowErrorNotification(true);
+            setTimeout(() => setShowErrorNotification(false), 3000);
         }
     };
+    
+    
+    
     
 
     return (
@@ -239,6 +258,12 @@ export default function RegisterUser() {
                             ))}
                         </select>
                     </div>
+                    {generalError && (
+    <div className="text-red-500 text-center mt-4">
+        {generalError}
+    </div>
+)}
+
                 </div>
                 <ButtonForms text='Registrarme' disabled={Object.keys(errors).length > 0} type='submit' />
                 <ButtonRedirectUser text="¿Ya posees una cuenta? Haz clic aquí para ingresar" onClick={handleRegisterRedirect} />

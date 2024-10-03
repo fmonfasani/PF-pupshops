@@ -12,8 +12,6 @@ const CartBuy: React.FC = () => {
 
   return (
     <div className="cart-buy mt-6">
-      {" "}
-      {/* Aumentar el margen superior */}
       <h2 className="text-lg font-semibold text-gray-800">
         Total: <span className="text-teal-600">${total.toFixed(2)}</span>
       </h2>

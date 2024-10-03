@@ -26,7 +26,7 @@ export class AdminService {
       users = users.slice(start, end);
       return users.map(({ password, ...user }) => user);
     } catch (error) {
-      throw new InternalServerErrorException('Error al obtener usuarios');
+      throw new BadRequestException('Error al obtener usuarios');
     }
   }
 
@@ -40,7 +40,7 @@ export class AdminService {
       }
       return user;
     } catch (error) {
-      throw new InternalServerErrorException('Error al buscar el usuario');
+      throw new NotFoundException('Error al buscar el usuario');
     }
   }
 
@@ -50,7 +50,7 @@ export class AdminService {
       console.log(`Usuario encontrado: ${user}`);
       return user;
     } catch (error) {
-      throw new InternalServerErrorException(
+      throw new NotFoundException(
         'Error al buscar el usuario por email',
       );
     }
@@ -69,13 +69,13 @@ export class AdminService {
       }
       return user;
     } catch (error) {
-      throw new InternalServerErrorException(
+      throw new NotFoundException(
         'Error al buscar el usuario por ID',
       );
     }
   }
 
-  async createUser(user: AdminCreateUserDto): Promise<User> {
+  async createUser(user: AdminCreateUserDto): Promise<User | string> {
     try {
       const findUser = await this.getEmailLogin(user.email);
       if (findUser) {
@@ -97,10 +97,11 @@ export class AdminService {
       const newUser = await this.usersRepository.save({
         ...user,
         password: hashedPassword,
+        isActive: user.isActive ?? true,
       });
-      return newUser;
+      return JSON.stringify(`Cuenta creada correctamente ${newUser.name} ${newUser.lastname}`) 
     } catch (error) {
-      throw new InternalServerErrorException('Error al crear el usuario');
+      throw new BadRequestException('Error al crear el usuario');
     }
   }
 
@@ -116,7 +117,7 @@ export class AdminService {
       }
       return updatedUser;
     } catch (error) {
-      throw new InternalServerErrorException('Error al actualizar el usuario');
+      throw new BadRequestException('Error al actualizar el usuario');
     }
   }
 
@@ -129,7 +130,7 @@ export class AdminService {
       await this.usersRepository.remove(user);
       return `Usuario ${user.name} ${user.lastname} eliminado exitosamente`;
     } catch (error) {
-      throw new InternalServerErrorException('Error al eliminar el usuario');
+      throw new BadRequestException('Error al eliminar el usuario');
     }
   }
 }

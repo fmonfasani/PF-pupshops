@@ -120,7 +120,7 @@ export class AppointmentsService {
     return await this.appointmentRepository.save(appointment); // Guarda el turno con el nuevo estado
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<string> {
     const appointment = await this.appointmentRepository.findOne({
       where: { id },
     });
@@ -129,9 +129,8 @@ export class AppointmentsService {
       throw new NotFoundException('Turno no encontrado');
     }
 
-    // Borrado lógico
-    appointment.isDeleted = true;
-    await this.appointmentRepository.save(appointment);
+       await this.appointmentRepository.delete(id);
+       return 'Cita eliminada'
   }
 
   async getUserAppointments(userId: string) {
