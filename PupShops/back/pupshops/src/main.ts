@@ -9,26 +9,15 @@ const port = 3001;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // Middleware de autenticación
-  app.use(auth(auth0config));
+  // Middleware de autenticación (descomentar para usar)
+  // app.use(auth(auth0config));
 
   // Configuración de CORS
   app.enableCors({
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        'http://localhost:3000',
-        'https://pupshops-frontend.onrender.com'
-      ];
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('No permitido por CORS'));
-      }
-    },
-
+    origin: '*', // Permitir todos los orígenes durante la etapa de desarrollo
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
-    credentials: true
+    credentials: true,
   });
 
   // Configuración de Swagger
