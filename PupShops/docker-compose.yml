@@ -1,0 +1,37 @@
+services:
+  frontend:
+    build: ./front
+    container_name: nextjs_frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000 # Cambia esta URL según la configuración de tu API
+    ports:
+      - "3000:3000" # Puedes cambiar los puertos si es necesario
+    depends_on:
+      - backend # Asegúrate de que el backend esté disponible antes de iniciar el frontend
+
+  backend:
+    build:
+      context: ./back/pupshops # La ruta correcta para el backend
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgres://yourusername:yourpassword@database:5432/yourdatabase # Conectado al servicio 'database'
+      - JWT_SECRET=${JWT_SECRET}
+      - MERCADO_PAGO_ACCESS_TOKEN=${MERCADO_PAGO_ACCESS_TOKEN}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+    depends_on:
+      - database # Asegura que la base de datos esté disponible antes del backend
+
+  database:
+    image: postgres:13 # Usa la imagen oficial de PostgreSQL
+    environment:
+      - POSTGRES_USER=yourusername
+      - POSTGRES_PASSWORD=yourpassword
+      - POSTGRES_DB=yourdatabase
+    ports:
+      - "5432:5432" # Expone el puerto de PostgreSQL
+
+volumes:
+  db-data: # Define un volumen para la persistencia de los datos de la base de datos

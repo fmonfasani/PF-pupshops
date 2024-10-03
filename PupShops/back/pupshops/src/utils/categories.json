@@ -1,0 +1,38 @@
+{
+    "default": [
+      {
+        "name": "Gato",
+        "parentName": null
+      },
+      {
+        "name": "Juguetes de Gato",
+        "parentName": "Gato"
+      },
+      {
+        "name": "Perro",
+        "parentName": null
+        
+      },
+      {
+        "name": "Juguetes de Perro",
+        "parentName": "Perro"
+      },
+      {
+        "name": "Accesorios para Perro",
+        "parentName": "Perro"
+      },
+      {
+        "name": "Accesorios para gatos",
+        "parentName":"Gato"
+      },
+      {
+        "name": "Alimento para perros",
+        "parentName":"Perro"
+      },
+      {
+        "name": "Alimento para gatos",
+        "parentName": "Gato"
+      }
+    ]
+  }
+  
