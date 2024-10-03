@@ -3,11 +3,11 @@ name: deploy
 on:
   push:
     branches:
-      - "main"
+      
       - "deploy"
   pull_request:
     branches:
-      - "main"
+      
       - "deploy"
 
 jobs:
