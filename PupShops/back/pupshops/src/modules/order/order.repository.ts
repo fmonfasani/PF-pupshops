@@ -68,7 +68,7 @@ export class OrdersRepository {
     await this.orderDetailRepository.save(orderDetail);
 
     return {
-      orderId: newOrder.id, // Cambiado a newOrder.id
+      orderId: newOrder.id,
       detail: await this.orderDetailRepository.find({
         where: { id: orderDetail.id },
         relations: {

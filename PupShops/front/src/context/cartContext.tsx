@@ -20,7 +20,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  const { user } = useContext(UserContext);
+
+  
+  const { user } = useContext(UserContext); //tomame con pinzas.
 
   useEffect(() => {
     setIsClient(true);
@@ -49,7 +51,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, [purchasedItems, isClient]);
 
   const addToCart = async (
-    productId: number, // Cambiado a number
+    productId: number,
     quantity: number = 1
   ): Promise<boolean> => {
     try {
@@ -123,7 +125,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
       const updatedPurchasedItems = cartItems.map((item) => ({
         ...item,
-        orderId: result.orderId, // Aquí se asigna el orderId
+        orderId: result.orderId,
       }));
 
       setPurchasedItems([...purchasedItems, ...updatedPurchasedItems]);

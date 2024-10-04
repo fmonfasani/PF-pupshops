@@ -15,7 +15,7 @@ const ClothesCat: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const categoryId = "2c5d9c21-1997-4311-b7ca-e9362c05aa2a";
+  const categoryId = "eaa18a41-08f8-41e0-8fa7-b83818f987f8";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
