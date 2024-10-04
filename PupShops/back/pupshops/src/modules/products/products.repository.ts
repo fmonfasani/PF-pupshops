@@ -111,12 +111,34 @@ export class ProductsRepository {
     return this.productsRepository.save(product);
   }
 
-  // Obtener productos por categoría hija
+  //Obtener productos por categoría hija
   async getProductsByChildCategory(categoryId: string): Promise<Products[]> {
-    return this.productsRepository.find({
+    return await this.productsRepository.find({
       where: { category: { id: categoryId } },
       relations: ['category'],
     });
+
+  }
+
+  async getProductsRecursive(categoryId: string): Promise<Products[]> {
+    let products = await this.productsRepository.find({
+      where: { category: { id: categoryId } },
+      relations: ['category'],
+    });
+    let childs = await this.categoriesRepository.find({
+      where: { parent: { id: categoryId } },
+    })
+
+    let productPromise = [];
+
+    for(let i=0;i<childs.length;i++){
+      productPromise.push(this.getProductsByChildCategory(childs[i].id)) 
+    }
+    
+    let fulfilledPromise = await Promise.all(productPromise)
+    products = products.concat(fulfilledPromise)
+    
+    return products;
   }
 
 

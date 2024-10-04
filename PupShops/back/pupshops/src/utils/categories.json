@@ -1,37 +1,201 @@
 {
     "default": [
       {
-        "name": "Gato",
+        "name": "Gatos",
         "parentName": null
       },
       {
-        "name": "Juguetes de Gato",
-        "parentName": "Gato"
-      },
-      {
-        "name": "Perro",
+        "name": "Perros",
         "parentName": null
         
       },
       {
-        "name": "Juguetes de Perro",
-        "parentName": "Perro"
+        "name": "Alimentos p/Perros",
+        "parentName":"Perros"
       },
       {
-        "name": "Accesorios para Perro",
-        "parentName": "Perro"
+        "name": "Salud y Bienestar p/Perros",
+        "parentName": "Perros"
       },
       {
-        "name": "Accesorios para gatos",
-        "parentName":"Gato"
+        "name": "Accesorios p/Perros",
+        "parentName": "Perros"
       },
       {
-        "name": "Alimento para perros",
-        "parentName":"Perro"
+        "name":"Juguetes p/Perros",
+        "parentName": "Perros"
       },
       {
-        "name": "Alimento para gatos",
-        "parentName": "Gato"
+        "name": "Higiene y Cuidado p/Perros",
+        "parentName":"Perros"
+      },
+      {
+        "name": "Alimentos p/Gatos",
+        "parentName":"Gatos"
+      },
+      {
+        "name": "Salud y Bienestar p/Gatos",
+        "parentName":"Gatos"
+      },
+      {
+        "name": "Juguetes p/Gatos",
+        "parentName": "Gatos"
+      },
+      {
+        "name": "Higiene y Cuidado p/Gatos",
+        "parentName":"Gatos"
+      },
+      {
+        "name": "Accesorios p/Gatos",
+        "parentName":"Gatos"
+      },
+      {
+        "name":"Alimentos Secos p/Gatos",
+        "parentName":"Alimentos p/Gatos"
+      },
+      {
+        "name":"Alimentos Húmedos p/Gatos",
+        "parentName":"Alimentos p/Gatos"
+      },
+      {
+        "name":"Dietas especiales p/Gatos",
+        "parentName":"Alimentos p/Gatos"
+      },
+      {
+        "name":"Snacks y premios p/Gatos",
+        "parentName":"Alimentos p/Gatos"
+      },
+      {
+        "name":"Ropa p/Gatos",
+        "parentName":"Accesorios p/Gatos"
+      },
+      {
+        "name":"Collares y Correas p/Gatos",
+        "parentName":"Accesorios p/Gatos"
+      },
+      {
+        "name":"Rascadores",
+        "parentName":"Accesorios p/Gatos"
+      },
+      {
+        "name":"Camas p/Gatos",
+        "parentName":"Accesorios p/Gatos"
+      },
+      {
+        "name":"Comederos y Bebederos p/Gatos",
+        "parentName":"Accesorios p/Gatos"
+      },
+      {
+        "name":"Transportadoras de viajes p/Gatos",
+        "parentName":"Accesorios p/Gatos"
+      },
+      {
+        "name":"Medicamentos p/Gatos",
+        "parentName":"Salud y Bienestar p/Gatos"
+      },
+      {
+        "name":"Suplementos p/Gatos",
+        "parentName":"Salud y Bienestar p/Gatos"
+      },
+      {
+        "name":"Cuidado Dental p/Gatos",
+        "parentName":"Salud y Bienestar p/Gatos"
+      },
+      {
+        "name":"Juguetes Interactivos p/Gatos",
+        "parentName":"Juguetes p/Gatos"
+      },
+      {
+        "name":"Pelotas p/Gatos",
+        "parentName":"Juguetes p/Gatos"
+      },
+      {
+        "name":"Articulos de Aseo p/Gatos",
+        "parentName":"Higiene y Cuidado p/Gatos"
+      },
+      {
+        "name":"Areas y Cajas de Arena p/Gatos",
+        "parentName":"Higiene y Cuidado p/Gatos"
+      },
+      {
+        "name":"Cuidado Pelaje p/Gatos",
+        "parentName":"Higiene y Cuidado p/Gatos"
+      },
+      {
+        "name":"Control de Pulgas y Garrapatas p/Gatos",
+        "parentName":"Higiene y Cuidado p/Gatos"
+      },
+      {
+        "name":"Alimentos secos p/Perros",
+        "parentName":"Alimentos p/Perros"
+      },
+      {
+        "name":"Alimentos Húmedos p/Perros",
+        "parentName":"Alimentos p/Perros"
+      },
+      {
+        "name":"Dietas especiales p/Perros",
+        "parentName":"Alimentos p/Perros"
+      },
+      {
+        "name":"Snacks y premios p/Perros",
+        "parentName":"Alimentos p/Perros"
+      },
+      {
+        "name":"Medicamentos p/Perros",
+        "parentName":"Salud y Bienestar p/Perros"
+      },
+      {
+        "name":"Suplementos p/Perros",
+        "parentName":"Salud y Bienestar p/Perros"
+      },
+      {
+        "name":"Cuidado Dental p/Perros",
+        "parentName":"Salud y Bienestar p/Perros"
+      },
+      {
+        "name":"Collares y Correas p/Perros",
+        "parentName":"Accesorios p/Perros"
+      },
+      {
+        "name":"Ropa p/Perros",
+        "parentName":"Accesorios p/Perros"
+      },
+      {
+        "name":"Casas y Camas p/Perros",
+        "parentName":"Accesorios p/Perros"
+      },
+      {
+        "name":"Comederos y Bebederos p/Perros",
+        "parentName":"Accesorios p/Perros"
+      },
+      {
+        "name":"Transportadoras de viajes p/Perros",
+        "parentName":"Accesorios p/Perros"
+      },
+      {
+        "name":"Juguetes interactivos p/Perros",
+        "parentName":"Juguetes p/Perros"
+      },
+      {
+        "name":"Pelotas y Frisbees p/Perros",
+        "parentName":"Juguetes p/Perros"
+      },
+      {
+        "name":"Juguetes para Masticar p/Perros",
+        "parentName":"Juguetes p/Perros"
+      },
+      {
+        "name":"Ariculos de Aseo p/Perros",
+        "parentName":"Higiene y Cuidado p/Perros"
+      },
+      {
+        "name":"Control de Pulgas y Garrapatas p/Perros",
+        "parentName":"Higiene y Cuidado p/Perros"
+      },
+      {
+        "name":"Cuidado del Pelaje p/Perros",
+        "parentName":"Higiene y Cuidado p/Perros"
       }
     ]
   }
