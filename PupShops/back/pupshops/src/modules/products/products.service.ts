@@ -36,6 +36,11 @@ export class ProductsService {
     return this.productsRepository.getProductsByChildCategory(categoryId);
   }
 
+  //obtener productos recursivamente
+  getProductsRecursive(categoryId: string) {
+    return this.productsRepository.getProductsRecursive(categoryId);
+  }
+
   // Obtener productos por categoría padre y sus subcategorías
   getProductsByParentCategory(categoryId: string) {
     return this.productsRepository.getProductsByParentCategory(categoryId);

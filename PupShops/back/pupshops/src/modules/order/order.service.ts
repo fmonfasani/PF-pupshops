@@ -1,4 +1,6 @@
+
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+
 import { OrdersRepository } from './order.repository';
 import { CuponService } from '../cupones/cupones.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +12,7 @@ import { OrderDetails } from './entities/order-detail.entity';
 
 @Injectable()
 export class OrderService {
+
   constructor(
     private readonly orderRepository: OrdersRepository,
     private readonly cuponService: CuponService,
@@ -24,11 +27,13 @@ export class OrderService {
   )
   
    {}
+
   async create(
     userId: string,
     products: Array<{ id: string; quantity: number }>,
     couponCode?: string 
   ) {
+
     let total = 0;
     
   
@@ -113,21 +118,26 @@ export class OrderService {
       'En camino a destino',
     ];
     return locations[Math.floor(Math.random() * locations.length)];
+
   }
 
   async findAll() {
-    return await this.orderRepository.getAllOrders();
+    return await this.ordersRepository.getAllOrders();
   }
 
   async findOne(id: string) {
-    return await this.orderRepository.getOrder(id);
+    const order = await this.ordersRepository.getOrder(id);
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+    return order;
   }
 
   async update(id: string, updateOrderDto: any) {
-    return await this.orderRepository.updateOrder(id, updateOrderDto);
+    return await this.ordersRepository.updateOrder(id, updateOrderDto);
   }
 
   async remove(id: string) {
-    return await this.orderRepository.removeOrder(id);
+    return await this.ordersRepository.removeOrder(id);
   }
 }
