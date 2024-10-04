@@ -13,22 +13,46 @@ import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { User } from '../users/entities/user.entity';
 import { Appointment } from './entities/appointment.entity';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiParam,
+  ApiBody,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
-import { RolesGuard } from '../auth/roles/roles.guard';
 import { Roles } from '../auth/roles/roles.decorator';
 import { Role } from '../auth/roles/roles.enum';
+import { RolesGuard } from '../auth/roles/roles.guard';
 
-@ApiTags('Appointments')
+@ApiTags('Appointments') 
 @Controller('appointments')
-@UseGuards(AuthGuard, RolesGuard)
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Post()
-  @Roles(Role.User)
-  @ApiOperation({ summary: 'Crear un nuevo turno para un servicio' })
-  create(
+  @ApiOperation({ summary: 'Crear un nuevo turno para un servicio' }) 
+  @ApiBody({ type: CreateAppointmentDto }) 
+  @ApiResponse({
+    status: 201,
+    description: 'Turno creado exitosamente.',
+    schema: {
+      example: {
+        message:
+          'Se ha reservado un turno de Peluquería a las 10:00 con fecha 2024-09-30 exitosamente!',
+        appointmentId: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+        serviceId: 'b18c1e9f-4c5b-4a3d-9a44-1c8e5d2c9e68',
+        serviceName: 'Peluquería',
+        userId: 'f29c2b3e-8c49-4b1a-a8c7-12c6e469a47d',
+        userName: 'Juan Pérez',
+      },
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  async create(
     @Body() createAppointmentDto: CreateAppointmentDto,
     @Req() req: any,
   ): Promise<{
@@ -39,24 +63,24 @@ export class AppointmentsController {
     userId: string;
     userName: string;
   }> {
-    console.log(req.user);
-    const user = req.user as User; // Obtener el usuario autenticado desde el request
+    const user = req.user as User; 
     return this.appointmentsService.create(createAppointmentDto, user);
   }
 
   @Get()
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   @ApiOperation({ summary: 'Obtener todos los turnos' })
   @ApiResponse({
     status: 200,
     description: 'Lista de todos los turnos.',
+    type: [Appointment], 
   })
   async findAll(): Promise<Appointment[]> {
     return this.appointmentsService.findAll();
   }
 
   @Get('user')
-  @Roles(Role.User)
   @ApiOperation({ summary: 'Obtener turnos del usuario autenticado' })
   @ApiResponse({
     status: 200,
@@ -97,27 +121,17 @@ export class AppointmentsController {
   }
 
   @Patch(':id/status')
-  @Roles(Role.User)
   @ApiOperation({ summary: 'Actualizar el estado de un turno' })
+  @ApiParam({ name: 'id', description: 'ID del turno a actualizar' }) // Parámetro del ID del turno
+  @ApiBody({
+    schema: {
+      example: { status: 'canceled' }, // Ejemplo de solicitud
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'El estado del turno ha sido actualizado.',
-    schema: {
-      example: {
-        id: 'f0e59ef0-819d-4f59-87be-4c847ac7e462',
-        appointmentDate: '2024-09-17T10:00:00Z',
-        status: 'canceled',
-        user: {
-          id: 'fe165c21-92bb-4066-bc98-2f0bfa999944',
-          name: 'Juan',
-          lastname: 'Sanchez',
-        },
-        service: {
-          id: 'a9117bf4-1cf7-43d3-a07c-4de1df18252b',
-          name: 'Peluquería',
-        },
-      },
-    },
+    type: Appointment,
   })
   async updateStatus(
     @Param('id') id: string,
@@ -128,11 +142,12 @@ export class AppointmentsController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Eliminar un turno (borrado lógico)' })
+  @ApiParam({ name: 'id', description: 'ID del turno a eliminar' }) 
   @ApiResponse({
     status: 200,
     description: 'El turno ha sido eliminado exitosamente.',
   })
-  remove(@Param('id') id: string): Promise<void> {
+  remove(@Param('id') id: string): Promise<string> {
     return this.appointmentsService.remove(id);
   }
 }

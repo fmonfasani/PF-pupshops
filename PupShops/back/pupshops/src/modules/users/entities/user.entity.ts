@@ -9,6 +9,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Appointment } from '../../appointments/entities/appointment.entity';
+import { Ticket } from '../../ticket/entities/ticket.entity';
+
 
 @Entity({
   name: 'users',
@@ -16,6 +18,9 @@ import { Appointment } from '../../appointments/entities/appointment.entity';
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({type:'boolean',nullable:false, default:true})
+  isActive:boolean
 
   @Column({ type: 'varchar', length: 50, nullable: false })
   name: string;
@@ -53,4 +58,8 @@ export class User {
   @OneToMany(() => Orders, (order) => order.user)
   @JoinColumn({ name: 'orders_id' })
   orders: Orders[];
+
+  @OneToMany(() => Ticket, ticket => ticket.user)
+  tickets: Ticket[]; 
 }
+

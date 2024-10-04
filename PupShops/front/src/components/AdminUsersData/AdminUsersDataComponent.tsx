@@ -18,6 +18,7 @@ const mockUsers = [
     phone: 123456789,
     address: "Av. Libertador 1234",
     isAdmin: true,
+    isActive:true
   },
   {
     id: 2,
@@ -29,6 +30,7 @@ const mockUsers = [
     phone: 987654321,
     address: "Calle San Martín 567",
     isAdmin: false,
+    isActive:true
   },
   {
     id: 3,
@@ -40,6 +42,7 @@ const mockUsers = [
     phone: 456789123,
     address: "Calle Reforma 890",
     isAdmin: false,
+    isActive:true
   },
   {
     id: 4,
@@ -51,6 +54,7 @@ const mockUsers = [
     phone: 321654987,
     address: "Calle Gran Vía 234",
     isAdmin: true,
+    isActive:true
   },
   {
     id: 5,
@@ -62,6 +66,7 @@ const mockUsers = [
     phone: 654321789,
     address: "Carrera 7 456",
     isAdmin: false,
+    isActive:true
   },
 ];
 

@@ -12,7 +12,7 @@ export class LoginUserDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'Proporciona tu contraseña',
-    example: 'Contraseña1234-',
+    example: 'Palabra1*',
   })
   password: string;
 }

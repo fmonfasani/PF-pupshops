@@ -1,21 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { config as auth0config } from './config/auth0.config';
+import { auth } from 'express-openid-connect';
 
 const port = 3001;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  
+  app.use(auth(auth0config));
 
-  // Configuración CORS ajustada
+ 
   app.enableCors({
-    origin: 'http://localhost:3000', 
+    origin: '*', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept, Authorization',
-    credentials: true, 
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
   });
 
-  // Swagger setup
+  
   const swaggerConfig = new DocumentBuilder()
     .setTitle('PupShops')
     .setDescription('Documentación referida al E-Commerce PupShops')

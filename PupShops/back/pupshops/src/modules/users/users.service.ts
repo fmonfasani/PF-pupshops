@@ -13,7 +13,12 @@ export class UsersService {
  
   async getEmailLogin(email: string): Promise<User> {
     const user = await this.usersRepository.findOneBy({ email });
-    console.log(`usuario encontrado ${user}`);
+    if(!user){console.log("Usuario no encontrado/Mail disponible");
+    }
+    else{
+      console.log(`usuario encontrado ${user}`);
+
+    }
     return user;
   }
   async createUser(user: CreateUserDto): Promise<Partial<User>> {
@@ -29,10 +34,12 @@ export class UsersService {
     const { password, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword;
   }
-  async deleteUser(id: string): Promise<Partial<User>> {
+  async deleteUser(id: string): Promise<Partial<User>|string> {
     const user = await this.usersRepository.findOneBy({ id });
-    this.usersRepository.remove(user);
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    user.isActive = false
+    this.usersRepository.save(user)
+    return "Usuario eliminado"
+
+   
   }
 }

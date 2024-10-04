@@ -1,33 +1,34 @@
 import {
-  Injectable,
+  BadRequestException,
   CanActivate,
   ExecutionContext,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
-
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers.authorization;
+    const token = request.headers['authorization']?.split(' ')[1] ?? '';
 
-    if (!authHeader) {
-      throw new UnauthorizedException(
-        'Token de autenticación erróneo/faltante',
-      );
+    if (!token) {
+      throw new BadRequestException('Bearer token not found');
     }
-
-    const token = authHeader.split(' ')[1]; // Obtiene el token del encabezado
-
     try {
-      const decoded = this.jwtService.verify(token);
-      request.user = decoded; // Almacena el usuario decodificado en la solicitud
-      return true; // Permitir el acceso
+      const secret = process.env.JWT_SECRET;
+      const payload = this.jwtService.verify(token, { secret });
+
+      payload.iat = new Date(payload.iat * 1000);
+      payload.exp = new Date(payload.exp * 1000);
+      request.user = payload;
+      return true;
     } catch (error) {
-      console.error('Error de validación del token:', error);
       throw new UnauthorizedException('Token Inválido');
     }
   }

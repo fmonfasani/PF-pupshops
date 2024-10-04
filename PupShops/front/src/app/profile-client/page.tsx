@@ -10,10 +10,10 @@ export default function ProfileClient() {
 
   return (
     user && (
-      <section className="bg-gray-100 p-4 mt-16">
+      <section className="bg-gray-100 p-4 mt-20">
         <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
           <div className="bg-white shadow-xl rounded-lg overflow-hidden p-6 sm:p-10">
-            <h2 className="text-2xl font-bold text-blue-950 mb-4">
+            <h2 className="text-2xl font-bold  text-blue-950 mb-4">
               Perfil de Usuario
             </h2>
             <div className="mt-32 text-center">

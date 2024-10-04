@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAppointments, fetchUserAppointments } from '@/utils/fetchAdminAppointments';
 import { IAppointment } from '@/Interfaces/interfaces';
-import { useUserContext } from '@/context/userContext';
+import { UserContext } from '@/context/userContext';
+import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { NotificationRegister } from '../Notifications/NotificationRegister';
 import { NotificationError } from '../Notifications/NotificationError';
 
 const AdminAppointments = () => {
-  const { user } = useUserContext(); 
-  const isAdmin = user?.user?.isAdmin;
+  const { user,isAdmin } = useContext(UserContext);
   
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -64,7 +64,7 @@ const AdminAppointments = () => {
         </div>
       )}
 
-      <div className="space-y-4">
+     { <div className="space-y-4">
         {filteredAppointments()?.length > 0 ? (
           filteredAppointments()?.map((appointment) => (
             <div key={appointment.id} className="border border-gray-300 p-4 rounded-md">
@@ -77,7 +77,7 @@ const AdminAppointments = () => {
         ) : (
           <p>No hay turnos disponibles.</p>
         )}
-      </div>
+      </div>}
 
       {showNotification && <NotificationRegister message={notificationMessage} />}
       {showErrorNotification && (

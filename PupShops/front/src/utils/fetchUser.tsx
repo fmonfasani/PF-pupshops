@@ -1,48 +1,65 @@
 import {
   IAppointment,
+  ILoginResponse,
   ILoginUser,
   IUserRegister,
 } from "@/Interfaces/interfaces";
-import { ILoginProps } from "../Interfaces/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const fetchRegisterUser = async (user: IUserRegister) => {
-  const response = await fetch(`${API_URL}/auth/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
+  console.log('Datos del usuario a enviar:', user);
+
+  const response = await fetch(`http://localhost:3001/auth/signup`, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
   });
 
-  if (!response.ok) {
-    throw new Error("Error en el registro. Por favor, verifica los datos.");
+  if (!response.ok) { // Comprueba si la respuesta no es exitosa
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Error desconocido'); // Lanza un error con el mensaje recibido
   }
 
-  return response.json();
-};
+  const data = await response.json();
+  return data;
+}
 
 
 // Función para iniciar sesión
-export async function login(userData: ILoginProps) {
+export const login = async (credentials: ILoginUser): Promise<ILoginResponse> => {
   try {
-    const res = await fetch(`${API_URL}/auth/signin`, {
+    const response = await fetch("http://localhost:3001/auth/signin", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(userData)
+      body: JSON.stringify(credentials),
     });
-    if (res.ok) {
-      return res.json();
-    } else {
-      throw Error("Failed to Login");
+
+    // Verifica si la respuesta es exitosa
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Login failed:", errorData);
+      return { success: false, token: "", findUser: null }; // Indica que el login falló
     }
-  } catch (error: any) {
-    throw new Error(error);
+
+    const data = await response.json();
+    console.log("Response data from login:", data);
+    
+    return {
+      success: data.success,
+      token: data.token,
+      findUser: data.findUser,
+    };
+    
+  } catch (error) {
+    console.error("Error during login request:", error);
+    return { success: false, token: "", findUser: null }; // Error de conexión
   }
-}
+};
 
 export const fetchAppointment = async (appointment: IAppointment) => {
   const response = await fetch(`http://localhost:3001/appointments/`, {
@@ -56,4 +73,3 @@ export const fetchAppointment = async (appointment: IAppointment) => {
   console.log("Response data from appointment:", appointment);
   return data;
 };
-

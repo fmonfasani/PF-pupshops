@@ -96,7 +96,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       if (!userId) throw new Error("ID de usuario no disponible");
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/orders`,
+        `http://localhost:3001/orders`,
         {
           method: "POST",
           headers: {

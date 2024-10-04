@@ -35,7 +35,7 @@ export default function ToysDog() {
           >
             <Image
               src={product.imgUrl}
-              alt={product.id}
+              alt={String(product.id)}
               width={200}
               height={200}
               className="object-cover rounded-md"

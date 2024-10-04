@@ -22,17 +22,18 @@ import { Roles } from '../auth/roles/roles.decorator';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
+
   @Post()
   @UseGuards(AuthGuard)
-  async create(
-    @Req() request: any,
-    @Body()
-    createOrderDto: { products: Array<{ id: string; quantity: number }> },
-  ) {
+
+  async create(@Req() request: any, @Body() createOrderDto: CreateOrderDto) {
+    console.log('Datos de la solicitud:', createOrderDto);
+  
     const userId = request.user.id;
-    const { products } = createOrderDto;
-    return await this.orderService.create(userId, products);
-  }
+    const { products, couponCode } = createOrderDto;
+  
+    return await this.orderService.create(userId, products, couponCode);    }
+
 
   @Get()
   @UseGuards(AuthGuard)
@@ -40,7 +41,11 @@ export class OrderController {
   async findAll() {
     return await this.orderService.findAll();
   }
-
+  @Get(':id/track')
+  @UseGuards(AuthGuard)
+  async trackOrderInternal(@Param('id') id: string) {
+    return await this.orderService.updateTrackingInternal(id);
+  }
   @Get(':id')
   @UseGuards(AuthGuard)
   async findOne(@Param('id') id: string) {

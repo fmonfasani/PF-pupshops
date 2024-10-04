@@ -1,28 +1,12 @@
+import { IUserRegister } from "@/Interfaces/interfaces";
 import {
   ILoginError,
   ILoginProps,
-  IRegisterError,
-  IRegisterProps
 } from "../Interfaces/types";
 
-/*export function validateLoginForm(values: ILoginProps) {
-  const errors: ILoginError = {};
-
-  if (!values.email) {
-    errors.email = "Email is required";
-  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-    errors.email = "Email is invalid";
-  }
-
-  if (!values.password) {
-    errors.password = "Password is required";
-  }
-
-  return errors;
-}*/
-
 export function validateLoginForm(values: ILoginProps) {
-  const errors: ILoginError = {};
+  let errors:{email?: string; password?:string} = {};
+    let formIsValid = true;
 
   if (!values.email) {
     errors.email = "Email is required";
@@ -34,11 +18,11 @@ export function validateLoginForm(values: ILoginProps) {
     errors.password = "Password is required";
   }
 
-  return errors;
+  return { formIsValid, errors };
 }
 
-export function validateRegisterForm(values: IRegisterProps) {
-  const errors: IRegisterError = {};
+export function validateRegisterForm(values: IUserRegister) {
+  let errors: { name?: string; email?: string; password?: string; address?: string; phone?: string } = {};
 
   if (!values.name) {
     errors.name = "Full name is required";
@@ -63,4 +47,4 @@ export function validateRegisterForm(values: IRegisterProps) {
   }
 
   return errors;
-}
+} 

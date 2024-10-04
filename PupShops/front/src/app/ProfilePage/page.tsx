@@ -1,32 +1,46 @@
-"use client";
-import { IUserSession } from "../../Interfaces/types";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { IUserResponse } from '@/Interfaces/interfaces';
 
 const ProfilePage = () => {
   const router = useRouter();
-  const [userSession, setUserSession] = useState<IUserSession | null>(null);
+  const [userData, setUserData] = useState<IUserResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userData = localStorage.getItem("userSession");
-    if (userData) {
-      setUserSession(JSON.parse(userData));
+    const authData = localStorage.getItem("authData");
+    if (authData) {
+      try {
+        const parsedData = JSON.parse(authData);
+        setUserData(parsedData);
+      } catch (error) {
+        console.error("Error parsing authData", error);
+      }
     }
     setLoading(false);
   }, []);
+  
 
   useEffect(() => {
-    if (!loading && !userSession) {
+    if (!loading && !userData) {
       router.push("/userDashboard/login");
       alert("Debes loguearte primero");
     }
-  }, [userSession, loading, router]);
+  }, [userData, loading, router]);
 
   const handleLogout = () => {
-    localStorage.removeItem("userSession");
+    localStorage.removeItem("authData");
     router.push("/userDashboard/login");
   };
+ 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
 
   return (
     <section className="bg-gray-100 p-4 mt-16">
@@ -37,26 +51,23 @@ const ProfilePage = () => {
           </h2>
           <div className="mb-4">
             <h3 className="text-lg font-semibold">Detalles de la cuenta:</h3>
-            {userSession ? (
+            {userData ? (
               <div className="mt-2">
                 <p>
-                  <strong>Email:</strong> {userSession.user.email}
+                  <strong>Email:</strong> {userData.user?.email}
                 </p>
                 <p>
-                  <strong>Nombre:</strong> {userSession.user.name}
+                  <strong>Nombre:</strong> {userData.user?.name}
                 </p>
                 <p>
                   <strong>Apellido:</strong>
-                  {userSession.user.lastname}
+                  {userData.user?.lastname}
                 </p>
                 <p>
-                  <strong>Telefono:</strong> {userSession.user.phone}
+                  <strong>Telefono:</strong> {userData.user?.phone}
                 </p>
                 <p>
-                  <strong>Direccion:</strong> {userSession.user.address}
-                </p>
-                <p>
-                  <strong>Id Interno:</strong> {userSession.user.id}
+                  <strong>Direccion:</strong> {userData.user?.address}
                 </p>
               </div>
             ) : (

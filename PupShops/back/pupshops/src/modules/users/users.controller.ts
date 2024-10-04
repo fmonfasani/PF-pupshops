@@ -48,17 +48,17 @@ export class UsersController {
     @ApiBearerAuth()
     @UseGuards(AuthGuard)
     @Delete(':id')
-    async deleteUser(@Param('id', ParseUUIDPipe) id: string, @Req() req: any) {
+    async deleteUser(@Param('id', ParseUUIDPipe) id: string, @Req() req: any)  {
       const currentUser = req.user;
     
       if (currentUser.id !== id) {
         throw new ForbiddenException('No tienes permiso para eliminar este perfil');
       }
-    
-      const result = await this.usersService.deleteUser(id);
-      if (!result) {
-        throw new NotFoundException('Usuario no encontrado');
+      if(currentUser.isActive===false){
+        throw new ForbiddenException('Este usuario no se encuentra activo')
       }
+      const result = await this.usersService.deleteUser(id);
+      
       return { message: 'Usuario eliminado con éxito' };
     }
 }
