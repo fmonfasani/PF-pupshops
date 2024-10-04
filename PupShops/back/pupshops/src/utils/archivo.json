@@ -5,7 +5,7 @@
     "price": 10.99,
     "stock": 100,
     "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_820093-MLU70119372746_062023-O.webp",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Pelotas p/Gatos"
   },
   {
     "name": "Cama para Perro",
@@ -13,7 +13,7 @@
     "price": 50.0,
     "stock": 50,
     "imgUrl": "https://petoutlet.com.co/wp-content/uploads/2021/08/19061-Cama-Economica-Para-Perros-OKAL-petoutlet.com_.co-2-1.jpg",
-    "categoryName": "Accesorios para Perro"
+    "categoryName": "Casas y Camas p/Perros"
   },
   {
     "name": "Correa de Perro",
@@ -21,7 +21,7 @@
     "price": 15.5,
     "stock": 75,
     "imgUrl": "https://carulla.vtexassets.com/arquivos/ids/16620143/juego-de-collar-y-correa-para-perros.jpg?v=638573527277230000",
-    "categoryName": "Accesorios para Perro"
+    "categoryName": "Collares y Correas p/Perros"
   },
   {
     "name": "Ratón de Juguete para Gato",
@@ -29,7 +29,7 @@
     "price": 5.99,
     "stock": 200,
     "imgUrl": "https://panamericana.vtexassets.com/arquivos/ids/489404/juguete-para-gato-x3-ratones-7701016384636.jpg?v=638155513557170000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Collar Luminoso para Perro",
@@ -37,8 +37,9 @@
     "price": 12.99,
     "stock": 60,
     "imgUrl": "https://caravanaexpert.com/wp-content/uploads/2023/05/71CXaaURP6L._AC_SX679_-450x450.jpg",
-    "categoryName": "Accesorios para Perro"
+    "categoryName": "Collares y Correas p/Perros"
   },
+
 
   {
     "name": "Hill's Science Diet",
@@ -46,7 +47,7 @@
     "price": 32,
     "stock": 100,
     "imgUrl": "https://www.vetshopaustralia.com.au/media/catalog/product/cache/700x700/c/_/c_hsfs_seni_ad_bag-hills-sdcat-adult11_chicken-agedefying_3.jpg",
-    "categoryName": "Alimento para gatos"
+    "categoryName": "Alimentos Secos p/Gatos"
   },
   {
     "name": "Royal Canin",
@@ -54,7 +55,7 @@
     "price": 38,
     "stock": 100,
     "imgUrl": "https://puppiscolombia.vteximg.com.br/arquivos/ids/184365-1000-1000/kitten-sterilised.png?v=638018651108330000",
-    "categoryName": "Alimento para gatos"
+    "categoryName": "Alimentos Secos p/Gatos"
   },
   {
     "name": "Purina Pro Plan",
@@ -62,7 +63,7 @@
     "price": 30,
     "stock": 100,
     "imgUrl": "https://purina.com.co/sites/default/files/styles/webp/public/2022-10/Kitten-Pollo-%26-H%C3%ADgado_1.png.webp?itok=4rV0aWti",
-    "categoryName": "Alimento para gatos"
+    "categoryName": "Alimentos Secos p/Gatos"
   },
   {
     "name": "Blue Buffalo",
@@ -70,8 +71,9 @@
     "price": 28,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/71uKQEo3oaL.jpg",
-    "categoryName": "Alimento para gatos"
+    "categoryName": "Alimentos Secos p/Gatos"
   },
+
 
   {
     "name": "Juguete Cañita Resorte",
@@ -79,7 +81,7 @@
     "price": 12.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/196922-150-150/Foto-Principal--5--Photoroom.png?v=638570042196770000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Ratoncitos para Gato",
@@ -87,7 +89,7 @@
     "price": 17.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/180464-150-150/237597.jpg?v=637590641661330000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Mariposa para Gato",
@@ -95,7 +97,7 @@
     "price": 14.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/177258-150-150/221228.jpg?v=637567929651370000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Pescaditos para Gato",
@@ -103,7 +105,7 @@
     "price": 18.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/176487-150-150/237525.jpg?v=637546240098700000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Plumudo para Gato",
@@ -111,7 +113,7 @@
     "price": 10.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/174033-150-150/221299.jpg?v=637434938302000000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Rascador anti-strees para Gato",
@@ -119,7 +121,7 @@
     "price": 7.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/171502-150-150/221078.jpg?v=637290590229730000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Juguete dispensador de alimento para Gato",
@@ -127,7 +129,7 @@
     "price": 20.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/181420-150-150/246317.jpg?v=637636581673730000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Ardilla para Gato",
@@ -135,7 +137,7 @@
     "price": 12.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/177318-150-150/244197.jpg?v=637567929838600000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Varita Star Wars para Gato",
@@ -143,7 +145,7 @@
     "price": 10.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/196274-150-150/233214.jpg?v=638494155336300000",
-    "categoryName": "Juguetes de Gato"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
   {
     "name": "Juguete dispensador Hongo para Gato",
@@ -151,8 +153,9 @@
     "price": 12.99,
     "stock": 100,
     "imgUrl": "https://puppis.vteximg.com.br/arquivos/ids/192692-150-150/243754.jpg?v=638209697002770000",
-    "categoryName": "JUguete interactivo p/gatos"
+    "categoryName": "Juguetes Interactivos p/Gatos"
   },
+
 
   {
     "name": "Suéter Gato Polar",
@@ -160,7 +163,7 @@
     "price": 19.99,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/71B7YNjN+qL._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Ropa p/Gatos"
   },
   {
     "name": "Capa Impermeable Gato",
@@ -168,7 +171,7 @@
     "price": 14.99,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/711VrLmMvCL._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Ropa p/Gatos"
   },
   {
     "name": "Sweater Frutilla Gato",
@@ -176,7 +179,7 @@
     "price": 17.99,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/61MHB9DBq2L._AC_UL320_.jpg",
-    "categoryName": "Ropa para gatos"
+    "categoryName":"Ropa p/Gatos"
   },
   {
     "name": "Pechera Gato",
@@ -184,7 +187,7 @@
     "price": 12.49,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/71KqkqtUWHL._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Collares y Correas p/Gatos"
   },
   {
     "name": "Pijama Gato Algodón",
@@ -192,7 +195,7 @@
     "price": 22.5,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/817O0PrzENL._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Ropa p/Gatos"
   },
   {
     "name": "Vestido Gato Sombrilla",
@@ -200,7 +203,7 @@
     "price": 9.99,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/51LJA6stiXL._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Ropa p/Gatos"
   },
   {
     "name": "Pañuelo Gato",
@@ -208,7 +211,7 @@
     "price": 15.0,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/81wv9OXLnZL._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Ropa p/Gatos"
   },
   {
     "name": "Abrigo Total Gato",
@@ -216,7 +219,7 @@
     "price": 13.75,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/612WSANqupL._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Ropa p/Gatos"
   },
   {
     "name": "Pijama para gato",
@@ -224,7 +227,7 @@
     "price": 24.99,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/51FEfaWbkNL._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Ropa p/Gatos"
   },
   {
     "name": "Vestido de cangrejos gato",
@@ -232,6 +235,520 @@
     "price": 18.99,
     "stock": 100,
     "imgUrl": "https://m.media-amazon.com/images/I/712+UfpS2ML._AC_UL320_.jpg",
-    "categoryName": "Accesorios para gatos"
+    "categoryName": "Ropa p/Gatos"
+  },
+  {
+    "name": "Pechera de perro",
+    "description": "Pechera cómoda y ajustable para perros",
+    "price": 19.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/71tEgtxdguL._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Collares y Correas p/Perros"
+  },
+  {
+    "name": "Sweater de perro",
+    "description": "Sweater de lana suave para mantener a tu perro abrigado",
+    "price": 24.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/71nkW6Ei4XL._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Collares y Correas p/Perros"
+  },
+  {
+    "name": "Pechera perro",
+    "description": "Pechera resistente y de fácil colocación para perros",
+    "price": 22.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/71S12SBCGOL._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Collares y Correas p/Perros"
+  },
+  {
+    "name": "Abrigo Gremlin perro",
+    "description": "Abrigo divertido con diseño de gremlin para perros",
+    "price": 27.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/816dyOmJbYL._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Ropa p/Perros"
+  },
+  {
+    "name": "Abrigo Sirenita perro",
+    "description": "Abrigo con diseño de sirenita, ideal para perros con estilo",
+    "price": 29.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/91WQ8F9sBtL._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Ropa p/Perros"
+  },
+  {
+    "name": "Pechera perro",
+    "description": "Pechera segura y duradera para paseos cómodos",
+    "price": 21.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/81QxcLaERJL._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Collares y Correas p/Perros"
+  },
+  {
+    "name": "Pechera perro",
+    "description": "Pechera ligera y fácil de usar para perros",
+    "price": 20.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/7136bRQpTSL._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Collares y Correas p/Perros"
+  },
+  {
+    "name": "Polera perro",
+    "description": "Polera fresca y cómoda para días soleados",
+    "price": 18.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/71h+TTkZPsL._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Ropa p/Perros"
+  },
+  {
+    "name": "Abrigo perro Spiderman",
+    "description": "Abrigo con diseño de Spiderman para fans de los superhéroes",
+    "price": 30.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/71HGTCrUk4L._AC_UL480_FMwebp_QL65_.jpg",
+    "categoryName": "Ropa p/Perros"
+  },
+  {
+    "name": "Purina Pro Plan OptiHealth",
+    "description": "Alimento seco para perro adulto mediana - Pollo/Arroz - 18 kg",
+    "price": 49.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_655577-MLU74975347238_032024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pro Plan OptiHealth Pequeña",
+    "description": "Alimento seco para perro adulto pequeña - Pollo/Arroz - 7.5 kg",
+    "price": 29.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_978047-MLA74652760702_022024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pro Plan Veterinary Diets Urinary ST/OX",
+    "description": "Alimento seco para perro adulto - Mix - 7.5 kg",
+    "price": 34.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_978185-MLA46977924207_082021-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pro Plan OptiHealth Raza Grande",
+    "description": "Alimento seco para perro adulto de raza grande - Pollo/Arroz - 18 kg",
+    "price": 49.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_972870-MLU74992135206_032024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pro Plan OptiAge Active Mind 7+",
+    "description": "Alimento seco para perro senior - Pollo/Arroz - 15 kg",
+    "price": 42.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_940736-MLA74780662725_022024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pro Plan Veterinary Diets EN Gastroenteric",
+    "description": "Alimento seco para perro de todas las edades - Mix - 7.5 kg",
+    "price": 39.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_601860-MLA48947284067_012022-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pro Plan Complete De Perro Puppy",
+    "description": "Alimento seco para cachorro de raza mediana - Pollo/Arroz - 18 kg",
+    "price": 49.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_759307-MLU74866439346_032024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pro Plan OptiFit Reduced Calorie",
+    "description": "Alimento seco para perro adulto de raza pequeña - Pollo/Arroz - 7.5 kg",
+    "price": 29.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_994026-MLA48981061722_012022-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pro Plan OptiStart Puppy",
+    "description": "Alimento seco para cachorro de raza grande - Pollo - 15 kg",
+    "price": 44.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_844564-MLU72835635427_112023-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },{
+    "name": "Juguete Pelota Trixie Dental",
+    "description": "Pelota dental inserta premios - Color Turquesa",
+    "price": 14.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/805141-MLU70396223082_072023-O.webp",
+    "categoryName": "Pelotas y Frisbees p/Perros"
+  },
+  {
+    "name": "Juguete Mordillo Zanahoria",
+    "description": "Mordillo anti estrés en forma de zanahoria con soga",
+    "price": 12.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/610789-MLA43866695356_102020-O.webp",
+    "categoryName": "Juguetes para Masticar p/Perros"
+  },
+  {
+    "name": "Kong Classic Large",
+    "description": "Juguete clásico para perros - Color Rojo",
+    "price": 19.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/965120-MLU73213117451_122023-O.webp",
+    "categoryName": "Juguetes interactivos p/Perros"
+  },
+  {
+    "name": "Juguete Pelota Rugby Resistente",
+    "description": "Pelota rugby resistente, ideal para mordillar",
+    "price": 16.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/999007-MLA50289862787_062022-O.webp",
+    "categoryName": "Pelotas y Frisbees p/Perros"
+  },
+  {
+    "name": "Pelota De Goma Caucho",
+    "description": "Pelota de goma maciza - 7.5 cm - 3 unidades",
+    "price": 11.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/690838-MLA53298242663_012023-O.webp",
+    "categoryName": "Pelotas y Frisbees p/Perros"
+  },
+  {
+    "name": "Juguete Mordillo Pelota Soga",
+    "description": "Pelota mordillo con soga anti estrés - Pequeña",
+    "price": 10.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/659567-MLA71474504233_092023-O.webp",
+    "categoryName": "Juguetes para Masticar p/Perros"
+  },
+  {
+    "name": "Frisbee Para Perros",
+    "description": "Disco de goma flexible - Grande 23 cm",
+    "price": 15.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/966077-MLA77635318330_072024-O.webp",
+    "categoryName": "Pelotas y Frisbees p/Perros"
+  },
+  {
+    "name": "Juguete Pelota Porta Alimento",
+    "description": "Pelota porta alimento con sonido",
+    "price": 13.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/805657-MLA74526548238_022024-O.webp",
+    "categoryName": "Pelotas y Frisbees p/Perros"
+  },
+  {
+    "name": "Juguete Peluche Pato Cerdo",
+    "description": "Peluche con chifle en forma de pato/cerno",
+    "price": 17.99,
+    "stock": 100,
+    "imgUrl": "https://m.media-amazon.com/images/I/931693-MLA43193025881_082020-O.webp",
+    "categoryName": "Juguetes interactivos p/Perros"
+  },
+  {
+    "name": "Royal Canin Size Health Nutrition Medium Adult",
+    "description": "Alimento seco para perro adulto mediana - Mix - 15 kg",
+    "price": 47.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_910599-MLA50769907057_072022-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Royal Canin Size Health Nutrition Mini Adult",
+    "description": "Alimento seco para perro adulto pequeña - Mix - 7.5 kg",
+    "price": 32.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_886319-MLA40417009886_012020-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Royal Canin Size Health Nutrition Medium Puppy",
+    "description": "Alimento seco para cachorro de raza mediana - Mix - 15 kg",
+    "price": 47.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_829949-MLA40412731842_012020-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Royal Canin Veterinary Diet Canine Renal",
+    "description": "Alimento seco para perro adulto - Todos los tamaños - Mix - 10 kg",
+    "price": 39.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_974940-MLU73803044647_012024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Royal Canin Breed Health Nutrition Caniche",
+    "description": "Alimento seco para perro adulto caniche - Mix - 7.5 kg",
+    "price": 34.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_835320-MLU72650504321_112023-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pedigree Óptima Digestión Etapa 2",
+    "description": "Alimento seco para perro adulto - Carne/Vegetales - 21 kg",
+    "price": 44.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_978504-MLU74832932385_022024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pedigree Alimento Seco Raza Pequeña",
+    "description": "Alimento seco para perro adulto de raza pequeña - 8 kg",
+    "price": 32.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_872832-MLU72746094402_112023-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pedigree Vida Plena Senior",
+    "description": "Alimento seco para perro senior (7+ años) - Carne/Vegetales - 8 kg",
+    "price": 29.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_894831-MLU79052038745_092024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pedigree Sano Crecimiento Etapa 1",
+    "description": "Alimento seco para cachorro - Mix - 8 kg",
+    "price": 34.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_642267-MLA48938536833_012022-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Pedigree Lata Adulto Pollo",
+    "description": "Lata de alimento para perro adulto - Pollo",
+    "price": 12.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_929231-MLA74085504172_012024-O.webp",
+    "categoryName": "Alimentos Húmedos p/Perros"
+  },
+  {
+    "name": "Pedigree Lata Cachorro",
+    "description": "Lata de alimento para cachorro - 340 gr",
+    "price": 8.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_946222-MLU78968925064_092024-O.webp",
+    "categoryName": "Alimentos Húmedos p/Perros"
+  },
+  {
+    "name": "Eukanuba Perro Adulto Raza Pequeña",
+    "description": "Alimento seco para perro adulto de raza pequeña - Mix - 15 kg",
+    "price": 45.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_826516-MLU74221504677_012024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Eukanuba Perro Adulto Mediana",
+    "description": "Alimento seco para perro adulto mediana - Mix - 15 kg",
+    "price": 47.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_976060-MLU74245576765_012024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Eukanuba Medium Breed Perro Adulto",
+    "description": "Alimento seco para perro adulto mediana - Mix - 15 kg",
+    "price": 47.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_832002-MLA48169192195_112021-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Eukanuba Small Breed Puppy",
+    "description": "Alimento seco para cachorro de raza pequeña - Mix - 15 kg",
+    "price": 45.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_940607-MLA45390479766_032021-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Eukanuba Super Premium Perro Senior Raza Mediana",
+    "description": "Alimento seco para perro senior raza mediana - Pollo - 15 kg",
+    "price": 49.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_989925-MLU74842936474_032024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Eukanuba Super Premium Perro Senior Grande",
+    "description": "Alimento seco para perro senior de raza grande - Mix - 15 kg",
+    "price": 49.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_614902-MLU74937862942_032024-O.webp",
+    "categoryName": "Alimentos secos p/Perros"
+  },
+  {
+    "name": "Cat Chow Defense Plus Gato Adulto",
+    "description": "Alimento seco para gato adulto sabor pescado y pollo - 15 kg",
+    "price": 42.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_651630-MLU69876019923_062023-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Cat Chow Defense Plus Gato Gatito",
+    "description": "Alimentos seco para gatito - Mix - 8 kg",
+    "price": 32.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_793649-MLA42000863895_052020-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Cat Chow Sobres Pouch",
+    "description": "Sobres de alimento Cat Chow - 15 unidades, pollo o pescado",
+    "price": 25.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_973994-MLU77933416950_082024-O.webp",
+    "categoryName": "Alimentos Húmedos p/Gatos"
+  },
+  {
+    "name": "Royal Canin Gatos Castrados",
+    "description": "Alimento para gatos castrados - 12 kg",
+    "price": 60.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_755800-MLU71337810106_082023-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Royal Canin Feline Health Nutrition Fit",
+    "description": "Alimento seco para gato adulto sabor mix - 7.5 kg",
+    "price": 45.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_745762-MLA48011601280_102021-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Royal Canin Veterinary Diet Feline Urinary S/O",
+    "description": "Alimento para gato adulto - Mix - 7.5 kg",
+    "price": 49.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_643939-MLU74244417145_012024-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Royal Canin Feline Health Nutrition Indoor",
+    "description": "Alimento seco para gato adulto sabor mix - 7.5 kg",
+    "price": 45.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_701586-MLU72750625906_112023-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Alimento Cat Chow Defense Plus para gato adulto",
+    "description": "Sabor pescado y pollo en bolsa de 15 kg",
+    "price": 36.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_651630-MLU69876019923_062023-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Purina Cat Chow Defense Plus Gatito",
+    "description": "Sabor mix en bolsa de 8 kg",
+    "price": 29.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_793649-MLA42000863895_052020-O.webp",
+    "categoryName": "Alimentos Húmedos p/Gatos"
+  },
+  {
+    "name": "Sobres Pouch Cat Chow",
+    "description": "Sabor pollo o pescado, 15 unidades",
+    "price": 19.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_973994-MLU77933416950_082024-O.webp",
+    "categoryName": "Alimentos Húmedos p/Gatos"
+  },
+  {
+    "name": "Alimento Royal Canin Gatos Castrados",
+    "description": "Bolsa de 12 kg",
+    "price": 42.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_755800-MLU71337810106_082023-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Royal Canin Feline Health Nutrition Fit",
+    "description": "Alimento para gato adulto sabor mix en bolsa de 7.5 kg",
+    "price": 36.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_745762-MLA48011601280_102021-O.webp",
+    "categoryName": "Alimentos Húmedos p/Gatos"
+  },
+  {
+    "name": "Royal Canin Veterinary Diet Feline Urinary S/O High Dilution",
+    "description": "Alimento para gato adulto mix en bolsa de 7.5 kg",
+    "price": 44.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_643939-MLU74244417145_012024-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Royal Canin Feline Health Nutrition Indoor",
+    "description": "Alimento para gato adulto sabor mix en bolsa de 7.5 kg",
+    "price": 36.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_701586-MLU72750625906_112023-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Purina Pro Plan Optiprebio Adult Gato",
+    "description": "Alimento para gato adulto sabor pollo/arroz en bolsa de 7.5 kg",
+    "price": 39.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_645545-MLA50252260896_062022-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Pro Plan OptiRenal Sterilized",
+    "description": "Alimento para gato adulto sabor salmón y arroz en bolsa de 7.5 kg",
+    "price": 39.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_718075-MLA48982270275_012022-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Pro Plan Optiprebio Adult Gato",
+    "description": "Alimento para gato adulto sabor pollo/arroz en bolsa de 3 kg",
+    "price": 29.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_767575-MLA74781173783_022024-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Pro Plan Feline En Gastroenterico",
+    "description": "Alimento para gato en bolsa de 1.5 kg",
+    "price": 24.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_786028-MLA45482401352_042021-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Purina Pro Plan OptiTract Urinary",
+    "description": "Alimento para gato adulto sabor pollo/arroz en bolsa de 7.5 kg",
+    "price": 39.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_908469-MLU75506296064_042024-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
+  },
+  {
+    "name": "Purina Pro Plan Optiprebio Adult Gato",
+    "description": "Alimento para gato adulto sabor pollo/arroz en bolsa de 7.5 kg",
+    "price": 39.99,
+    "stock": 100,
+    "imgUrl": "https://http2.mlstatic.com/D_NQ_NP_825034-MLU72754686982_112023-O.webp",
+    "categoryName": "Alimentos Secos p/Gatos"
   }
 ]
+
+
+
