@@ -86,6 +86,35 @@ export class OrderService {
     };
   }
 
+  async updateTrackingInternal(id: string) {
+    const order = await this.ordersRepository.findOne({ where: { id } });
+    if (!order) throw new NotFoundException('Order no encontrada');
+  
+      const newLocation = {
+      location: this.getRandomLocation(),
+      date: new Date(),
+    };
+  
+    if (!order.trackingHistory) {
+      order.trackingHistory = [];
+    }
+  
+    order.trackingHistory.push(newLocation);
+    await this.ordersRepository.save(order);
+  
+    return order.trackingHistory;
+  }
+  
+  private getRandomLocation(): string {
+    const locations = [
+      'Centro de Distribución A',
+      'Depósito Regional B',
+      'Oficina Postal C',
+      'En camino a destino',
+    ];
+    return locations[Math.floor(Math.random() * locations.length)];
+  }
+
   async findAll() {
     return await this.orderRepository.getAllOrders();
   }

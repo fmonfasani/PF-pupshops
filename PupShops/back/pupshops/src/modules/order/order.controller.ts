@@ -40,7 +40,11 @@ export class OrderController {
   async findAll() {
     return await this.orderService.findAll();
   }
-
+  @Get(':id/track')
+  @UseGuards(AuthGuard)
+  async trackOrderInternal(@Param('id') id: string) {
+    return await this.orderService.updateTrackingInternal(id);
+  }
   @Get(':id')
   @UseGuards(AuthGuard)
   async findOne(@Param('id') id: string) {

@@ -48,4 +48,7 @@ export class Orders {
 
   @Column({ type: 'varchar', length: 50, default: 'pending' })
   status: string;
+
+  @Column('json', { nullable: true })
+  trackingHistory: { location: string, date: Date }[];
 }
