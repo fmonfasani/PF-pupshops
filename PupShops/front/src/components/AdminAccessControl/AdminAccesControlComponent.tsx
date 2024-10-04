@@ -54,11 +54,6 @@ export default function RegisterUser() {
         setErrors(validationRegister(updatedUser));
     };
 
-   
-
-    const handleRegisterRedirect = () => {
-        router.push("/userDashboard/login");
-    };
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -117,10 +112,10 @@ export default function RegisterUser() {
                     <form onSubmit={onSubmit} className="space-y-4">
                         <div className="relative z-10 mt-0 bg-opacity-60 bg-white p-4 rounded-lg">
                             <h1 className="text-2xl font-bold text-center text-blue-950 ">
-                                Únete a Nuestra Comunidad
+                                Nuevo administrador
                             </h1>
                             <p className="max-w-xl text-sm text-gray-600 text-center">
-                                Regístrate hoy mismo, podrás acceder a promociones especiales y conocer las últimas novedades de nuestra tienda.
+                               Completa los datos del usuario a quien quieras darle permisos de administrador 
                             </p>
                         </div>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
@@ -240,9 +235,7 @@ export default function RegisterUser() {
                         </select>
                     </div>
                 </div>
-                <ButtonForms text='Registrarme' disabled={Object.keys(errors).length > 0} type='submit' />
-                <ButtonRedirectUser text="¿Ya posees una cuenta? Haz clic aquí para ingresar" onClick={handleRegisterRedirect} />
-            </form>
+                <ButtonForms text='Registrar administrador' disabled={Object.keys(errors).length > 0} type='submit' />            </form>
         </div>
     </div>
     {showNotification && <NotificationRegister message={notificationMessage} />}

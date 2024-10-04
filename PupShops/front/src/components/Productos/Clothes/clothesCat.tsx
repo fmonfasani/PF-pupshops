@@ -134,7 +134,7 @@ const ClothesCat: React.FC = () => {
                 if (success) {
                   
                   Swal.fire({
-                    title: "Â¡Producto Agregado!",
+                    title: "¡Producto Agregado!",
                     text: `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito.`,
                     icon: "success",
                     confirmButtonText: "Aceptar",
