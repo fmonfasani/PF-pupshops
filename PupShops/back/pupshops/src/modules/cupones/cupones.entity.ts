@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Orders } from '../order/entities/order.entity';
+import { IsOptional } from 'class-validator';
 
 @Entity('cupones')
 export class Cupon {
@@ -28,4 +30,9 @@ export class Cupon {
 
   @Column({ type: 'uuid', nullable: true })
   userId?: string; 
+
+  @IsOptional()
+  @ManyToOne(() => Orders, (orders)=> orders.cupon)
+  @JoinColumn({name:'Order_id'})
+  order:Orders
 }

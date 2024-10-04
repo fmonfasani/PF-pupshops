@@ -23,16 +23,16 @@ import { Roles } from '../auth/roles/roles.decorator';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
+
   @Post()
   @UseGuards(AuthGuard)
   async create(@Req() request: any, @Body() createOrderDto: CreateOrderDto) {
     console.log('Datos de la solicitud:', createOrderDto);
-
-    // Extraer userId desde request.user
-    const userId = request.user.id; // Asegúrate de que request.user tenga la propiedad id
-    const { products } = createOrderDto; // Obtener solo los productos desde el DTO
-    return await this.orderService.create(userId, products);
-  }
+  
+    const userId = request.user.id;
+    const { products, couponCode } = createOrderDto;
+  
+    return await this.orderService.create(userId, products, couponCode);    }
 
   @Get()
   @UseGuards(AuthGuard)
