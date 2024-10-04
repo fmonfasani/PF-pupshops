@@ -1,11 +1,9 @@
-"use client"
-import React, { useContext, useEffect, useState } from 'react'
+"use client";
+import React, { useContext, useEffect, useState } from 'react';
 import LoginPage from '@/components/Forms/FormsUser/LoginUser';
 import { UserContext } from '@/context/userContext';
 import { useRouter } from 'next/navigation';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
-
-
 
 export default function Login() {
   const [token, setToken] = useState<string | null>(null);
@@ -19,19 +17,21 @@ export default function Login() {
       setNotificationMessage(`Ya has iniciado sesión`);
       setShowNotification(true);
       setTimeout(() => {
-      setShowNotification(false);
-      router.push("/home");
+        setShowNotification(false);
+        router.push("/home");
       }, 3000);
     }
   }, [isLogged, router]);
 
-
+  // No se renderiza el componente de login si el usuario está logueado
   if (isLogged) {
-    return null;
+    return null; 
   }
+
   return (
     <div>
-    <LoginPage setToken={setToken}/>
-      {showNotification && <NotificationRegister message={notificationMessage} />}</div>
-  )
+      <LoginPage setToken={setToken}/>
+      {showNotification && <NotificationRegister message={notificationMessage} />}
+    </div>
+  );
 }

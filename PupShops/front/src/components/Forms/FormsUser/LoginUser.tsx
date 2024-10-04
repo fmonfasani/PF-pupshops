@@ -40,12 +40,16 @@ function LoginPage({ setToken }: ILoginClientProps) {
       };
       try {
         const success = await signIn(credentials); 
-                 
+                  
         if (success) {
           
           const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
           if (token) {
             setToken(token); 
+            const userData = JSON.parse(localStorage.getItem("userSession") || '{}');
+
+            // Si necesitas usar los datos del usuario:
+            console.log(userData);
             setNotificationMessage(`Bienvenido`);
             setShowNotification(true);
             setTimeout(() => {

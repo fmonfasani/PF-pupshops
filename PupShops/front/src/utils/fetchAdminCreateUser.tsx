@@ -1,31 +1,42 @@
-import { IUser } from "@/Interfaces/interfaces";
+import { IUser, IUserResponse } from "@/Interfaces/interfaces";
 import { IUserRegister } from "@/Interfaces/interfaces";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 //Crear usuario como administrador
-export const fetchAdminCreateUser = async (userAdmin: IUserRegister, token: string) => {
-  console.log("Token de autorización:", token);
- 
+export const fetchAdminCreateUser = async (userData: IUserRegister, token: string) => {
+  try {
+      const response = await fetch('http://localhost:3001/admin/users/register', {
+          method: 'POST',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+      });
 
-  const response = await fetch(`${API_URL}/admin/users/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}` 
-    },
-    
-    body: JSON.stringify(userAdmin),
-  });
+      // Si la respuesta no es ok, maneja el error
+      if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message || errorData}`);
+      }
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Error en el registro. Por favor, verifica los datos.");
+      // Aquí asumimos que la respuesta es un objeto JSON
+      const responseData = await response.json();
+
+      // Puedes añadir un manejo específico dependiendo de la estructura que devuelva tu backend
+      // Si el backend devuelve un mensaje de éxito
+      if (responseData && typeof responseData === 'object') {
+          return responseData; // Devuelve los datos de respuesta
+      }
+
+      return responseData; // En caso de que sea una cadena o un objeto diferente
+  } catch (error) {
+      console.error('Error durante la solicitud de registro:', error);
+      throw error; // Lanza el error para manejarlo en la función llamadora
   }
-
-
-return response.json();
 };
+
 
 
 //Ver usuarios registrados
