@@ -7,6 +7,7 @@ import { IUserRegister } from '@/Interfaces/interfaces';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 import { NotificationError } from '@/components/Notifications/NotificationError';
 import { UserContext } from '@/context/userContext';
+import { ICreateAdmin } from '@/Interfaces/interfacesAdmin';
 
 
 type Country = "Argentina" | "Chile" | "Colombia" | "México";
@@ -24,7 +25,7 @@ const isValidCountry = (country: string): country is Country => {
 
 export default function RegisterUser() {
     const router = useRouter();
-    const [userRegister, setUserRegister] = useState<IUserRegister>({
+    const [userRegister, setUserRegister] = useState<ICreateAdmin>({
         name: "",
         lastname: "",
         email: "",
@@ -34,8 +35,10 @@ export default function RegisterUser() {
         city: "",
         address: "",
         phone: 0,
+        isAdmin:false
     });
-
+    
+    const [loading, setLoading] = useState(true);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');
@@ -43,11 +46,12 @@ export default function RegisterUser() {
     const [errorMessage, setErrorMessage] = useState("");
     const {signUpRegister} = useContext(UserContext);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const { name, value, type } = e.target;
+        const isChecked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
         
         const updatedUser = {
             ...userRegister,
-            [name]: value 
+            [name]: type === 'checkbox' ? isChecked : value
         };
         setUserRegister(updatedUser);
         
@@ -58,7 +62,7 @@ export default function RegisterUser() {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        const user: IUserRegister = {
+        const user: ICreateAdmin = {
             name: userRegister.name,
             lastname: userRegister.lastname,
             email: userRegister.email,
@@ -68,6 +72,7 @@ export default function RegisterUser() {
             phone: Number(userRegister.phone),
             country: userRegister.country,
             city: userRegister.city,
+            isAdmin:userRegister.isAdmin
         };
         
         console.log('User que se está enviando:', user);
@@ -91,7 +96,8 @@ export default function RegisterUser() {
                     address: "",
                     phone: 0,
                     country: "",
-                    city: ""
+                    city: "",
+                    isAdmin:false
                 });
             } else {
                 setErrors({ ...errors, general: "Registro inválido" });
@@ -106,8 +112,8 @@ export default function RegisterUser() {
     
 
     return (
-        <section className="bg-gray-100 p-4 mt-16">
-            <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
+             <section className="bg-gray-100 p-4 mt-16">
+                    <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
                 <div className="rounded-lg bg-white py-8 px-4 shadow-lg lg:px-8">
                     <form onSubmit={onSubmit} className="space-y-4">
                         <div className="relative z-10 mt-0 bg-opacity-60 bg-white p-4 rounded-lg">
@@ -232,14 +238,27 @@ export default function RegisterUser() {
                             {isValidCountry(userRegister.country) && cities[userRegister.country]?.map(city => (
                                 <option key={city} value={city}>{city}</option>
                             ))}
-                        </select>
-                    </div>
-                </div>
+                            </select>
+                                    </div>
+                                </div>
+                                <div className="md:col-span-2 lg:col-span-2">
+                                    <label htmlFor="isAdmin" className="text-sm font-medium text-gray-700">
+                                        ¿Es administrador?
+                                    </label>
+                                    <input
+                                        id="isAdmin"
+                                        name="isAdmin"
+                                        type="checkbox"
+                                        checked={userRegister.isAdmin}
+                                        onChange={handleChange}
+                                        className="ml-2 rounded-lg border-gray-200 text-blue-600 focus:ring-blue-500"
+                                    />
+                                </div>
                 <ButtonForms text='Registrar administrador' disabled={Object.keys(errors).length > 0} type='submit' />            </form>
         </div>
     </div>
     {showNotification && <NotificationRegister message={notificationMessage} />}
     {showErrorNotification && <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />}
-</section>
+    </section>
 )
 }
