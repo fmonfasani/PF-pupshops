@@ -65,70 +65,35 @@ export default function RegisterUser() {
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
+      
         const user: IUserRegister = {
-            name: userRegister.name,
-            lastname: userRegister.lastname,
-            email: userRegister.email,
-            password: userRegister.password,
-            confirmPassword: userRegister.confirmPassword,
-            address: userRegister.address,
-            phone: Number(userRegister.phone),
-            country: userRegister.country,
-            city: userRegister.city,
+          name: userRegister.name,
+          lastname: userRegister.lastname,
+          email: userRegister.email,
+          password: userRegister.password,
+          confirmPassword: userRegister.confirmPassword,
+          address: userRegister.address,
+          phone: Number(userRegister.phone),
+          country: userRegister.country,
+          city: userRegister.city,
         };
-    
-        console.log('Datos del usuario a enviar:', user);
-    
+      
         try {
-            const isRegistered = await signUp(user); // Llama a la función de registro
-    
-            if (isRegistered) {
-                // Aquí llamamos a signIn para iniciar sesión automáticamente
-                const isLoggedIn = await signIn({
-                    email: userRegister.email,
-                    password: userRegister.password,
-                });
-    
-                if (isLoggedIn) {
-                    // Si el inicio de sesión fue exitoso
-                    setNotificationMessage(`Registro y login exitoso. Bienvenido/a ${userRegister.name}`);
-                    setShowNotification(true);
-                    setTimeout(() => {
-                        setShowNotification(false);
-                        router.push("/home"); // Redirige a la página de inicio
-                    }, 3000);
-                } else {
-                    setGeneralError("El registro fue exitoso, pero el inicio de sesión falló. Por favor, intenta nuevamente.");
-                }
-    
-                // Restablece el estado después del registro e inicio de sesión exitoso
-                setUserRegister({
-                    name: "",
-                    lastname: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                    address: "",
-                    phone: 0,
-                    country: "",
-                    city: ""
-                });
-            } else {
-                setGeneralError("Registro inválido. Por favor, revisa los datos ingresados.");
-            }
+          const isRegistered = await signUp(user);
+          
+          if (isRegistered) {
+            console.log("Registro exitoso y usuario autenticado.");
+          } else {
+            setGeneralError("Registro inválido. Por favor, revisa los datos ingresados.");
+          }
         } catch (error) {
-            console.error("Error durante el registro:", error);
-            setErrorMessage(error instanceof Error ? error.message : "Error desconocido.");
-            setShowErrorNotification(true);
-            setTimeout(() => setShowErrorNotification(false), 3000);
+          setErrorMessage(error instanceof Error ? error.message : "Error desconocido.");
+          setShowErrorNotification(true);
+          setTimeout(() => setShowErrorNotification(false), 3000);
         }
-    };
+      };
+   
     
-    
-    
-    
-
     return (
         <section className="bg-gray-100 p-4 mt-16">
             <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">

@@ -1,12 +1,11 @@
 "use client";
-
 import { ILoginResponse, ILoginUser, IUserRegister, IUserResponse } from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
 import { login, fetchRegisterUser } from "@/utils/fetchUser";
 import { createContext, useContext, useEffect, useState } from "react";
 import { fetchAdminCreateUser } from "@/utils/fetchAdminCreateUser";
 
-// Creamos el contexto con un valor inicial
+
 export const UserContext = createContext<IUserContextType>({
   user: null,
   setUser: () => {},
@@ -18,62 +17,64 @@ export const UserContext = createContext<IUserContextType>({
   signUp: async () => false,
   signUpRegister: async () => false,
   logOut: () => {},
+  token: null,
+  setToken: () => {},
 });
 
-// Provider para el contexto
+
+
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // Inicializa el estado del usuario y del token
+ 
   const [user, setUser] = useState<IUserResponse | null>(null);
   const [isLogged, setIsLogged] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false); // Estado para el rol de admin
-  const [token, setToken] = useState<string | null>(null); // Estado para el token
+  const [isAdmin, setIsAdmin] = useState<boolean>(false); 
+  const [token, setToken] = useState<string | null>(null); 
+
 
   // Función para iniciar sesión
 const signIn = async (credentials: ILoginUser): Promise<boolean> => {
   try {
-    const data: ILoginResponse = await login(credentials); // Llamada a la API para login
+    const data: ILoginResponse = await login(credentials); 
     console.log("Credenciales enviadas:", credentials);
 
-    if (data.success) { // Verifica si el login fue exitoso
+    if (data.success) { 
       if (typeof window !== "undefined") {
-        // Guarda el usuario y el token juntos en un solo objeto
         const userData = {
           token: data.token,
-          user: data.findUser, // Cambiar a findUser
+          user: data.findUser,
         };
-        localStorage.setItem("authData", JSON.stringify(userData)); // Guarda ambos juntos
+        localStorage.setItem("authData", JSON.stringify(userData)); 
         console.log("Datos almacenados en localStorage:", localStorage.getItem("authData"));
 
-        // Establece el estado
+      
         setUser({
-          succes: true, // Asegúrate de que este campo se esté usando en IUserResponse
+          succes: true, 
           token: data.token,
-          user: data.findUser, // Aquí usas findUser
+          user: data.findUser, 
         });
 
-        setToken(data.token); // Guarda el token en el estado
-        setIsLogged(true); // Indica que el usuario ha iniciado sesión
+        setToken(data.token); 
+        setIsLogged(true); 
 
-        // Asegúrate de que findUser no sea null antes de acceder a isAdmin
         if (data.findUser) {
-          setIsAdmin(data.findUser.isAdmin); // Uso directo de data.findUser
+          setIsAdmin(data.findUser.isAdmin);
         } else {
-          setIsAdmin(false); // O maneja el caso donde no hay usuario
+          setIsAdmin(false);
         }
 
-        return true; // Login exitoso
+        return true;
       } else {
-        return false; // Si `window` no está disponible
+        return false; 
       }
     } else {
       console.error("Login failed. User may not exist.");
-      return false; // Si el login falló
+      return false;
     }
   } catch (error) {
     console.error("Error during sign in:", error);
-    return false; // Si ocurre un error durante el proceso
+    return false;
   }
 };
 
@@ -92,7 +93,7 @@ const signIn = async (credentials: ILoginUser): Promise<boolean> => {
       return false;
     } catch (error) {
       console.error(`Error during sign up: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      throw new Error(error instanceof Error ? error.message : 'Error desconocido'); // Lanza el error para que pueda ser capturado en onSubmit
+      throw new Error(error instanceof Error ? error.message : 'Error desconocido');
     }
   };
 
@@ -111,7 +112,6 @@ const signIn = async (credentials: ILoginUser): Promise<boolean> => {
 
         const data = await fetchAdminCreateUser(userAdmin, token);
 
-        // Verifica si el mensaje de éxito está presente en la respuesta
         if (data && typeof data === 'string' && data.includes("Cuenta creada correctamente")) {
             console.log("Administrador registrado exitosamente:", data);
             return true;
@@ -139,14 +139,13 @@ const signIn = async (credentials: ILoginUser): Promise<boolean> => {
           const { token, user } = parsedSession;
 
           if (user) {
-            setUser(user); // Almacena el usuario
-            setToken(token); // Almacena el token
-            setIsLogged(Boolean(token)); // Verifica que haya un token válido
-            setIsAdmin(user.isAdmin); // Asigna si es admin
+            setUser(user); 
+            setToken(token);
+            setIsLogged(Boolean(token)); 
+            setIsAdmin(user.isAdmin); 
           }
         } catch (error) {
           console.error("Error al parsear authData:", error);
-          // Resetea los valores si hay un error
           setUser(null);
           setToken(null);
           setIsLogged(false);
@@ -161,7 +160,7 @@ const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("authData");
       setUser(null);
-      setToken(null); // Limpiar el token
+      setToken(null); 
       setIsLogged(false);
     }
   };
@@ -173,6 +172,8 @@ const signIn = async (credentials: ILoginUser): Promise<boolean> => {
         setUser,
         isLogged,
         setIsLogged,
+        token,
+        setToken,
         isAdmin,
         setIsAdmin,
         signIn,
