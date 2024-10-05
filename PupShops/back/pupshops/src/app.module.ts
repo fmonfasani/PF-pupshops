@@ -14,6 +14,7 @@ import { AppointmentModule } from './modules/appointments/appointments.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { WebhookModule } from './modules/webhook/webhook.module';
 import { PaymentsModule } from './modules/payments/payment.module';
+import { MailPaymentModule } from './modules/MailPayments/mailpayment.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PaymentsModule } from './modules/payments/payment.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
+    MailPaymentModule,
     PaymentsModule,
     WebhookModule,
     AppointmentModule,
