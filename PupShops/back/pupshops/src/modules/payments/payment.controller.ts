@@ -9,6 +9,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PaymentsService } from './payment.service';
+import { OrderService } from '../order/order.service'; // Servicio para manejar las órdenes
+import { MailPaymentService } from '../MailPayments/mailpayment.service'; // Servicio para manejar el correo
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Response } from 'express';
 import {
@@ -16,17 +18,23 @@ import {
   ApiExcludeEndpoint,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Payment } from './entities/payment.entity';
+
 @ApiTags('Payments')
 @Controller('payments')
 export class PaymentsController {
-  constructor(private readonly paymentsService: PaymentsService) {}
+  constructor(
+    private readonly paymentsService: PaymentsService,
+    private readonly ordersService: OrderService, // Servicio para manejar las órdenes
+    private readonly mailService: MailPaymentService, // Servicio para manejar el correo
+  ) {}
+
+  // Obtener pagos de un usuario
   @Get('/user/:userId/payments')
-  @ApiOperation({ summary: 'Obtener los pagos realizados por un usuario' }) // Descripción del endpoint
+  @ApiOperation({ summary: 'Obtener los pagos realizados por un usuario' })
   @ApiParam({
     name: 'userId',
     description: 'El ID del usuario',
@@ -35,7 +43,7 @@ export class PaymentsController {
   @ApiResponse({
     status: 200,
     description: 'Lista de pagos realizados por el usuario',
-    type: [Payment], // Indica que el retorno será un array de la entidad Payment
+    type: [Payment],
   })
   @ApiResponse({
     status: 404,
@@ -53,30 +61,8 @@ export class PaymentsController {
   }
 
   // Crear preferencia de pago
-  @ApiOperation({ summary: 'Crear una preferencia de pago' })
-  @ApiResponse({
-    status: 201,
-    description: 'Preferencia de pago creada exitosamente',
-    schema: {
-      example: {
-        message: 'Preferencia de pagos creada exitosamente',
-        payment: {
-          id: '123456789',
-          init_point: 'https://www.mercadopago.com/checkout/v1/payment',
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Error al crear la preferencia de pago',
-  })
-  @ApiBody({
-    description: 'Datos necesarios para crear la preferencia de pago',
-    type: CreatePaymentDto,
-  })
-  // Crear pago
   @Post('/create')
+  @ApiOperation({ summary: 'Crear una preferencia de pago' })
   async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
     try {
       const payment =
@@ -94,60 +80,72 @@ export class PaymentsController {
   }
 
   // Manejar redirección de pago exitoso
-  /*@ApiOperation({ summary: 'Manejar redirección de pago exitoso' })
-  @ApiQuery({
-    name: 'payment_id',
-    required: true,
-    description: 'ID del pago en Mercado Pago',
-    example: '123456789',
-  })
-  @ApiQuery({
-    name: 'status',
-    required: true,
-    description: 'Estado del pago',
-    example: 'approved',
-  })
-  @ApiQuery({
-    name: 'external_reference',
-    required: true,
-    description: 'Referencia externa (orderId)',
-    example: '73b56cfb-d8e5-4097-b93e-e3b59de0e4f3',
-  })*/
   @Get('success')
   @ApiExcludeEndpoint()
-  handleSuccess(@Query() query, @Res() res: Response) {
+  async handleSuccess(@Query() query, @Res() res: Response) {
     const { payment_id, status, external_reference } = query;
     console.log('Pago exitoso:', { payment_id, status, external_reference });
-    res.send('Pago completado con éxito. ¡Gracias!');
+
+    try {
+      // Obtener la orden asociada utilizando external_reference (orderId)
+      const order = await this.ordersService.findOne(external_reference); // Usar findOne en el servicio de órdenes
+
+      // Obtener el correo del usuario relacionado con la orden
+      const userEmail = order.user.email;
+
+      // Enviar un correo de confirmación al usuario
+      const subject = 'Confirmación de tu compra';
+      const text = `Gracias por tu compra. El pago con ID ${payment_id} ha sido completado con éxito.`;
+
+      await this.mailService.sendMail(userEmail, subject, text);
+
+      // Enviar respuesta al cliente
+      res.send('Pago completado con éxito. ¡Gracias!');
+    } catch (error) {
+      console.error('Error procesando el pago exitoso:', error.message);
+      res.status(500).send('Error procesando el pago.');
+    }
   }
 
   // Manejar redirección de pago fallido
-  @ApiOperation({ summary: 'Manejar redirección de pago fallido' })
   @Get('failure')
   @ApiExcludeEndpoint()
-  handleFailure(@Query() query, @Res() res: Response) {
+  async handleFailure(@Query() query, @Res() res: Response) {
     console.log('Pago fallido:', query);
-    res.send('Hubo un error con tu pago. Intenta nuevamente.');
+
+    try {
+      const userEmail = query.email || 'usuario@ejemplo.com';
+      const subject = 'Pago fallido';
+      const text = `Hubo un problema con tu pago. Por favor, inténtalo nuevamente.`;
+
+      await this.mailService.sendMail(userEmail, subject, text);
+
+      res.send('Hubo un error con tu pago. Intenta nuevamente.');
+    } catch (error) {
+      console.error('Error procesando el pago fallido:', error.message);
+      res.status(500).send('Error procesando el pago fallido.');
+    }
   }
 
   // Manejar redirección de pago pendiente
-  @ApiOperation({ summary: 'Manejar redirección de pago pendiente' })
   @Get('pending')
   @ApiExcludeEndpoint()
-  handlePending(@Query() query, @Res() res: Response) {
+  async handlePending(@Query() query, @Res() res: Response) {
     console.log('Pago pendiente:', query);
-    res.send('Tu pago está en proceso. Espera la confirmación.');
+
+    try {
+      const userEmail = query.email || 'usuario@ejemplo.com';
+      const subject = 'Pago pendiente';
+      const text = `Tu pago está en proceso. Te notificaremos cuando se haya completado.`;
+
+      await this.mailService.sendMail(userEmail, subject, text);
+
+      res.send('Tu pago está en proceso. Espera la confirmación.');
+    } catch (error) {
+      console.error('Error procesando el pago pendiente:', error.message);
+      res.status(500).send('Error procesando el pago pendiente.');
+    }
   }
-  /*
-  @ApiOperation({ summary: 'Recibir notificaciones de Mercado Pago (Webhook)' })
-  @ApiResponse({
-    status: 200,
-    description: 'Notificación recibida y procesada exitosamente',
-  })
-  @ApiResponse({
-    status: 500,
-    description: 'Error al procesar la notificación',
-  })*/
 
   // Webhook para recibir notificaciones de Mercado Pago
   @Post('/webhook')
@@ -160,7 +158,6 @@ export class PaymentsController {
     try {
       if (topic === 'payment') {
         if (resource) {
-          // Extraer el paymentId desde la URL o desde los datos de la notificación
           const paymentId = resource.split('/').pop(); // Extraer el ID del pago
           await this.paymentsService.processPaymentNotification(paymentId);
           console.log('ID del pago:', paymentId);
