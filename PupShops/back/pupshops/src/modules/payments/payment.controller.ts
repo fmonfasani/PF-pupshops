@@ -9,8 +9,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PaymentsService } from './payment.service';
-import { OrderService } from '../order/order.service'; // Servicio para manejar las órdenes
-import { MailPaymentService } from '../MailPayments/mailpayment.service'; // Servicio para manejar el correo
+import { OrderService } from '../order/order.service';
+import { MailPaymentService } from '../MailPayments/mailpayment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Response } from 'express';
 import {
@@ -28,8 +28,8 @@ import { Payment } from './entities/payment.entity';
 export class PaymentsController {
   constructor(
     private readonly paymentsService: PaymentsService,
-    private readonly ordersService: OrderService, // Servicio para manejar las órdenes
-    private readonly mailService: MailPaymentService, // Servicio para manejar el correo
+    private readonly ordersService: OrderService,
+    private readonly mailService: MailPaymentService,
   ) {}
 
   // Obtener pagos de un usuario
@@ -60,7 +60,7 @@ export class PaymentsController {
     return payments;
   }
 
-  // Crear preferencia de pago
+  // Preferencia de pago
   @Post('/create')
   @ApiOperation({ summary: 'Crear una preferencia de pago' })
   async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
@@ -79,7 +79,7 @@ export class PaymentsController {
     }
   }
 
-  // Manejar redirección de pago exitoso
+  // Notificaciones de Mercado Pago
   @Get('success')
   @ApiExcludeEndpoint()
   async handleSuccess(@Query() query, @Res() res: Response) {
@@ -87,19 +87,12 @@ export class PaymentsController {
     console.log('Pago exitoso:', { payment_id, status, external_reference });
 
     try {
-      // Obtener la orden asociada utilizando external_reference (orderId)
-      const order = await this.ordersService.findOne(external_reference); // Usar findOne en el servicio de órdenes
-
-      // Obtener el correo del usuario relacionado con la orden
+      const order = await this.ordersService.findOne(external_reference);
       const userEmail = order.user.email;
-
-      // Enviar un correo de confirmación al usuario
       const subject = 'Confirmación de tu compra';
       const text = `Gracias por tu compra. El pago con ID ${payment_id} ha sido completado con éxito.`;
-
       await this.mailService.sendMail(userEmail, subject, text);
 
-      // Enviar respuesta al cliente
       res.send('Pago completado con éxito. ¡Gracias!');
     } catch (error) {
       console.error('Error procesando el pago exitoso:', error.message);
@@ -107,7 +100,6 @@ export class PaymentsController {
     }
   }
 
-  // Manejar redirección de pago fallido
   @Get('failure')
   @ApiExcludeEndpoint()
   async handleFailure(@Query() query, @Res() res: Response) {
@@ -127,7 +119,6 @@ export class PaymentsController {
     }
   }
 
-  // Manejar redirección de pago pendiente
   @Get('pending')
   @ApiExcludeEndpoint()
   async handlePending(@Query() query, @Res() res: Response) {
@@ -147,7 +138,7 @@ export class PaymentsController {
     }
   }
 
-  // Webhook para recibir notificaciones de Mercado Pago
+  // Webhook de las notificaciones de Mercado Pago
   @Post('/webhook')
   @ApiExcludeEndpoint()
   async handleNotification(@Body() body: any, @Res() res: Response) {

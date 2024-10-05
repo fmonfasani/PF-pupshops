@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { google } from 'googleapis';
 import { ConfigService } from '@nestjs/config';
+import { access } from 'fs';
 
 @Injectable()
 export class MailPaymentService {
@@ -19,8 +20,8 @@ export class MailPaymentService {
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
       //(this.baseUrl = 'https://developers.google.com/oauthplayground'),
-      //(this.baseUrl = 'https://pupshops-backend.onrender.com'),
-      (this.baseUrl = 'https://0b26-190-17-115-142.ngrok-free.app'),
+      //(this.baseUrl = 'https://pupshops-backend.onrender.com'), // camnbiar en produccion por este
+      (this.baseUrl = 'https://0b26-190-17-115-142.ngrok-free.app'), // quitar en produccion
     );
 
     this.oauth2Client.setCredentials({
@@ -31,12 +32,12 @@ export class MailPaymentService {
   }
   async setupTransporter() {
     try {
-      // try {
-      //   const accessToken = await this.oauth2Client.getAccessToken();
-      //   console.log('Access Token:', accessToken);
-      // } catch (error) {
-      //   console.error('Error obteniendo el Access Token:', error);
-      // }
+      try {
+        const accessToken = await this.oauth2Client.getAccessToken();
+        console.log('Access Token:', accessToken);
+      } catch (error) {
+        console.error('Error obteniendo el Access Token:', error);
+      }
 
       this.transporter = nodemailer.createTransport({
         service: 'gmail',
