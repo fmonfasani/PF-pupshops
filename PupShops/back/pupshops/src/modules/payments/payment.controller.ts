@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { PaymentsService } from './payment.service';
 import { OrderService } from '../order/order.service';
-import { MailPaymentService } from '../MailPayments/mailpayment.service';
+import { MailPaymentService } from './mailpayment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Response } from 'express';
 import {

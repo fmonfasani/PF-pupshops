@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Payment } from './entities/payment.entity';
 import { Orders } from '../../modules/order/entities/order.entity';
-import { MailPaymentService } from '../MailPayments/mailpayment.service';
+import { MailPaymentService } from './mailpayment.service';
 
 @Injectable()
 export class PaymentsService {
@@ -20,7 +20,7 @@ export class PaymentsService {
     @InjectRepository(Payment)
     private paymentRepository: Repository<Payment>,
     @InjectRepository(Orders)
-    private ordersRepository: Repository<Orders>,
+    private readonly ordersRepository: Repository<Orders>,
     private readonly mailPaymentService: MailPaymentService,
   ) {
     this.accessToken = this.configService.get<string>(
@@ -28,9 +28,9 @@ export class PaymentsService {
     );
   }
 
-  private readonly baseUrl = 'https://pupshops-backend.onrender.com'; // para notificaicon de MP y mailing de produccion
-  private readonly basenegrokUrl =
-    'https://b4cf-201-231-240-116.ngrok-free.app'; // tengo que cambiarlo en produccion
+  private readonly baseUrl = 'https://pupshops-backend.onrender.com';
+  private readonly basengrokUrl = 'https://b4cf-201-231-240-116.ngrok-free.app';
+
   private async httpRequest(url: string, options: any) {
     try {
       if (!options.headers) {
@@ -56,10 +56,9 @@ export class PaymentsService {
   }
 
   async getPaymentsByUser(userId: string): Promise<Payment[]> {
-    // Primero buscamos todas las órdenes asociadas al usuario
     const orders = await this.ordersRepository.find({
       where: { user: { id: userId } },
-      relations: ['payments'], // Busco los pagos del user
+      relations: ['payments'],
     });
 
     if (!orders.length) {
@@ -103,24 +102,20 @@ export class PaymentsService {
           description: 'pelota para perro',
         },
       ],
-
-      external_reference: orderId, //IMPORTANTE para las notificaciones
-
+      external_reference: orderId,
       back_urls: {
         success: `${this.baseUrl}/payments/success`,
         failure: `${this.baseUrl}/payments/failure`,
         pending: `${this.baseUrl}/payments/pending`,
       },
-      notification_url: `${this.basenegrokUrl}/payments/webhook`,
+      notification_url: `${this.basengrokUrl}/payments/webhook`,
       auto_return: 'approved',
       payment_methods: {
-        installments: 6, // 6 cuotas
-        excluded_payment_methods: [
-          { id: 'visa' }, // Excluir Visa
-        ],
+        installments: 6,
+        excluded_payment_methods: [{ id: 'visa' }],
       },
       metadata: {
-        integrator_id: 'dev_24c65fb163bf11ea96500242ac130004', // ID Integrador fmonfasani
+        integrator_id: 'dev_24c65fb163bf11ea96500242ac130004',
       },
     };
 
@@ -133,7 +128,6 @@ export class PaymentsService {
         },
         body: JSON.stringify(preference),
       });
-      console.log('Datos enviados a Mercado Pago:', preference);
 
       if (!response.ok) {
         throw new Error('Error en la creación de la preferencia');
@@ -141,7 +135,6 @@ export class PaymentsService {
 
       const data = await response.json();
 
-      // Solo le doy al front el `init_point`
       return {
         init_point: data.init_point,
       };
@@ -156,7 +149,6 @@ export class PaymentsService {
     }
   }
 
-  //Busco la order que devuelve MP para actualizar el pago
   async processPaymentNotification(paymentId: string) {
     const paymentResponse = await this.getPaymentStatus(paymentId);
 
@@ -165,12 +157,9 @@ export class PaymentsService {
     }
 
     const orderId = paymentResponse.external_reference;
-    const status = paymentResponse.status; // Estado del pago (approved, rejected, etc.)
+    const status = paymentResponse.status;
     const transactionAmount = paymentResponse.transaction_amount;
 
-    console.log(`Procesando orden con ID: ${orderId}`);
-
-    // Busco la orden
     const order = await this.ordersRepository.findOne({
       where: { id: orderId },
       relations: ['user', 'payments'],
@@ -180,23 +169,14 @@ export class PaymentsService {
       throw new Error('Orden no encontrada');
     }
 
-    // Busco el user de la orden
     if (!order.user) {
       throw new Error('No se encontró un usuario asociado a la orden');
     }
 
-    // Actualizo el estado en la BBDD
     if (status === 'approved') {
       order.status = 'paid';
 
-      // envio el mail
       const userEmail = order.user.email;
-      console.log(
-        `Pago aprobado para la orden ${orderId}, enviando correo a ${userEmail}`,
-      );
-      console.log(
-        `Pago rechazado para la orden ${orderId}, enviando correo a ${userEmail}`,
-      );
       if (userEmail) {
         await this.mailPaymentService.sendMail(
           userEmail,
@@ -211,7 +191,6 @@ export class PaymentsService {
     } else if (status === 'rejected') {
       order.status = 'payment_failed';
 
-      // Envia correo de rechazo al usuario
       const userEmail = order.user.email;
       if (userEmail) {
         await this.mailPaymentService.sendMail(
@@ -226,23 +205,14 @@ export class PaymentsService {
       }
     }
 
-    // Guardo el pago en la BBDD
     const payment = new Payment();
     payment.id = paymentResponse.id;
     payment.status = paymentResponse.status;
     payment.transactionAmount = paymentResponse.transaction_amount;
     payment.order = order;
 
-    //Guardo la orden en la BBDD
-    console.log('Guardando orden con estado:', order.status);
     await this.ordersRepository.save(order);
-    console.log(
-      'Guardando detalles del pago en la base de datos:',
-      paymentResponse,
-    );
-    console.log('Datos del pago antes de guardarlo:', payment);
     await this.paymentRepository.save(payment);
-    console.log('Pago guardado exitosamente');
 
     return paymentResponse;
   }
@@ -256,27 +226,21 @@ export class PaymentsService {
       },
     });
 
-    console.log(
-      'Respuesta del pago:',
-      JSON.stringify(paymentResponse, null, 2),
-    );
-
     if (!paymentResponse || !paymentResponse.id) {
       throw new Error('Respuesta inválida: no se encontró el ID del pago');
     }
     return paymentResponse;
   }
+
   async getOrderInfo(resource: string) {
     try {
-      // obtengo la info de la oreden
       const orderResponse = await this.httpRequest(resource, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${this.accessToken}`, //token de MP
+          Authorization: `Bearer ${this.accessToken}`,
         },
       });
 
-      // Verifico la respuesta
       if (!orderResponse || !orderResponse.id) {
         throw new Error('Respuesta inválida: no se encontró el ID de la orden');
       }

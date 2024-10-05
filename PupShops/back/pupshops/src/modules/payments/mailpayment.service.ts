@@ -11,11 +11,7 @@ export class MailPaymentService {
   private baseUrl: string;
 
   constructor(private configService: ConfigService) {
-    this.baseUrl = this.configService.get<string>('BASE_URL');
-    console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID);
-    console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET);
-    console.log('OAUTH_REFRESH_TOKEN:', process.env.OAUTH_REFRESH_TOKEN);
-
+    //this.baseUrl = this.configService.get<string>('BASE_URL');
     this.oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
@@ -32,12 +28,11 @@ export class MailPaymentService {
   }
   async setupTransporter() {
     try {
-      try {
-        const accessToken = await this.oauth2Client.getAccessToken();
-        console.log('Access Token:', accessToken);
-      } catch (error) {
-        console.error('Error obteniendo el Access Token:', error);
+      /*const { token } = await this.oauth2Client.getAccessToken();
+      if (!token) {
+        throw new Error('No se pudo obtener el token de acceso');
       }
+      console.log('Access Token obtenido:', token);*/
 
       this.transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -48,15 +43,28 @@ export class MailPaymentService {
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           refreshToken: process.env.OAUTH_REFRESH_TOKEN,
           accessToken:
-            'ya29.a0AcM612wG_N_MTg3A5VYRoEjyzQ36bL1i66SODZ92cTD0XOSOPwQvXd9cjCtdsZicLt3zwVe-SSlHIEU_h4-bkOd1EZynYwcFfRNXVuzvSqebcCU5z44gIrKDvPXz1Wtb7y9TSKPsPqPz4NYDVlFitmesh5McWeXBX2SGV0NwaCgYKAXkSARISFQHGX2MiJC3ufwvHpeg1bLMR3WuyEQ0175',
+            'ya29.a0AcM612wh3PMu65ahabZE0zWheq4MJn86VQ0ygEYDbf_HtNqvtmBxeRyP1cLbV4MQPbn-u9pjcfZia4Kg6acYjUiJEu-ganKx_aO9ci2JpUIiejFmQNql1-du8rAKsXIqI5TPe8SPTiZgJN1sq5QTTFmWvCF3CF8bRifXDal0aCgYKAYkSARISFQHGX2Miw_ifaR3XIJKFASkra3O-eQ0175',
         },
       });
     } catch (error) {
-      console.error('Error obteniendo el Access Token:', error);
+      console.error(
+        'Error en la configuración del transporter:',
+        error.message,
+      );
+      this.transporter = undefined;
     }
   }
 
   async sendMail(to: string, subject: string, text: string) {
+    await this.setupTransporter();
+
+    if (!this.transporter) {
+      console.error(
+        'Error: transporter is not defined. No se puede enviar el correo.',
+      );
+      return;
+    }
+
     const mailOptions = {
       from: 'pupshopscompany@gmail.com',
       to,

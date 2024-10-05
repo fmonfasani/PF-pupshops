@@ -22,7 +22,7 @@ export class MailPaymentController {
   @Post('test')
   async sendTestMail() {
     try {
-      const to = 'fmonfasanidev@gmail.com'; // Email de prueba
+      const to = 'fmonfasanidev@gmail.com';
       const subject = 'Correo de prueba';
       const text =
         'Este es un correo de prueba enviado desde NestJS usando Nodemailer.';
