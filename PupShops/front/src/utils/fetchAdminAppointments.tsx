@@ -1,31 +1,49 @@
-import { IAppointment } from "@/Interfaces/interfaces";
 
-// Obtener los turnos
-export const fetchAppointments = async (): Promise<IAppointment[]> => {
-    const res = await fetch("http://localhost:3001/appointments");
-    if (!res.ok) {
-      throw new Error("Failed to fetch appointments");
+
+
+export const fetchAppointments = async (token: string) => {
+  try {
+    const response = await fetch('http://localhost:3001/appointments', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener los turnos');
     }
-    return res.json();
+
+    const appointments = await response.json();
+    return appointments;
+  } catch (error) {
+    console.error('Error en fetchAppointments:', error);
+    throw error;
   }
-  
+};
 
-  export const fetchUserAppointments = async (): Promise<{ 
-    scheduledAppointments: IAppointment[], 
-    historicalAppointments: IAppointment[] 
-  }> => {
-    const res = await fetch("http://localhost:3001/appointments/user"); // Ruta para obtener turnos del usuario
-  
-    if (!res.ok) {
-      throw new Error("Failed to fetch user appointments");
+export const fetchUserAppointments = async (userId: number, token: string) => {
+  try {
+    const response = await fetch(`http://localhost:3001/appointments/user/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener los turnos del usuario');
     }
-  
-    const data = await res.json();
-  
-    // Validamos que los datos tengan la estructura esperada
-    if (!data.scheduledAppointments || !data.historicalAppointments) {
-      throw new Error("Unexpected data format");
-    }
-  
-    return data;
-  };
+
+    const userAppointments = await response.json();
+    return {
+      scheduledAppointments: userAppointments.filter((appt: any) => appt.status === 'reserved'),
+      historicalAppointments: userAppointments.filter((appt: any) => appt.status !== 'reserved')
+    };
+  } catch (error) {
+    console.error('Error en fetchUserAppointments:', error);
+    throw error;
+  }
+};

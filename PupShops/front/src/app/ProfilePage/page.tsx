@@ -9,9 +9,11 @@ const ProfilePage = () => {
   const router = useRouter();
   const [showLogoutNotification, setShowLogoutNotification] = useState(false);
   const [logoutNotificationMessage, setLogoutNotificationMessage] = useState('');
+  const [showNotificationRedirect, setShowNotificationRedirect] = useState(false);
+  const [notificationMessageRedirect, setNotificationMessageRedirect] = useState('');
   const [userData, setUserData] = useState<IUserResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const {logOut} = useContext(UserContext);
+  const { logOut } = useContext(UserContext);
 
   useEffect(() => {
     const authData = localStorage.getItem("authData");
@@ -25,32 +27,32 @@ const ProfilePage = () => {
     }
     setLoading(false);
   }, []);
-  
 
   useEffect(() => {
     if (!loading && !userData) {
       router.push("/userDashboard/login");
-      alert("Debes loguearte primero");
+      setNotificationMessageRedirect("Debes loguearte primero");
+      setShowNotificationRedirect(true);
     }
   }, [userData, loading, router]);
 
   const handleEdit = () => {
-
-  }
+    // Lógica para editar datos del perfil
+  };
 
   const handleLogout = () => {
-    logOut(); // Asumiendo que esta función maneja el cierre de sesión
+    logOut();
     setLogoutNotificationMessage("Has cerrado sesión correctamente");
     setShowLogoutNotification(true);
 
     const logoutNotificationTimeout = setTimeout(() => {
-        setShowLogoutNotification(false);
-        router.push("/userDashboard/login");
+      setShowLogoutNotification(false);
+      router.push("/userDashboard/login");
     }, 3000);
 
     return () => clearTimeout(logoutNotificationTimeout);
-};
- 
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -58,6 +60,17 @@ const ProfilePage = () => {
       </div>
     );
   }
+
+  if (!loading && !userData) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+          {showNotificationRedirect && (
+            <NotificationRegister message={notificationMessageRedirect} />
+          )}
+      </div>
+    );
+  }
+
   return (
     <section className="bg-gray-100 p-6 mt-20">
       <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-6 py-8">
@@ -68,31 +81,22 @@ const ProfilePage = () => {
           <div className="space-y-4">
             {userData ? (
               <div className="space-y-2">
-                {/* Email */}
                 <div className="grid grid-cols-2 gap-2">
                   <p className="font-semibold text-gray-700 text-left">Email:</p>
                   <p className="text-gray-600 break-words">{userData.user?.email}</p>
                 </div>
-  
-                {/* Nombre */}
                 <div className="grid grid-cols-2 gap-2">
                   <p className="font-semibold text-gray-700 text-left">Nombre:</p>
                   <p className="text-gray-600">{userData.user?.name}</p>
                 </div>
-  
-                {/* Apellido */}
                 <div className="grid grid-cols-2 gap-2">
                   <p className="font-semibold text-gray-700 text-left">Apellido:</p>
                   <p className="text-gray-600">{userData.user?.lastname}</p>
                 </div>
-  
-                {/* Teléfono */}
                 <div className="grid grid-cols-2 gap-2">
                   <p className="font-semibold text-gray-700 text-left">Teléfono:</p>
                   <p className="text-gray-600">{userData.user?.phone}</p>
                 </div>
-  
-                {/* Dirección */}
                 <div className="grid grid-cols-2 gap-2">
                   <p className="font-semibold text-gray-700 text-left">Dirección:</p>
                   <p className="text-gray-600">{userData.user?.address}</p>
@@ -102,7 +106,6 @@ const ProfilePage = () => {
               <p className="text-center text-gray-500">Cargando...</p>
             )}
           </div>
-  
           <div className="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <button
               onClick={handleEdit}
@@ -122,7 +125,6 @@ const ProfilePage = () => {
       </div>
     </section>
   );
-  
 };
 
 export default ProfilePage;

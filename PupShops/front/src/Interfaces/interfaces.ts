@@ -24,6 +24,7 @@ export interface ILoginResponse {
 }
 
 export interface IUserResponse {
+  id?:string;
   succes: boolean; 
   user: IUser | null;
   token: string; 

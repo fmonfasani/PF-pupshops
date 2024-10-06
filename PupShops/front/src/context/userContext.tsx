@@ -31,7 +31,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false); 
   const [token, setToken] = useState<string | null>(null); 
-
+  const [userProfile, setUserProfile] = useState<IUserResponse | null>(null);
 
   // Función para iniciar sesión
 const signIn = async (credentials: ILoginUser): Promise<boolean> => {

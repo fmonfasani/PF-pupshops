@@ -1,27 +1,59 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { fetchAppointments, fetchUserAppointments } from '@/utils/fetchAdminAppointments';
+import React, { useState, useEffect, useContext } from 'react';
+import { fetchAppointments, fetchUserAppointments } from '@/utils/fetchAdminAppointments'; 
 import { IAppointment } from '@/Interfaces/interfaces';
 import { UserContext } from '@/context/userContext';
-import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { NotificationRegister } from '../Notifications/NotificationRegister';
 import { NotificationError } from '../Notifications/NotificationError';
 
 const AdminAppointments = () => {
-  const { user,isAdmin } = useContext(UserContext);
-  
-  const [showErrorNotification, setShowErrorNotification] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState("");
-
+  const { user, isAdmin, token } = useContext(UserContext); 
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
-  const [userAppointments, setUserAppointments] = useState<{scheduledAppointments: IAppointment[], historicalAppointments: IAppointment[]}>({ scheduledAppointments: [], historicalAppointments: [] });
+  const [userAppointments, setUserAppointments] = useState<{ scheduledAppointments: IAppointment[], historicalAppointments: IAppointment[] }>({
+    scheduledAppointments: [],
+    historicalAppointments: [],
+  });
   const [filter, setFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  
+  // 1. Cargar los turnos cuando el componente se monte
+  useEffect(() => {
+    const fetchAllAppointments = async () => {
+      try {
+        if (isAdmin && token) { // Verifica que el usuario sea administrador y tenga un token
+          const allAppointments = await fetchAppointments(token);
+          setAppointments(allAppointments);
+        }
+      } catch (error) {
+        setErrorMessage("Error al cargar los turnos.");
+        setShowErrorNotification(true);
+      }
+    };
+
+    fetchAllAppointments();
+  }, [isAdmin, token]);
+
+  // 2. Cargar turnos del usuario cuando el filtro sea "user"
+  useEffect(() => {
+    const fetchUserAppointmentsData = async () => {
+      try {
+        if (user && token && filter === 'user') {
+          const userAppointmentsData = await fetchUserAppointments(user.id, token); // Asegúrate de definir esta función
+          setUserAppointments(userAppointmentsData);
+        }
+      } catch (error) {
+        setErrorMessage("Error al cargar los turnos del usuario.");
+        setShowErrorNotification(true);
+      }
+    };
+
+    fetchUserAppointmentsData();
+  }, [user, token, filter]);
 
   // Filtrar los turnos según el filtro seleccionado en el dropdown
   const filteredAppointments = () => {
@@ -29,9 +61,7 @@ const AdminAppointments = () => {
       return appointments;
     } else if (filter === 'user') {
       const allUserAppointments = [...userAppointments.scheduledAppointments, ...userAppointments.historicalAppointments];
-      return statusFilter
-        ? allUserAppointments.filter((appointment) => appointment.status === statusFilter)
-        : allUserAppointments;
+      return statusFilter ? allUserAppointments.filter((appointment) => appointment.status === statusFilter) : allUserAppointments;
     }
   };
 
@@ -39,6 +69,7 @@ const AdminAppointments = () => {
     <div className="max-w-4xl mx-auto mt-36 mb-36 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Turnos Reservados</h2>
 
+      {/* Filtro por tipo de turnos */}
       <div className="mb-4 hover:cursor-pointer">
         <select
           value={filter}
@@ -50,6 +81,7 @@ const AdminAppointments = () => {
         </select>
       </div>
 
+      {/* Filtro por estado de los turnos del usuario */}
       {filter === 'user' && (
         <div className="mb-4">
           <select
@@ -64,7 +96,8 @@ const AdminAppointments = () => {
         </div>
       )}
 
-     { <div className="space-y-4">
+      {/* Mostrar los turnos filtrados */}
+      <div className="space-y-4">
         {filteredAppointments()?.length > 0 ? (
           filteredAppointments()?.map((appointment) => (
             <div key={appointment.id} className="border border-gray-300 p-4 rounded-md">
@@ -77,7 +110,7 @@ const AdminAppointments = () => {
         ) : (
           <p>No hay turnos disponibles.</p>
         )}
-      </div>}
+      </div>
 
       {showNotification && <NotificationRegister message={notificationMessage} />}
       {showErrorNotification && (
