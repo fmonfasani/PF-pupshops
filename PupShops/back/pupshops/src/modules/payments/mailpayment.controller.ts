@@ -1,6 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { MailPaymentService } from './mailpayment.service';
 
+@ApiExcludeController() 
 @Controller('mailpayment')
 export class MailPaymentController {
   constructor(private readonly mailPaymentService: MailPaymentService) {}
