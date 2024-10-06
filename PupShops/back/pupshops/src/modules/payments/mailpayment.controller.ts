@@ -1,5 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { MailPaymentService } from './mailpayment.service';
+import { ApiExcludeController } from '@nestjs/swagger';
 
 @ApiExcludeController() 
 @Controller('mailpayment')
