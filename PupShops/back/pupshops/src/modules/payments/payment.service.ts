@@ -108,7 +108,7 @@ export class PaymentsService {
         failure: `${this.baseUrl}/payments/failure`,
         pending: `${this.baseUrl}/payments/pending`,
       },
-      notification_url: `${this.basengrokUrl}/payments/webhook`, //cambiar en modo produccion
+      notification_url: `${this.baseUrl}/payments/webhook`, //cambiar en modo produccion
       auto_return: 'approved',
       payment_methods: {
         installments: 6,
