@@ -43,7 +43,7 @@ export class MailPaymentService {
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           refreshToken: process.env.OAUTH_REFRESH_TOKEN,
           accessToken:
-            'ya29.a0AcM612wh3PMu65ahabZE0zWheq4MJn86VQ0ygEYDbf_HtNqvtmBxeRyP1cLbV4MQPbn-u9pjcfZia4Kg6acYjUiJEu-ganKx_aO9ci2JpUIiejFmQNql1-du8rAKsXIqI5TPe8SPTiZgJN1sq5QTTFmWvCF3CF8bRifXDal0aCgYKAYkSARISFQHGX2Miw_ifaR3XIJKFASkra3O-eQ0175',
+            'ya29.a0AcM612yeoiuhh328n9pm5xzx3FqR1HtHtShvWF2DgSXOZp0KXJu1ADGGeDbJXEob8BlomggO22KCD9cPjemgEnYhGDsqwePXsLn0SFCxCXeTfM3jaNu7yHaXphoncgyij26RDqFhoe0evh9PXQ_l4BET3vE3zwhd6pSg2jXTaCgYKAY4SARISFQHGX2MiGS84EvafElSuhBIWF3dV9Q0175',
         },
       });
     } catch (error) {
@@ -57,6 +57,8 @@ export class MailPaymentService {
 
   async sendMail(to: string, subject: string, text: string) {
     await this.setupTransporter();
+
+    console.log('Transporter configurado con éxito');
 
     if (!this.transporter) {
       console.error(
@@ -78,6 +80,34 @@ export class MailPaymentService {
       console.log('Correo enviado:', info.response);
     } catch (error) {
       console.error('Error enviando el correo:', error);
+    }
+  }
+  async sendPaymentNotificationToSeller(orderId: string, amount: number) {
+    const to = 'pupshopscompany@gmail.com'; // Correo del vendedor (PupShops)
+    const subject = 'Notificación de pago exitoso';
+    const text = `
+      Hola PupShops,
+
+      Se ha realizado un pago exitoso para la orden ${orderId}.
+
+      Monto total: $${amount.toFixed(2)}
+
+      Por favor, revisa tu sistema para procesar la orden.
+      
+      Saludos,
+      El sistema de notificaciones de PupShops.
+    `;
+    console.log(
+      `Enviando correo al vendedor para la orden ${orderId} con monto ${amount}`,
+    );
+
+    try {
+      await this.sendMail(to, subject, text);
+    } catch (error) {
+      console.error(
+        'Error enviando el correo de notificación de pago al vendedor:',
+        error.message,
+      );
     }
   }
 }

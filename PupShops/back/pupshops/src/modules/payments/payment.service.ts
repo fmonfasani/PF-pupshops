@@ -29,7 +29,7 @@ export class PaymentsService {
   }
 
   private readonly baseUrl = 'https://pupshops-backend.onrender.com';
-  private readonly basengrokUrl = 'https://b4cf-201-231-240-116.ngrok-free.app';
+  private readonly basengrokUrl = 'https://b4cf-201-231-240-116.ngrok-free.app'; // solo en desarrollo
 
   private async httpRequest(url: string, options: any) {
     try {
@@ -77,7 +77,7 @@ export class PaymentsService {
       );
     }
 
-    return payments;
+    return payments; // con estado pending
   }
 
   async createPayment(createPaymentDto: CreatePaymentDto) {
@@ -108,7 +108,7 @@ export class PaymentsService {
         failure: `${this.baseUrl}/payments/failure`,
         pending: `${this.baseUrl}/payments/pending`,
       },
-      notification_url: `${this.basengrokUrl}/payments/webhook`,
+      notification_url: `${this.basengrokUrl}/payments/webhook`, //cambiar en modo produccion
       auto_return: 'approved',
       payment_methods: {
         installments: 6,
@@ -158,11 +158,10 @@ export class PaymentsService {
 
     const orderId = paymentResponse.external_reference;
     const status = paymentResponse.status;
-    const transactionAmount = paymentResponse.transaction_amount;
 
     const order = await this.ordersRepository.findOne({
       where: { id: orderId },
-      relations: ['user', 'payments'],
+      relations: ['orderDetails', 'orderDetails.products', 'user'], // Traemos todo para el mailing
     });
 
     if (!order) {
@@ -177,17 +176,62 @@ export class PaymentsService {
       order.status = 'paid';
 
       const userEmail = order.user.email;
+      const orderDate = new Date(order.date).toLocaleDateString();
+      const finalTotal = order.orderDetails.price;
+      const items = order.orderDetails.products
+        .map((product) => {
+          return `${product.name} x ${order.orderDetails.quantity} - $${product.price}`;
+        })
+        .join('\n');
+
+      // Mailing al cliente
       if (userEmail) {
         await this.mailPaymentService.sendMail(
           userEmail,
-          'Confirmación de pago',
-          `Tu pago por la orden ${orderId} ha sido aprobado. Monto: ${transactionAmount}.`,
+          'Confirmación de tu compra - PupShops',
+          `¡Gracias por tu compra!
+  
+  Tu pago ha sido procesado exitosamente. Aquí tienes los detalles de tu compra:
+  
+  - Número de orden: ${orderId}
+  - Fecha de la compra: ${orderDate}
+  - Monto total: $${finalTotal}
+  
+  Detalles de los artículos adquiridos:
+  ${items}
+  
+  Puedes revisar el estado de tu orden en cualquier momento en nuestra tienda.
+  
+  Gracias por confiar en PupShops. ¡Esperamos verte pronto!
+  
+  Saludos,
+  Equipo PupShops`,
         );
       } else {
         console.error(
           'No se encontró el email del usuario asociado a la orden',
         );
       }
+
+      // Mailing al nosotros
+      await this.mailPaymentService.sendMail(
+        'pupshopscompany@gmail.com',
+        'Notificación de pago exitoso',
+        `Se ha realizado un pago exitoso para la orden ${orderId}.
+  
+  Detalles del pago:
+  - Monto total: $${finalTotal}
+  - Cliente: ${order.user.name} (${order.user.email})
+  - Fecha de la compra: ${orderDate}
+  
+  Artículos vendidos:
+  ${items}
+  
+  Revisa los detalles en el sistema y procede con la preparación del pedido.
+  
+  Gracias,
+  Sistema de PupShops`,
+      );
     } else if (status === 'rejected') {
       order.status = 'payment_failed';
 
@@ -205,6 +249,7 @@ export class PaymentsService {
       }
     }
 
+    // Guardamos los cambios en la orden y el pago
     const payment = new Payment();
     payment.id = paymentResponse.id;
     payment.status = paymentResponse.status;
@@ -217,6 +262,7 @@ export class PaymentsService {
     return paymentResponse;
   }
 
+  // Metodo para consultar el estado de pago
   async getPaymentStatus(paymentId: string) {
     const url = `https://api.mercadopago.com/v1/payments/${paymentId}`;
     const paymentResponse = await this.httpRequest(url, {

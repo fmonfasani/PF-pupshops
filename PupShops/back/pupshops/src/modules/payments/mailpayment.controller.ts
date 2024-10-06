@@ -35,4 +35,24 @@ export class MailPaymentController {
       };
     }
   }
+  @Post('/payment/success')
+  async handlePaymentSuccess(@Body() paymentData: any) {
+    const { orderId, amount } = paymentData; // Valores del frontend o backend de pagos
+    try {
+      // Enviar correo de confirmación al vendedor (PupShops)
+      await this.mailPaymentService.sendPaymentNotificationToSeller(
+        orderId,
+        amount,
+      );
+
+      return {
+        message: 'Notificación de pago enviada al vendedor exitosamente.',
+      };
+    } catch (error) {
+      return {
+        message: 'Error enviando notificación al vendedor.',
+        error: error.message,
+      };
+    }
+  }
 }
