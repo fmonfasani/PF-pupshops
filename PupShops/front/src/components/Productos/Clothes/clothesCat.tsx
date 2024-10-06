@@ -16,8 +16,7 @@ const ClothesCat: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "fe747332-2062-4f2c-92d2-3c7934ab685f";
-
+  const categoryId = "fc2e9079-2764-4c4a-a577-11c55f6a4861";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -42,7 +41,7 @@ const ClothesCat: React.FC = () => {
 
         setProducts(formattedData);
         const initialQuantity = formattedData.reduce((acc, product) => {
-          acc[product.id] = 1; 
+          acc[product.id] = 1;
           return acc;
         }, {} as { [key: number]: number });
         setQuantity(initialQuantity);
@@ -129,12 +128,11 @@ const ClothesCat: React.FC = () => {
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
                 e.stopPropagation();
-                const currentQuantity = quantity[product.id] || 1; 
+                const currentQuantity = quantity[product.id] || 1;
                 console.log("Adding to cart:", product.id, currentQuantity);
                 const success = await addToCart(product.id, currentQuantity);
 
                 if (success) {
-                  
                   Swal.fire({
                     title: "¡Producto Agregado!",
                     text: `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito.`,

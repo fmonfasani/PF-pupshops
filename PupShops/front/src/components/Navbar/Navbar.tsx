@@ -64,7 +64,7 @@ export default function Navbar() {
         </div>
         <SearchBar />
         <div className="flex items-center flex-1 justify-between space-x-12">
-          {/* Enlaces de navegación */}
+          {/* Enlaces de navegaci贸n */}
           <nav
             aria-label="Global"
             className="hidden md:flex gap-6 text-sm flex-1"
@@ -175,7 +175,7 @@ export default function Navbar() {
               Contacto
             </button>
 
-            {/* Botón de perfil en escritorio */}
+            {/* Bot贸n de perfil en escritorio */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
@@ -199,12 +199,12 @@ export default function Navbar() {
                       handleProfileMenuClick("/userDashboard/login")
                     }
                   >
-                    Iniciar sesión
+                    Iniciar sesi贸n
                   </button>
-                  {/* Nuevo botón Panel de Usuario */}
+                  {/* Nuevo bot贸n Panel de Usuario */}
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleProfileMenuClick("/profile-client")}
+                    onClick={() => handleProfileMenuClick("/ProfilePage")}
                   >
                     Panel de Usuario
                   </button>
@@ -345,11 +345,11 @@ export default function Navbar() {
                           handleProfileMenuClick("/userDashboard/login")
                         }
                       >
-                        Iniciar sesión
+                        Iniciar sesi贸n
                       </button>
                       <button
                         className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                        onClick={() => handleProfileMenuClick("/profile-client")}
+                        onClick={() => handleProfileMenuClick("/ProfilePage")}
                       >
                         Panel de Usuario
                       </button>

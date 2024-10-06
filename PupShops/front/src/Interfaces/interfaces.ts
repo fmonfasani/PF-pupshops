@@ -1,5 +1,5 @@
 export interface IUser {
-  id: number; // ID del usuario
+  id: number;
   name: string;
   lastname: string;
   email: string;
@@ -9,37 +9,40 @@ export interface IUser {
   address: string;
   phone: number;
   isAdmin: boolean;
-  isActive: boolean; // Este debe ser booleano, no true
+  isActive: boolean;
 }
 
 export interface IAdminRegisterUser extends IUserRegister {
   isAdmin: boolean;
-  isActive?: boolean; // Asumimos que esto es true por defecto
+  isActive?: boolean;
 }
 
 export interface ILoginResponse {
   success: boolean;
   token: string;
-  findUser: IUser | null; // Esto es correcto, ya que findUser puede ser nulo
+  findUser: IUser | null;
 }
 
 export interface IUserResponse {
-  succes: boolean; // Asegurando que esta propiedad también esté en la interfaz
-  user: IUser | null; // Cambiado para ser IUser
-  token: string; // Esto debe ser un string
+  id?: string;
+  succes: boolean;
+  user: IUser | null;
+  token: string;
 }
 
 export interface IUserContextType {
-  user: IUserResponse | null; // Esto está bien si user puede ser nulo
+  user: IUserResponse | null;
   setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
   isLogged: boolean;
   isAdmin: boolean;
-  setIsAdmin: (isAdmin: boolean) => void; // Cambié el tipo a isAdmin
+  setIsAdmin: (isAdmin: boolean) => void;
   setIsLogged: (isLogged: boolean) => void;
   signIn: (credentials: ILoginUser) => Promise<boolean>;
   signUp: (user: IUserRegister) => Promise<boolean>;
   signUpRegister: (user: IUserRegister) => Promise<boolean>;
   logOut: () => void;
+  token: string | null;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export interface ILoginUser {
@@ -57,7 +60,7 @@ export interface IUserRegister {
   city: string;
   address: string;
   phone: number;
-  isActive?: boolean; // Esto indica que el usuario está activo por defecto
+  isActive?: boolean;
 }
 
 export interface IButtonProps {

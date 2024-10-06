@@ -120,15 +120,11 @@ export class OrderService {
   }
 
   async findOne(id: string) {
-<<<<<<< HEAD
-    return await this.orderRepository.getOrder(id);
-=======
     const order = await this.orderRepository.getOrder(id);
     if (!order) {
       throw new NotFoundException('Order not found');
     }
     return order;
->>>>>>> 94bda516b54ff2a57dc9962f7804307a1ae05100
   }
 
   async update(id: string, updateOrderDto: any) {
@@ -137,10 +133,5 @@ export class OrderService {
 
   async remove(id: string) {
     return await this.orderRepository.removeOrder(id);
-<<<<<<< HEAD
-  }
-}
-=======
   }
 }
->>>>>>> 94bda516b54ff2a57dc9962f7804307a1ae05100
