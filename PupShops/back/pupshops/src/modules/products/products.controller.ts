@@ -67,8 +67,14 @@ export class ProductsController {
     return this.productsService.getProductsByChildCategory(categoryId);
   }
 
+  
   @Get('parent/:categoryId')
   getProductsByParentCategory(@Param('categoryId') categoryId: string) {
     return this.productsService.getProductsByParentCategory(categoryId);
+  }
+
+  @Get('category/:categoryId')
+  getProductsRecursive(@Param('categoryId') categoryId: string) {
+    return this.productsService.getProductsRecursive(categoryId);
   }
 }

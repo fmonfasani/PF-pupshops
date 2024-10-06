@@ -20,7 +20,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  const { user } = useContext(UserContext);
+
+  
+  const { user } = useContext(UserContext); //tomame con pinzas.
 
   useEffect(() => {
     setIsClient(true);
@@ -76,6 +78,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const removeFromCart = (productId: number) => {
+    // Cambiado a number
     const updatedCartItems = cartItems.filter((item) => item.id !== productId);
     setCartItems(updatedCartItems);
   };
@@ -87,10 +90,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         throw new Error("No se encontró la sesión del usuario.");
 
       const { token, user } = JSON.parse(storedUserSession);
-
       if (!token) throw new Error("Token no disponible");
 
-      const userId = user.id; // Ahora obtenemos el ID directamente del usuario
+      const userId = user.id;
       if (!userId) throw new Error("ID de usuario no disponible");
 
       const response = await fetch(
@@ -101,7 +103,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, products: cartItems }),
+          body: JSON.stringify({
+            userId,
+            products: cartItems.map((item) => ({
+              id: item.id,
+              quantity: item.quantity || 1,
+            })),
+          }),
         }
       );
 
@@ -112,7 +120,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         );
       }
 
-      setPurchasedItems([...purchasedItems, ...cartItems]);
+      const result = await response.json();
+      console.log("Order ID:", result.orderId);
+
+      const updatedPurchasedItems = cartItems.map((item) => ({
+        ...item,
+        orderId: result.orderId,
+      }));
+
+      setPurchasedItems([...purchasedItems, ...updatedPurchasedItems]);
       setCartItems([]);
       alert("Compra realizada con éxito!");
     } catch (error) {

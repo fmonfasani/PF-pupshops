@@ -204,7 +204,7 @@ export default function Navbar() {
                   {/* Nuevo botón Panel de Usuario */}
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleProfileMenuClick("/ProfilePage")}
+                    onClick={() => handleProfileMenuClick("/profile-client")}
                   >
                     Panel de Usuario
                   </button>

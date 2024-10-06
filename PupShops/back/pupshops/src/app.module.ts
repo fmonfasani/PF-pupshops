@@ -14,6 +14,8 @@ import { AppointmentModule } from './modules/appointments/appointments.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { WebhookModule } from './modules/webhook/webhook.module';
 import { PaymentsModule } from './modules/payments/payment.module';
+import { TicketsModule } from './modules/ticket/ticket.module';
+import { CuponModule } from './modules/cupones/cupones.module';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { PaymentsModule } from './modules/payments/payment.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
+
     PaymentsModule,
     WebhookModule,
     AppointmentModule,
@@ -34,6 +37,8 @@ import { PaymentsModule } from './modules/payments/payment.module';
     ProductsModule,
     OrderModule,
     AuthModule,
+    TicketsModule,
+    CuponModule,
     JwtModule.register({
       global: true,
       signOptions: {

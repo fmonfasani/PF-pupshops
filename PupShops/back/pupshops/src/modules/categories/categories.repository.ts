@@ -15,32 +15,44 @@ export class CategoriesRepository {
     return await this.categoriesRepository.find();
   }
 
-  async addCategories() {
-    data.default.default.forEach(async (element) => {
+  async addCategory(name, parentName){
 
-      const parentCategory = await this.categoriesRepository.findOne({
-        where: { name : element.parentName}
-      })
-      
-      let parentId = null
+    let parentCategory = null;
 
-      if(parentCategory){
-        parentId = parentCategory.id
-        
-      }
+    if(parentName){
+      parentCategory = await this.categoriesRepository.findOne({
+       where: { name: parentName },
+     });
+    }
 
-
-      await this.categoriesRepository
-        .createQueryBuilder()
-        .insert()
-        .into(Categories)
-        .values({
-          name: element.name,
-          parent: parentId,
-        })
-        .orIgnore()
-        .execute();
+    let parentId = null;
+    if (parentCategory) {
+      parentId = parentCategory.id;
+    }
+    
+    let gatosCategoria = await this.categoriesRepository.findOne({
+      where: { name: name },
     });
+
+    if (!gatosCategoria) {
+      gatosCategoria = this.categoriesRepository.create({
+        name: name,
+        parent: parentId,
+      });
+      gatosCategoria = await this.categoriesRepository.save(gatosCategoria);
+  }
+
+  return gatosCategoria;
+
+
+
+  }
+
+  async addCategories() {
+
+    for (const element of data.default.default) {
+      await this.addCategory(element.name, element.parentName);
+  }
     return 'Categorías Agregadas';
   }
 
@@ -51,11 +63,8 @@ export class CategoriesRepository {
   }
 
   async getChildCategories(parentId: string) {
-    console.log(parentId);
-        
-    return  await this.categoriesRepository.find({
+    return await this.categoriesRepository.find({
       where: { parent: { id: parentId } },
     });
-    
   }
 }

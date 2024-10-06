@@ -1,5 +1,6 @@
 import {
   IAppointment,
+  ILoginResponse,
   ILoginUser,
   IUserRegister,
 } from "@/Interfaces/interfaces";
@@ -27,9 +28,8 @@ export const fetchRegisterUser = async (user: IUserRegister) => {
 }
 
 
-
 // Función para iniciar sesión
-export const login = async (credentials: ILoginUser) => {
+export const login = async (credentials: ILoginUser): Promise<ILoginResponse> => {
   try {
     const response = await fetch("http://localhost:3001/auth/signin", {
       method: "POST",
@@ -43,23 +43,23 @@ export const login = async (credentials: ILoginUser) => {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Login failed:", errorData);
-      return { login: false, error: errorData }; // Indica que el login falló
+      return { success: false, token: "", findUser: null }; // Indica que el login falló
     }
 
     const data = await response.json();
     console.log("Response data from login:", data);
     
     return {
-      login: true,
+      success: data.success,
       token: data.token,
-      user: data.findUser,
-    }; // Asegúrate de devolver el token y la información del usuario
+      findUser: data.findUser,
+    };
+    
   } catch (error) {
     console.error("Error during login request:", error);
-    return { login: false, error: "Error desconocido" }; // Error de conexión
+    return { success: false, token: "", findUser: null }; // Error de conexión
   }
 };
-
 
 export const fetchAppointment = async (appointment: IAppointment) => {
   const response = await fetch(`http://localhost:3001/appointments/`, {
@@ -73,4 +73,3 @@ export const fetchAppointment = async (appointment: IAppointment) => {
   console.log("Response data from appointment:", appointment);
   return data;
 };
-

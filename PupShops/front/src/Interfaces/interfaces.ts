@@ -1,4 +1,3 @@
-
 export interface IUser {
   id: number; // ID del usuario
   name: string;
@@ -10,7 +9,7 @@ export interface IUser {
   address: string;
   phone: number;
   isAdmin: boolean;
-  isActive: boolean; // Se puede agregar aquí si se quiere hacer opcional
+  isActive: boolean; // Este debe ser booleano, no true
 }
 
 export interface IAdminRegisterUser extends IUserRegister {
@@ -18,36 +17,28 @@ export interface IAdminRegisterUser extends IUserRegister {
   isActive?: boolean; // Asumimos que esto es true por defecto
 }
 
+export interface ILoginResponse {
+  success: boolean;
+  token: string;
+  findUser: IUser | null; // Esto es correcto, ya que findUser puede ser nulo
+}
+
 export interface IUserResponse {
-  login: boolean; // Asumiendo que esta propiedad también está en la interfaz
-  user: {
-    id: number; // Este campo debe estar presente
-    name: string;
-    lastname: string;
-    email: string;
-    country: string;
-    city: string;
-    address: string;
-    phone: number; // Asegúrate de que sea 'number'
-    isAdmin: boolean; // Asegúrate de que esto sea del tipo correcto
-    isActive: true; // Esto también debe ser true por defecto al crear el usuario
-  };
-  token: string; // Este también debe ser el tipo correcto
+  succes: boolean; // Asegurando que esta propiedad también esté en la interfaz
+  user: IUser | null; // Cambiado para ser IUser
+  token: string; // Esto debe ser un string
 }
 
 export interface IUserContextType {
-  user: IUserResponse | null;
+  user: IUserResponse | null; // Esto está bien si user puede ser nulo
   setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
   isLogged: boolean;
   isAdmin: boolean;
-  setIsAdmin: (isLogged: boolean) => void;
+  setIsAdmin: (isAdmin: boolean) => void; // Cambié el tipo a isAdmin
   setIsLogged: (isLogged: boolean) => void;
   signIn: (credentials: ILoginUser) => Promise<boolean>;
   signUp: (user: IUserRegister) => Promise<boolean>;
   signUpRegister: (user: IUserRegister) => Promise<boolean>;
-  //   getOrders: () => Promise<void>;
-  // setOrders: (orders: IOrderResponse[]) => void;
-  // orders: IOrderResponse[] | [];
   logOut: () => void;
 }
 
@@ -70,12 +61,11 @@ export interface IUserRegister {
 }
 
 export interface IButtonProps {
-    text: string;
-    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    type?: "button" | "submit" | "reset";
-    disabled?:boolean;
+  text: string;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
-
 
 export interface ILoginClientProps {
   setToken: (token: string | null) => void;
