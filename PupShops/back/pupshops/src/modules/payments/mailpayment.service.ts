@@ -16,8 +16,8 @@ export class MailPaymentService {
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
       //(this.baseUrl = 'https://developers.google.com/oauthplayground'),
-      //(this.baseUrl = 'https://pupshops-backend.onrender.com'), // camnbiar en produccion por este
-      (this.baseUrl = 'https://0b26-190-17-115-142.ngrok-free.app'), // quitar en produccion
+      (this.baseUrl = 'https://pupshops-backend.onrender.com'), 
+      //(this.baseUrl = 'https://0b26-190-17-115-142.ngrok-free.app'), 
     );
 
     this.oauth2Client.setCredentials({
@@ -43,7 +43,7 @@ export class MailPaymentService {
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           refreshToken: process.env.OAUTH_REFRESH_TOKEN,
           accessToken:
-            'ya29.a0AcM612yeoiuhh328n9pm5xzx3FqR1HtHtShvWF2DgSXOZp0KXJu1ADGGeDbJXEob8BlomggO22KCD9cPjemgEnYhGDsqwePXsLn0SFCxCXeTfM3jaNu7yHaXphoncgyij26RDqFhoe0evh9PXQ_l4BET3vE3zwhd6pSg2jXTaCgYKAY4SARISFQHGX2MiGS84EvafElSuhBIWF3dV9Q0175',
+            'ya29.a0AcM612yN7ZTK7xa1IO2dUWJbBLgXT3D3OQYWvr4Y13VnnJ-A1s7wvU_qn_oqbNOrv4jDazBC_tcd3VpRaZCDwX6vvt7Kbt-0GFieuavhVJPOF41crlWEyp-fiG_FJD2WXYNYc_uT463D-4V7Fzub3P_uCeMkURHmTo3erviFaCgYKATcSARISFQHGX2MiUVsF0hL30GHCdng__n46bQ0175',
         },
       });
     } catch (error) {
