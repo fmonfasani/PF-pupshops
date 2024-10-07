@@ -34,7 +34,7 @@ import { plainToClass } from 'class-transformer';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @HttpCode(200)
+ /*  @HttpCode(200)
   @Get('/users')
   async getUsers(@Query('page') page = 1, @Query('limit') limit = 3) {
     try {
@@ -44,7 +44,18 @@ export class AdminController {
     } catch (error) {
       throw new InternalServerErrorException('Error al obtener usuarios');
     }
-  }
+  } */
+
+   @HttpCode(200)
+  @Get('/users')
+  async getUsers() {
+    try {
+            return await this.adminService.getUsers();
+    } catch (error) {
+      throw new InternalServerErrorException('Error al obtener usuarios');
+    }
+  } 
+
 
   @HttpCode(200)
   @Get('users/findUser')
