@@ -19,6 +19,7 @@ export default function RegisterPage() {
       setShowNotification(true);
       setLoading(false);  
 
+
       const notificationTimeout = setTimeout(() => {
         setShowNotification(false);
         router.push("/ProfilePage");
@@ -43,7 +44,7 @@ export default function RegisterPage() {
   }
   return (
       <div>
-      {!isLogged &&  <RegisterUser />}  
+      {!isLogged &&  <RegisterUser />} 
       {showNotification && <NotificationRegister message={notificationMessage} />} 
     </div>
   )

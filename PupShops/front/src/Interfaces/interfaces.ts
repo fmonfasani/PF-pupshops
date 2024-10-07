@@ -15,6 +15,7 @@ export interface IUser {
 export interface IAdminRegisterUser extends IUserRegister {
   isAdmin: boolean;
   isActive?: boolean; 
+
 }
 
 export interface ILoginResponse {
@@ -31,11 +32,11 @@ export interface IUserResponse {
 }
 
 export interface IUserContextType {
-  user: IUserResponse | null; 
+  user: IUserResponse | null;
   setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
   isLogged: boolean;
   isAdmin: boolean;
-  setIsAdmin: (isAdmin: boolean) => void; 
+  setIsAdmin: (isAdmin: boolean) => void;
   setIsLogged: (isLogged: boolean) => void;
   signIn: (credentials: ILoginUser) => Promise<boolean>;
   signUp: (user: IUserRegister) => Promise<boolean>;
@@ -68,6 +69,11 @@ export interface IButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
+}
+
+export interface IButtonPropsDelete {
+  onConfirm: () => void;
+  onCancel: () => void;
 }
 
 export interface ILoginClientProps {

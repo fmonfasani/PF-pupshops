@@ -1,8 +1,7 @@
-"use client"; // Asegúrate de que esta línea esté al principio del archivo
-
+"use client"; 
 import { UserContext } from '@/context/userContext';
 import { IUser } from '@/Interfaces/interfaces';
-import { fetchGetUsers } from '@/utils/fetchAdminCreateUser'; // Asegúrate de que esta función esté bien implementada
+import { fetchGetUsers } from '@/utils/fetchAdminCreateUser';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 
@@ -10,38 +9,41 @@ export default function AdminUsersDataComponent() {
   const { user, token } = useContext(UserContext);
   const [users, setUsers] = useState<IUser[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true); // Estado para cargar
-  const [error, setError] = useState<string | null>(null); // Estado para errores
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); 
  
   const router = useRouter();
 
-  // Función para obtener usuarios
   const fetchUsers = async () => {
     if (!token) {
-      setError('Token no disponible.'); // Establece un mensaje de error
-      router.push('/login'); // Redirige si no hay token
-      return; // Sale de la función si no hay token
+      setError('Token no disponible.'); 
+      router.push('userDashboard/login'); 
+      return; 
     }
 
     try {
       setLoading(true);
       setError(null);
       
-      const fetchedUsers = await fetchGetUsers(token); // Llama a tu función de obtención de usuarios
-      setUsers(fetchedUsers); // Asigna los usuarios obtenidos al estado
+      const fetchedUsers = await fetchGetUsers(token); 
+      setUsers(fetchedUsers);
     } catch (err) {
       console.error('Error fetching users:', err);
-      setError('Error al obtener usuarios.'); // Manejo de errores
+      setError('Error al obtener usuarios.'); 
     } finally {
-      setLoading(false); // Finaliza el estado de carga
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers(); // Obtiene usuarios al cargar el componente
-  }, [token]); // Elimina la condición dentro del useEffect, siempre se llamará al montar
+    fetchUsers();
+  }, [token]); 
 
-  // Filtra los usuarios según el término de búsqueda
+  const handleUserClick = (id: string) => {
+    router.push(`/adminDashboard/users/usersData/${id}`);
+  };
+  
+
   const filteredUsers = users.filter(user => {
     const lowerCaseTerm = searchTerm.toLowerCase();
     return (
@@ -71,10 +73,11 @@ export default function AdminUsersDataComponent() {
         <p className="text-center text-gray-600 text-lg">No hay usuarios registrados.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredUsers.map(user => (
+           {filteredUsers.map(user => (
             <div
               key={user.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 flex flex-col"
+              className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 flex flex-col cursor-pointer"
+              onClick={() => handleUserClick(user.id.toString())}
             >
               <div className="p-4 flex-grow flex flex-col justify-between">
                 <div>

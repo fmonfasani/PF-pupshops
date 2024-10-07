@@ -14,20 +14,25 @@ function LoginPage({ setToken }: ILoginClientProps) {
   const [dataUser, setDataUser] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({} as { [key: string]: string });
   const [showNotificationWelcome, setShowNotificationWelcome] = useState(false);
-  const [notificationMessageWelcome, setNotificationMessageWelcome] = useState('');
+  const [notificationMessageWelcome, setNotificationMessageWelcome] =
+    useState("");
+
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setDataUser({ ...dataUser, [name]: value });
+
     const { formIsValid, errors } = validateLoginForm({ ...dataUser, [name]: value });
+
     setErrors(errors);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { formIsValid, errors } = validateLoginForm(dataUser);
+
   
     if (formIsValid) {
       const credentials = { email: dataUser.email, password: dataUser.password };
@@ -38,6 +43,7 @@ function LoginPage({ setToken }: ILoginClientProps) {
           const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
           if (token) {
             setToken(token); 
+
             setNotificationMessageWelcome(`Bienvenido`);
             setShowNotificationWelcome(true);
             setTimeout(() => {
@@ -46,7 +52,6 @@ function LoginPage({ setToken }: ILoginClientProps) {
             }, 3000);
           }
         } else {
-          
           if (!dataUser.email) {
             setErrorMessage("Por favor ingresa tu correo electrónico");
           } else if (!dataUser.password) {
@@ -62,17 +67,18 @@ function LoginPage({ setToken }: ILoginClientProps) {
         setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
         setShowErrorNotification(true); 
         setTimeout(() => setShowErrorNotification(false), 3000); 
+
       }
     } else {
-      setErrors(errors); 
+      setErrors(errors);
     }
   };
-  
+
 
   const handleRegisterRedirect = () => {
     router.push("/userDashboard/register");
   };
-  
+
   return (
     <section className="bg-gray-100 p-4 mt-16">
       <div className="mx-auto max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl px-4 py-6">
@@ -84,7 +90,10 @@ function LoginPage({ setToken }: ILoginClientProps) {
               </h1>
             </div>
             <div>
-              <a href="/api/auth/login" className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300">
+              <a
+                href="/api/auth/login"
+                className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300"
+              >
                 Iniciar sesión con tu email
               </a>
             </div>
@@ -122,7 +131,11 @@ function LoginPage({ setToken }: ILoginClientProps) {
                   required
                   className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                 />
-                {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
+                {errors.password && (
+                  <span className="text-red-500 text-sm">
+                    {errors.password}
+                  </span>
+                )}
               </div>
             </div>
             <div>
@@ -136,12 +149,23 @@ function LoginPage({ setToken }: ILoginClientProps) {
             </div>
           </form>
           <p className="mt-10 text-center text-sm text-gray-500">
-            <ButtonForms text="¿No posees una cuenta? Haz clic aquí para registrarse" onClick={handleRegisterRedirect} /> 
+            <ButtonForms
+              text="¿No posees una cuenta? Haz clic aquí para registrarse"
+              onClick={handleRegisterRedirect}
+            />
           </p>
         </div>
       </div>
-      {showNotificationWelcome && <NotificationRegister message={notificationMessageWelcome} />}
-      {showErrorNotification && <NotificationError message={errorMessage} onClose={() => setShowErrorNotification(false)} />}
+      {showNotificationWelcome && (
+        <NotificationRegister message={notificationMessageWelcome} />
+      )}
+      {showErrorNotification && (
+        <NotificationError
+          message={errorMessage}
+          onClose={() => setShowErrorNotification(false)}
+        />
+      )}
+
     </section>
   );
 }

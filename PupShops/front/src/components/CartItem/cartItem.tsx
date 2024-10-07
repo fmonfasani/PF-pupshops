@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { cartContext } from "@/context/cartContext";
 import { IProduct } from "@/Interfaces/ICart";
 import Image from "next/image";
+
 import { FaTrash } from "react-icons/fa"; 
+
 
 interface CartItemProps {
   item: IProduct;
@@ -12,9 +14,18 @@ interface CartItemProps {
 
 const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { removeFromCart } = useContext(cartContext);
+  const [quantity, setQuantity] = useState(item.quantity || 1);
 
   const handleRemoveClick = () => {
     removeFromCart(item.id);
+  };
+
+  const updateQuantity = (operation: "increment" | "decrement") => {
+    setQuantity((prevQuantity) =>
+      operation === "increment"
+        ? prevQuantity + 1
+        : Math.max(prevQuantity - 1, 1)
+    );
   };
 
   return (
@@ -33,9 +44,21 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
           Precio:{" "}
           <span className="text-teal-600">${item.price.toFixed(2)}</span>
         </p>
-        <p className="text-lg font-light">
-          Cantidad: <span className="text-teal-600">{item.quantity || 1}</span>
-        </p>
+        <div className="flex items-center space-x-4">
+          <button
+            className="px-3 py-1 bg-gray-300 rounded"
+            onClick={() => updateQuantity("decrement")}
+          >
+            -
+          </button>
+          <span>{quantity}</span>
+          <button
+            className="px-3 py-1 bg-gray-300 rounded"
+            onClick={() => updateQuantity("increment")}
+          >
+            +
+          </button>
+        </div>
       </div>
       <button
         onClick={handleRemoveClick}

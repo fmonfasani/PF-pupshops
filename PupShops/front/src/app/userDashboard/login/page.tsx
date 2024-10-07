@@ -16,8 +16,7 @@ export default function Login() {
     if (isLogged) {
       setNotificationMessage(`Has iniciado sesión`);
       setShowNotification(true);
-      setLoading(false);  
-
+      setLoading(false);
       const notificationTimeout = setTimeout(() => {
         setShowNotification(false);
         router.push("/home");

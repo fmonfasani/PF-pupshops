@@ -5,6 +5,7 @@ import { IUserResponse } from '@/Interfaces/interfaces';
 import { UserContext } from '@/context/userContext';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 
+
 const ProfilePage = () => {
   const router = useRouter();
   const [showLogoutNotification, setShowLogoutNotification] = useState(false);
@@ -67,6 +68,7 @@ const ProfilePage = () => {
           {showNotificationRedirect && (
             <NotificationRegister message={notificationMessageRedirect} />
           )}
+
       </div>
     );
   }
@@ -82,23 +84,35 @@ const ProfilePage = () => {
             {userData ? (
               <div className="space-y-2">
                 <div className="grid grid-cols-2 gap-2">
-                  <p className="font-semibold text-gray-700 text-left">Email:</p>
-                  <p className="text-gray-600 break-words">{userData.user?.email}</p>
+                  <p className="font-semibold text-gray-700 text-left">
+                    Email:
+                  </p>
+                  <p className="text-gray-600 break-words">
+                    {userData.user?.email}
+                  </p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <p className="font-semibold text-gray-700 text-left">Nombre:</p>
+                  <p className="font-semibold text-gray-700 text-left">
+                    Nombre:
+                  </p>
                   <p className="text-gray-600">{userData.user?.name}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <p className="font-semibold text-gray-700 text-left">Apellido:</p>
+                  <p className="font-semibold text-gray-700 text-left">
+                    Apellido:
+                  </p>
                   <p className="text-gray-600">{userData.user?.lastname}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <p className="font-semibold text-gray-700 text-left">Teléfono:</p>
+                  <p className="font-semibold text-gray-700 text-left">
+                    Teléfono:
+                  </p>
                   <p className="text-gray-600">{userData.user?.phone}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <p className="font-semibold text-gray-700 text-left">Dirección:</p>
+                  <p className="font-semibold text-gray-700 text-left">
+                    Dirección:
+                  </p>
                   <p className="text-gray-600">{userData.user?.address}</p>
                 </div>
               </div>
@@ -121,7 +135,9 @@ const ProfilePage = () => {
             </button>
           </div>
         </div>
-        {showLogoutNotification && <NotificationRegister message={logoutNotificationMessage} />}
+        {showLogoutNotification && (
+          <NotificationRegister message={logoutNotificationMessage} />
+        )}
       </div>
     </section>
   );

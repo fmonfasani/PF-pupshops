@@ -11,6 +11,9 @@ import { OrderDetails } from './order-detail.entity';
 import { User } from '../../users/entities/user.entity';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Payment } from '../../payments/entities/payment.entity';
+import { IsOptional } from 'class-validator';
+import { Cupon } from '../../cupones/cupones.entity';
+
 
 @Entity({
   name: 'orders',
@@ -34,9 +37,18 @@ export class Orders {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
+  @IsOptional()
+  @OneToMany(()=> Cupon , (cupon) => cupon.order)
+  @JoinColumn({name: 'Cupon'})
+  cupon: Cupon[]
+
+ 
   @OneToMany(() => Payment, (payment) => payment.order)
   payments: Payment[];
 
   @Column({ type: 'varchar', length: 50, default: 'pending' })
   status: string;
+
+  @Column('json', { nullable: true })
+  trackingHistory: { location: string, date: Date }[];
 }
