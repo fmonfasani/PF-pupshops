@@ -87,6 +87,7 @@ export default function AdminOrdersComponent() {
                   <p className="text-gray-600 mb-1 text-sm"><strong>Fecha: </strong>{new Date(order.date).toLocaleDateString()}</p>
                   <p className="text-gray-600 mb-1 text-sm"><strong>Estado: </strong> {order.status}</p>
                   <p className="text-gray-600 mb-1 text-sm"><strong>ID del Usuario: </strong>{order.userId}</p>
+                  
                 </div>
               </div>
             </div>

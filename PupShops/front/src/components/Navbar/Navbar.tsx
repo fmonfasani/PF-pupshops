@@ -345,7 +345,7 @@ export default function Navbar() {
                           handleProfileMenuClick("/userDashboard/login")
                         }
                       >
-                        Iniciar sesi贸n
+                        Iniciar sesion
                       </button>
                       <button
                         className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"

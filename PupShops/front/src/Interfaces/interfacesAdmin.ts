@@ -1,4 +1,5 @@
 import { IUserRegister } from "./interfaces";
+import { IProduct } from "./ICart";
 
 export interface ICategory {
     id?: string;
