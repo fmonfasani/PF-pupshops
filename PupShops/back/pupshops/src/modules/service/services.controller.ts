@@ -27,32 +27,47 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Post()
+  @ApiBearerAuth()
+@UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   create(@Body() createServiceDto: CreateServiceDto) {
     return this.servicesService.create(createServiceDto);
   }
-
+  @Get('seeder')
+  addProducts() {
+    return this.servicesService.addServicesSeeder();
+  }
   @Get()
+  @ApiBearerAuth()
+@UseGuards(AuthGuard,RolesGuard)
   findAll() {
     return this.servicesService.findAll();
   }
 
   @Get(':id')
+  @ApiBearerAuth()
+@UseGuards(AuthGuard,RolesGuard)
   findOne(@Param('id') id: string) {
     return this.servicesService.findOne(id);
   }
   @Delete(':id')
+  @ApiBearerAuth()
+@UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   remove(@Param('id') id: string) {
     return this.servicesService.remove(id);
   }
   @Patch(':id/restore')
+  @ApiBearerAuth()
+@UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   restore(@Param('id') id: string) {
     return this.servicesService.restore(id);
   }
 
   @Patch(':id/price')
+  @ApiBearerAuth()
+@UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   updatePrice(
     @Param('id') id: string,

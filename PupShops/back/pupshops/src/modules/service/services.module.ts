@@ -10,7 +10,7 @@ import { AppointmentsService } from '../appointments/appointments.service';
 import { User } from '../users/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Service, Appointment, User])],
+  imports: [TypeOrmModule.forFeature([Service,Appointment,User])],
   controllers: [ServicesController],
   providers: [ServicesService, AppointmentsService],
 })

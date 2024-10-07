@@ -11,14 +11,18 @@ import { Not, Repository } from 'typeorm';
 import { Service } from './entities/services.entity';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServicePriceDto } from './dto/update-price.dto';
+import * as serviceData from '../../utils/service.json'
+import { Appointment } from '../appointments/entities/appointment.entity';
+import { AppointmentsService } from '../appointments/appointments.service';
 //import * as mercadopago from 'mercadopago';
 
 @Injectable()
 export class ServicesService {
   constructor(
     @InjectRepository(Service)
-    private servicesRepository: Repository<Service>,
-  ) {}
+    private readonly servicesRepository: Repository<Service>,
+    private readonly appointmentService: AppointmentsService
+  )  {}
 
   async create(createServiceDto: CreateServiceDto): Promise<Service> {
     const service = this.servicesRepository.create(createServiceDto);
@@ -35,6 +39,33 @@ export class ServicesService {
         // Manejar otros errores
         throw new InternalServerErrorException('Error al crear el servicio');
       }
+    }
+  }
+  async addServicesSeeder() {
+    try {
+      
+      if (!Array.isArray(serviceData['default'])) {
+        throw new Error(
+          'El archivo JSON no contiene un array válido de productos.',
+        );
+      }
+
+      const servicesArray = serviceData['default'];
+
+      
+      for (const service of servicesArray) {
+        const newService = this.servicesRepository.create({
+          name: service.name,
+          price: service.price,
+        });
+       
+        await this.servicesRepository.save(newService);
+      }
+
+      return 'Servicios Agregados';
+    } catch (error) {
+      console.error('Error al agregar productos:', error.message);
+      throw new InternalServerErrorException('Error al agregar los productos');
     }
   }
 
@@ -70,16 +101,23 @@ export class ServicesService {
     return service;
   }
 
-  async remove(id: string): Promise<{ message: string }> {
-    const service = await this.findOne(id);
+  async remove(id: string): Promise<string> {
+    const service = await this.servicesRepository.findOne({ where: { id } });
     if (!service) {
-      throw new NotFoundException(`Servicio con id ${id} no encontrado`);
+        throw new NotFoundException(`Servicio con id ${id} no encontrado`);
     }
-    // Marcar el servicio como eliminado lógicamente
-    service.deletedAt = new Date();
-    await this.servicesRepository.save(service);
-    return { message: 'Borrado lógico correctamente' };
-  }
+
+    
+    await this.appointmentService.remove(id)
+
+    try {
+        await this.servicesRepository.delete(id);
+        return 'Servicio eliminado';
+    } catch (error) {
+        console.error('Error al eliminar el servicio:', error.message);
+        throw new InternalServerErrorException('Error al eliminar el servicio');
+    }
+}
 
   async restore(id: string): Promise<Service> {
     const service = await this.servicesRepository.findOne({
