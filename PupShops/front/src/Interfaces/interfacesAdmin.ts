@@ -42,3 +42,10 @@ export interface IUploadProductComponentProps {
   onPreview?: (product: IUploadProduct) => void;
 }
 
+export interface IOrder {
+  id: string;
+  date: string; 
+  status: string;
+  userId: string; 
+}
+

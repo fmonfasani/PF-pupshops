@@ -82,7 +82,11 @@ export interface ILoginClientProps {
 }
 
 export interface IAppointment {
-  id?: string;
-  date: string;
-  time: string;
+  id: string; 
+  appointmentDate: string; 
+  appointmentTime: string; 
+  serviceName: string; 
+  isDeleted:boolean;
+  userId?: string;
+  status?: string; 
 }

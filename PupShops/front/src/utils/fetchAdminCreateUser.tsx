@@ -36,7 +36,7 @@ export const fetchAdminCreateUser = async (userData: IUserRegister, token: strin
 
 //Ver usuarios registrados
 export const fetchGetUsers = async (token:string, page = 1, limit = 8) => {
-  const response = await fetch(`http://localhost:3001/admin/users?page=${page}&limit=${limit}`, {
+  const response = await fetch(`http://localhost:3001/admin/users`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
