@@ -1,22 +1,22 @@
 "use client";
 
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cartContext } from "@/context/cartContext";
 import { IProduct } from "@/Interfaces/ICart";
 import Swal from "sweetalert2";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 6;
 
-const ClothesCat: React.FC = () => {
+const GatoGeneral: React.FC = () => {
   const router = useRouter();
   const { addToCart } = useContext(cartContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "fc2e9079-2764-4c4a-a577-11c55f6a4861";
+  const categoryId = "cb738664-5d89-44f8-8b2f-b029e35d9dc2";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -24,7 +24,7 @@ const ClothesCat: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/products/child/${categoryId}`
+          `http://localhost:3001/products/category/${categoryId}`
         );
 
         if (!response.ok) {
@@ -33,6 +33,7 @@ const ClothesCat: React.FC = () => {
         }
 
         const data: IProduct[] = await response.json();
+        console.log(data);
 
         const formattedData = data.map((product) => ({
           ...product,
@@ -81,7 +82,7 @@ const ClothesCat: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 bg-slate-50">
-      <h1 className="text-2xl text-center font-bold mb-4">Ropa para Gatos</h1>
+      <h1 className="text-2xl text-center font-bold mb-4">Productos para Gato</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
           <div
@@ -169,4 +170,4 @@ const ClothesCat: React.FC = () => {
   );
 };
 
-export default ClothesCat;
+export default GatoGeneral;

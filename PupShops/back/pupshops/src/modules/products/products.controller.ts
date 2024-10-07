@@ -25,7 +25,7 @@ export class ProductsController {
   @Get()
   findAllProducts(
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('limit') limit: number = 75,
   ) {
     if (page && limit) return this.productsService.getAllProducts(page, limit);
     return this.productsService.getAllProducts(page, limit);

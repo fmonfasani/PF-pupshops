@@ -1,21 +1,22 @@
 "use client";
 
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cartContext } from "@/context/cartContext";
 import { IProduct } from "@/Interfaces/ICart";
+import Swal from "sweetalert2";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 6;
 
-const ClothesCat: React.FC = () => {
+const AlimentoGato: React.FC = () => {
   const router = useRouter();
   const { addToCart } = useContext(cartContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "66ea5242-6ab4-4cbb-a92d-76599c13e654";
+  const categoryId = "4e2baa45-17f7-4750-9631-b92d875fe5db";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -23,7 +24,7 @@ const ClothesCat: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/products/child/${categoryId}`
+          `http://localhost:3001/products/category/${categoryId}`
         );
 
         if (!response.ok) {
@@ -32,15 +33,16 @@ const ClothesCat: React.FC = () => {
         }
 
         const data: IProduct[] = await response.json();
+        console.log(data);
 
         const formattedData = data.map((product) => ({
           ...product,
-          price: Number(product.price)
+          price: Number(product.price),
         }));
 
         setProducts(formattedData);
         const initialQuantity = formattedData.reduce((acc, product) => {
-          acc[product.id] = 1; // Inicializamos la cantidad en 1
+          acc[product.id] = 1;
           return acc;
         }, {} as { [key: number]: number });
         setQuantity(initialQuantity);
@@ -74,14 +76,14 @@ const ClothesCat: React.FC = () => {
       [productId]:
         operation === "increment"
           ? (prevQuantities[productId] || 1) + 1
-          : Math.max((prevQuantities[productId] || 1) - 1, 1)
+          : Math.max((prevQuantities[productId] || 1) - 1, 1),
     }));
   };
 
   return (
     <div className="container mx-auto p-4 bg-slate-50">
       <h1 className="text-2xl text-center font-bold mb-4">
-        Balanceados para Gatos
+        Productos para Gato
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
@@ -128,14 +130,18 @@ const ClothesCat: React.FC = () => {
             <button
               className="mt-auto bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
               onClick={async (e) => {
-                e.stopPropagation(); // Previene el evento de click en el contenedor
-                const currentQuantity = quantity[product.id] || 1; // Asegúrate de que quantity esté definido
+                e.stopPropagation();
+                const currentQuantity = quantity[product.id] || 1;
                 console.log("Adding to cart:", product.id, currentQuantity);
-                const success = await addToCart(product.id, currentQuantity); // Aquí
+                const success = await addToCart(product.id, currentQuantity);
+
                 if (success) {
-                  alert(
-                    `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito`
-                  );
+                  Swal.fire({
+                    title: "¡Producto Agregado!",
+                    text: `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito.`,
+                    icon: "success",
+                    confirmButtonText: "Aceptar",
+                  });
                 } else {
                   alert("Error al agregar al carrito");
                 }
@@ -166,4 +172,4 @@ const ClothesCat: React.FC = () => {
   );
 };
 
-export default ClothesCat;
+export default AlimentoGato;
