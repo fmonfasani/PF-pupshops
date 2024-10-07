@@ -21,7 +21,7 @@ export default function Gato() {
       </div>
 
       <div className="flex justify-center gap-6">
-        <Link href="../Categorias/Gato/SubCategorias/Alimento" passHref>
+        <Link href="/Categorias/Gato/SubCategorias/Alimento" passHref>
           <button className="flex flex-col items-center justify-center text-center hover:text-orange-400 transition">
             <span className="text-lg mb-2">Alimentos</span>
             <FaFish className="text-teal-600 text-6xl" />

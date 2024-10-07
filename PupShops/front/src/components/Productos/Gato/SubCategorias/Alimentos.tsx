@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 
 const ITEMS_PER_PAGE = 6;
 
+
 const AlimentoGato: React.FC = () => {
   const router = useRouter();
   const { addToCart } = useContext(cartContext);
@@ -16,7 +17,7 @@ const AlimentoGato: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "4e2baa45-17f7-4750-9631-b92d875fe5db";
+  const categoryId = "56b9b258-6fcc-408e-ab95-2282ece92bfe";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -81,9 +82,9 @@ const AlimentoGato: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-slate-50">
+    <div className="container mx-auto p-4 mt-24 bg-slate-50">
       <h1 className="text-2xl text-center font-bold mb-4">
-        Productos para Gato
+        Alimentos para Gato
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
