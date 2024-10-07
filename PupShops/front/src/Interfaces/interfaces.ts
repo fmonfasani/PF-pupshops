@@ -1,5 +1,5 @@
 export interface IUser {
-  id: number;
+  id: number; 
   name: string;
   lastname: string;
   email: string;
@@ -14,7 +14,8 @@ export interface IUser {
 
 export interface IAdminRegisterUser extends IUserRegister {
   isAdmin: boolean;
-  isActive?: boolean;
+  isActive?: boolean; 
+
 }
 
 export interface ILoginResponse {
@@ -24,10 +25,10 @@ export interface ILoginResponse {
 }
 
 export interface IUserResponse {
-  id?: string;
-  succes: boolean;
+  id?:string;
+  succes: boolean; 
   user: IUser | null;
-  token: string;
+  token: string; 
 }
 
 export interface IUserContextType {
@@ -60,7 +61,7 @@ export interface IUserRegister {
   city: string;
   address: string;
   phone: number;
-  isActive?: boolean;
+  isActive?: boolean; 
 }
 
 export interface IButtonProps {
@@ -70,12 +71,22 @@ export interface IButtonProps {
   disabled?: boolean;
 }
 
+export interface IButtonPropsDelete {
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
 export interface ILoginClientProps {
   setToken: (token: string | null) => void;
+ 
 }
 
 export interface IAppointment {
-  id?: string;
-  date: string;
-  time: string;
+  id: string; 
+  appointmentDate: string; 
+  appointmentTime: string; 
+  serviceName: string; 
+  isDeleted:boolean;
+  userId?: string;
+  status?: string; 
 }

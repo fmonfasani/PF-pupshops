@@ -82,7 +82,6 @@ export default function RegisterUser() {
 
     try {
       const isRegistered = await signUp(user);
-
       if (isRegistered) {
         console.log("Registro exitoso y usuario autenticado.");
       } else {

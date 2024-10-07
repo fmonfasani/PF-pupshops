@@ -17,7 +17,6 @@ export default function Login() {
       setNotificationMessage(`Has iniciado sesión`);
       setShowNotification(true);
       setLoading(false);
-
       const notificationTimeout = setTimeout(() => {
         setShowNotification(false);
         router.push("/home");
@@ -39,7 +38,7 @@ export default function Login() {
 
   return (
     <div>
-      {!isLogged &&  <LoginPage setToken={setToken}/>}
+      {!isLogged &&  <LoginPage setToken={setToken}/>}   
       {showNotification && <NotificationRegister message={notificationMessage} />} 
     </div>
   );

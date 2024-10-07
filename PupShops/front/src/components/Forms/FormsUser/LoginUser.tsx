@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 import { validateLoginForm } from "../../../helpers/validate";
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
@@ -16,16 +16,16 @@ function LoginPage({ setToken }: ILoginClientProps) {
   const [showNotificationWelcome, setShowNotificationWelcome] = useState(false);
   const [notificationMessageWelcome, setNotificationMessageWelcome] =
     useState("");
+
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setDataUser({ ...dataUser, [name]: value });
-    const { formIsValid, errors } = validateLoginForm({
-      ...dataUser,
-      [name]: value,
-    });
+
+    const { formIsValid, errors } = validateLoginForm({ ...dataUser, [name]: value });
+
     setErrors(errors);
   };
 
@@ -33,21 +33,17 @@ function LoginPage({ setToken }: ILoginClientProps) {
     event.preventDefault();
     const { formIsValid, errors } = validateLoginForm(dataUser);
 
+  
     if (formIsValid) {
-      const credentials = {
-        email: dataUser.email,
-        password: dataUser.password,
-      };
+      const credentials = { email: dataUser.email, password: dataUser.password };
       try {
-        const success = await signIn(credentials);
-
+        const success = await signIn(credentials); 
+  
         if (success) {
-          const token =
-            typeof window !== "undefined"
-              ? localStorage.getItem("token")
-              : null;
+          const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
           if (token) {
-            setToken(token);
+            setToken(token); 
+
             setNotificationMessageWelcome(`Bienvenido`);
             setShowNotificationWelcome(true);
             setTimeout(() => {
@@ -61,25 +57,23 @@ function LoginPage({ setToken }: ILoginClientProps) {
           } else if (!dataUser.password) {
             setErrorMessage("Por favor ingresa tu contraseña");
           } else {
-            setErrorMessage(
-              "Credenciales inválidas. Verifica tu correo electrónico y contraseña."
-            );
+            setErrorMessage("Credenciales inválidas. Verifica tu correo electrónico y contraseña.");
           }
           setShowErrorNotification(true);
-          setTimeout(() => setShowErrorNotification(false), 3000);
+          setTimeout(() => setShowErrorNotification(false), 3000); 
         }
       } catch (error) {
         console.error("Error durante el inicio de sesión:", error);
-        setErrorMessage(
-          error instanceof Error ? error.message : "Error desconocido."
-        );
-        setShowErrorNotification(true);
-        setTimeout(() => setShowErrorNotification(false), 3000);
+        setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
+        setShowErrorNotification(true); 
+        setTimeout(() => setShowErrorNotification(false), 3000); 
+
       }
     } else {
       setErrors(errors);
     }
   };
+
 
   const handleRegisterRedirect = () => {
     router.push("/userDashboard/register");
@@ -104,10 +98,7 @@ function LoginPage({ setToken }: ILoginClientProps) {
               </a>
             </div>
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email
               </label>
               <div className="mt-2">
@@ -122,16 +113,11 @@ function LoginPage({ setToken }: ILoginClientProps) {
                   autoComplete="email"
                   className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                 />
-                {errors.email && (
-                  <span className="text-red-500 text-sm">{errors.email}</span>
-                )}
+                {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
               </div>
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                 Contraseña
               </label>
               <div className="mt-2">
@@ -179,6 +165,7 @@ function LoginPage({ setToken }: ILoginClientProps) {
           onClose={() => setShowErrorNotification(false)}
         />
       )}
+
     </section>
   );
 }

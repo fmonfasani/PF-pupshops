@@ -9,6 +9,20 @@ export interface ICategory {
     id?: string;
     name: string;
   }
+
+  export interface ICreateAdmin {
+    name: string;
+    lastname: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    country: string;
+    city: string;
+    address: string;
+    phone: number;
+    isAdmin?:boolean;
+    isActive?: boolean; // Esto indica que el usuario está activo por defecto
+  }
   
   
   export interface IUploadProduct {
@@ -26,5 +40,12 @@ export interface ICategory {
 
 export interface IUploadProductComponentProps {
   onPreview?: (product: IUploadProduct) => void;
+}
+
+export interface IOrder {
+  id: string;
+  date: string; 
+  status: string;
+  userId: string; 
 }
 

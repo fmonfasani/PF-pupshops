@@ -1,10 +1,5 @@
 "use client";
-import {
-  ILoginResponse,
-  ILoginUser,
-  IUserRegister,
-  IUserResponse,
-} from "@/Interfaces/interfaces";
+import { ILoginResponse, ILoginUser, IUserRegister, IUserResponse } from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
 import { login, fetchRegisterUser } from "@/utils/fetchUser";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -83,14 +78,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error(`Registration failed: ${JSON.stringify(data)}`);
       return false;
     } catch (error) {
-      console.error(
-        `Error during sign up: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
-      throw new Error(
-        error instanceof Error ? error.message : "Error desconocido"
-      );
+      console.error(`Error during sign up: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(error instanceof Error ? error.message : 'Error desconocido');
+
     }
   };
 
@@ -98,7 +88,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const storedAuthData = localStorage.getItem("authData");
       const token = storedAuthData ? JSON.parse(storedAuthData).token : null;
-
       if (!token) {
         console.error(
           "No se encontró un token válido para realizar el registro."

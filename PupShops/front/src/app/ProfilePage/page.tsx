@@ -1,19 +1,17 @@
-"use client";
-import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { IUserResponse } from "@/Interfaces/interfaces";
-import { UserContext } from "@/context/userContext";
-import { NotificationRegister } from "@/components/Notifications/NotificationRegister";
+'use client';
+import { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { IUserResponse } from '@/Interfaces/interfaces';
+import { UserContext } from '@/context/userContext';
+import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
+
 
 const ProfilePage = () => {
   const router = useRouter();
   const [showLogoutNotification, setShowLogoutNotification] = useState(false);
-  const [logoutNotificationMessage, setLogoutNotificationMessage] =
-    useState("");
-  const [showNotificationRedirect, setShowNotificationRedirect] =
-    useState(false);
-  const [notificationMessageRedirect, setNotificationMessageRedirect] =
-    useState("");
+  const [logoutNotificationMessage, setLogoutNotificationMessage] = useState('');
+  const [showNotificationRedirect, setShowNotificationRedirect] = useState(false);
+  const [notificationMessageRedirect, setNotificationMessageRedirect] = useState('');
   const [userData, setUserData] = useState<IUserResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const { logOut } = useContext(UserContext);
@@ -67,9 +65,10 @@ const ProfilePage = () => {
   if (!loading && !userData) {
     return (
       <div className="flex flex-col justify-center items-center h-screen">
-        {showNotificationRedirect && (
-          <NotificationRegister message={notificationMessageRedirect} />
-        )}
+          {showNotificationRedirect && (
+            <NotificationRegister message={notificationMessageRedirect} />
+          )}
+
       </div>
     );
   }

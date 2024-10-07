@@ -73,4 +73,3 @@ throw new Error("Error al modificar producto");
 
 return response.json();
 };
-

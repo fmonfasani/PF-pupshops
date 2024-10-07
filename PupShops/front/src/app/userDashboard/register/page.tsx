@@ -17,7 +17,8 @@ export default function RegisterPage() {
     if (isLogged) {
       setNotificationMessage(`Debes cerrar sesión para registrar un usuario`);
       setShowNotification(true);
-      setLoading(false);
+      setLoading(false);  
+
 
       const notificationTimeout = setTimeout(() => {
         setShowNotification(false);
@@ -43,7 +44,7 @@ export default function RegisterPage() {
   }
   return (
       <div>
-      {!isLogged &&  <RegisterUser />}
+      {!isLogged &&  <RegisterUser />} 
       {showNotification && <NotificationRegister message={notificationMessage} />} 
     </div>
   )

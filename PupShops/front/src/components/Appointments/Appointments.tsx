@@ -48,6 +48,8 @@ const AppointmentForm = () => {
       `Día seleccionado: ${selectedDate}, Horario seleccionado: ${selectedTime}`
     );
     const appointment: IAppointment = {
+      id:"",
+      userId:"",
       appointmentDate: selectedDate, // La fecha seleccionada por el usuario
       appointmentTime: selectedTime, // La hora seleccionada por el usuario
       serviceName: "Peluquería",
