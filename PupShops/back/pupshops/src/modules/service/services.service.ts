@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-// src/service/services.service.ts
 import {
   ConflictException,
   Injectable,
@@ -11,18 +9,17 @@ import { Not, Repository } from 'typeorm';
 import { Service } from './entities/services.entity';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServicePriceDto } from './dto/update-price.dto';
-import * as serviceData from '../../utils/service.json'
+import * as serviceData from '../../utils/service.json';
 import { Appointment } from '../appointments/entities/appointment.entity';
 import { AppointmentsService } from '../appointments/appointments.service';
-//import * as mercadopago from 'mercadopago';
 
 @Injectable()
 export class ServicesService {
   constructor(
     @InjectRepository(Service)
     private readonly servicesRepository: Repository<Service>,
-    private readonly appointmentService: AppointmentsService
-  )  {}
+    private readonly appointmentService: AppointmentsService,
+  ) {}
 
   async create(createServiceDto: CreateServiceDto): Promise<Service> {
     const service = this.servicesRepository.create(createServiceDto);
@@ -36,14 +33,12 @@ export class ServicesService {
           `El servicio con el nombre "${createServiceDto.name}" ya existe.`,
         );
       } else {
-        // Manejar otros errores
         throw new InternalServerErrorException('Error al crear el servicio');
       }
     }
   }
   async addServicesSeeder() {
     try {
-      
       if (!Array.isArray(serviceData['default'])) {
         throw new Error(
           'El archivo JSON no contiene un array válido de productos.',
@@ -52,13 +47,12 @@ export class ServicesService {
 
       const servicesArray = serviceData['default'];
 
-      
       for (const service of servicesArray) {
         const newService = this.servicesRepository.create({
           name: service.name,
           price: service.price,
         });
-       
+
         await this.servicesRepository.save(newService);
       }
 
@@ -84,14 +78,13 @@ export class ServicesService {
   }
 
   async findAll(): Promise<Service[]> {
-    // Solo devuelve los servicios que no están eliminados lógicamente
+    //
     return await this.servicesRepository.find({
       where: { deletedAt: null },
     });
   }
 
   async findOne(id: string): Promise<Service> {
-    // Busca un servicio que no esté marcado como eliminado
     const service = await this.servicesRepository.findOne({
       where: { id, deletedAt: null },
     });
@@ -104,20 +97,19 @@ export class ServicesService {
   async remove(id: string): Promise<string> {
     const service = await this.servicesRepository.findOne({ where: { id } });
     if (!service) {
-        throw new NotFoundException(`Servicio con id ${id} no encontrado`);
+      throw new NotFoundException(`Servicio con id ${id} no encontrado`);
     }
 
-    
-    await this.appointmentService.remove(id)
+    await this.appointmentService.remove(id);
 
     try {
-        await this.servicesRepository.delete(id);
-        return 'Servicio eliminado';
+      await this.servicesRepository.delete(id);
+      return 'Servicio eliminado';
     } catch (error) {
-        console.error('Error al eliminar el servicio:', error.message);
-        throw new InternalServerErrorException('Error al eliminar el servicio');
+      console.error('Error al eliminar el servicio:', error.message);
+      throw new InternalServerErrorException('Error al eliminar el servicio');
     }
-}
+  }
 
   async restore(id: string): Promise<Service> {
     const service = await this.servicesRepository.findOne({
@@ -128,7 +120,7 @@ export class ServicesService {
         `Servicio con id ${id} no encontrado o no eliminado`,
       );
     }
-    service.deletedAt = null; // Restaurar el servicio
+    service.deletedAt = null;
     return await this.servicesRepository.save(service);
   }
 }
