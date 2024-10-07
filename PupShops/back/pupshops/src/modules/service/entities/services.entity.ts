@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-// src/service/entities/service.entity.ts
 import {
   Column,
   Entity,
@@ -21,7 +19,6 @@ export class Service {
   @OneToMany(() => Appointment, (appointment) => appointment.service)
   appointments: Appointment[];
 
-  // Columna para marcar la eliminación lógica
   @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
 

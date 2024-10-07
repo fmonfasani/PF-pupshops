@@ -27,7 +27,6 @@ export class ServicesService {
     try {
       return await this.servicesRepository.save(service);
     } catch (error) {
-      // Manejar errores de restricción única (nombre duplicado)
       if (error.code === '23505') {
         throw new ConflictException(
           `El servicio con el nombre "${createServiceDto.name}" ya existe.`,
@@ -37,29 +36,37 @@ export class ServicesService {
       }
     }
   }
+
   async addServicesSeeder() {
     try {
       if (!Array.isArray(serviceData['default'])) {
         throw new Error(
-          'El archivo JSON no contiene un array válido de productos.',
+          'El archivo JSON no contiene un array válido de servicios.',
         );
       }
 
       const servicesArray = serviceData['default'];
 
       for (const service of servicesArray) {
-        const newService = this.servicesRepository.create({
-          name: service.name,
-          price: service.price,
-        });
-
-        await this.servicesRepository.save(newService);
+        try {
+          await this.create({
+            name: service.name,
+            price: service.price,
+          });
+        } catch (error) {
+          if (error instanceof ConflictException) {
+            console.log(`El servicio "${service.name}" ya existe, se omite.`);
+            continue;
+          } else {
+            throw error;
+          }
+        }
       }
 
-      return 'Servicios Agregados';
+      return 'Servicios agregados correctamente.';
     } catch (error) {
-      console.error('Error al agregar productos:', error.message);
-      throw new InternalServerErrorException('Error al agregar los productos');
+      console.error('Error al agregar servicios:', error.message);
+      throw new InternalServerErrorException('Error al agregar los servicios');
     }
   }
 
@@ -100,8 +107,8 @@ export class ServicesService {
       throw new NotFoundException(`Servicio con id ${id} no encontrado`);
     }
 
-    await this.appointmentService.remove(id);
-
+    await this.servicesRepository.delete(id);
+    return 'Servicio eliminado';
     try {
       await this.servicesRepository.delete(id);
       return 'Servicio eliminado';
