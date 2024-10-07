@@ -20,7 +20,7 @@ export class Products {
     type: 'varchar',
     length: 100,
     unique: false,
-    nullable: false,
+    nullable: true,
   })
   name: string;
 
