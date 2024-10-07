@@ -20,3 +20,11 @@ export interface ICartContextType {
   proceedToBuy: () => Promise<void>;
   purchasedItems: IProduct[]; 
 }
+
+export interface IProductDetail {
+  id: string;
+  name: string;
+  price: string;
+  imgUrl: string;
+  description: string;
+}

@@ -12,14 +12,10 @@ export default function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isDogsOpen, setIsDogsOpen] = useState(false);
-  const [isCatsOpen, setIsCatsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const closeAllMenus = () => {
-    setIsDogsOpen(false);
-    setIsCatsOpen(false);
     setIsProfileOpen(false);
   };
 
@@ -35,17 +31,7 @@ export default function Navbar() {
     }
   };
 
-  const handleDogMenuClick = (route: string) => {
-    router.push(route);
-    closeAllMenus();
-  };
-
-  const handleCatMenuClick = (route: string) => {
-    router.push(route);
-    closeAllMenus();
-  };
-
-  const handleProfileMenuClick = (route: string) => {
+  const handleMenuItemClick = (route: string) => {
     router.push(route);
     closeAllMenus();
   };
@@ -53,7 +39,7 @@ export default function Navbar() {
   return (
     <header className="bg-gray-100 shadow-md mt-6 fixed top-0 left-0 w-full z-50">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
+      
         <div
           onClick={() => router.push("/")}
           className="block text-teal-600 cursor-pointer"
@@ -62,93 +48,24 @@ export default function Navbar() {
             <Image alt="logo" src={pups} width={100} height={100} />
           </div>
         </div>
+
         <SearchBar />
+
         <div className="flex items-center flex-1 justify-between space-x-12">
-          {/* Enlaces de navegaci贸n */}
+          
           <nav
             aria-label="Global"
             className="hidden md:flex gap-6 text-sm flex-1"
           >
+           
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/products")}
+              onClick={() => handleMenuItemClick("/products")}
             >
               Productos
             </button>
 
-            {/* Menu Perros */}
-            <div className="relative group">
-              <button
-                className="text-gray-500 transition hover:text-gray-500/75"
-                onClick={() => handleMenuClick(setIsDogsOpen, isDogsOpen)}
-              >
-                Perros
-              </button>
-              {isDogsOpen && (
-                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() =>
-                      handleDogMenuClick("/Categorias/Balanceados/Perro")
-                    }
-                  >
-                    Balanceados
-                  </button>
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() =>
-                      handleDogMenuClick("/Categorias/Clothes/Perro")
-                    }
-                  >
-                    Ropa
-                  </button>
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleDogMenuClick("/Categorias/Toys/Perro")}
-                  >
-                    Juguetes
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Menu Gatos */}
-            <div className="relative group">
-              <button
-                className="text-gray-500 transition hover:text-gray-500/75"
-                onClick={() => handleMenuClick(setIsCatsOpen, isCatsOpen)}
-              >
-                Gatos
-              </button>
-              {isCatsOpen && (
-                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() =>
-                      handleCatMenuClick("/Categorias/Balanceados/Gato")
-                    }
-                  >
-                    Balanceados
-                  </button>
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() =>
-                      handleCatMenuClick("/Categorias/Clothes/Gato")
-                    }
-                  >
-                    Ropa
-                  </button>
-                  <button
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleCatMenuClick("/Categorias/Toys/Gato")}
-                  >
-                    Juguetes
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Otros enlaces */}
+           
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/Appointments")}
@@ -161,7 +78,6 @@ export default function Navbar() {
             >
               Carrito
             </button>
-
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/aboutUs")}
@@ -175,7 +91,6 @@ export default function Navbar() {
               Contacto
             </button>
 
-            {/* Bot贸n de perfil en escritorio */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
@@ -188,23 +103,20 @@ export default function Navbar() {
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                     onClick={() =>
-                      handleProfileMenuClick("/userDashboard/register")
+                      handleMenuItemClick("/userDashboard/register")
                     }
                   >
                     Registrarse
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() =>
-                      handleProfileMenuClick("/userDashboard/login")
-                    }
+                    onClick={() => handleMenuItemClick("/userDashboard/login")}
                   >
-                    Iniciar sesi贸n
+                    Iniciar sesión
                   </button>
-                  {/* Nuevo bot贸n Panel de Usuario */}
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleProfileMenuClick("/ProfilePage")}
+                    onClick={() => handleMenuItemClick("/ProfilePage")}
                   >
                     Panel de Usuario
                   </button>
@@ -214,7 +126,7 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* Menu hamburguesa para mobile */}
+        
         <div className="md:hidden">
           <button onClick={toggleMenu}>
             <GiHamburgerMenu className="text-gray-500" />
@@ -228,74 +140,16 @@ export default function Navbar() {
                 >
                   <IoClose />
                 </button>
+
+                
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                  onClick={() => handleMenuClick(setIsDogsOpen, isDogsOpen)}
+                  onClick={() => handleMenuItemClick("/products")}
                 >
-                  Perros
+                  Productos
                 </button>
-                {isDogsOpen && (
-                  <div className="flex flex-col pl-4 bg-gray-100 items-end">
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleDogMenuClick("/Categorias/Balanceados/Perro")
-                      }
-                    >
-                      Balanceados
-                    </button>
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleDogMenuClick("/Categorias/Clothes/Perro")
-                      }
-                    >
-                      Ropa
-                    </button>
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleDogMenuClick("/Categorias/Toys/Perro")
-                      }
-                    >
-                      Juguetes
-                    </button>
-                  </div>
-                )}
-                <button
-                  className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                  onClick={() => handleMenuClick(setIsCatsOpen, isCatsOpen)}
-                >
-                  Gatos
-                </button>
-                {isCatsOpen && (
-                  <div className="flex flex-col pl-4 bg-gray-100 items-end">
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleCatMenuClick("/Categorias/Balanceados/Gato")
-                      }
-                    >
-                      Balanceados
-                    </button>
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleCatMenuClick("/Categorias/Clothes/Gato")
-                      }
-                    >
-                      Ropa
-                    </button>
-                    <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleCatMenuClick("/Categorias/Toys/Gato")
-                      }
-                    >
-                      Juguetes
-                    </button>
-                  </div>
-                )}
+
+                
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                   onClick={() => router.push("/Appointments")}
@@ -320,6 +174,8 @@ export default function Navbar() {
                 >
                   Contacto
                 </button>
+
+              
                 <div className="relative group">
                   <button
                     className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
@@ -334,7 +190,7 @@ export default function Navbar() {
                       <button
                         className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
                         onClick={() =>
-                          handleProfileMenuClick("/userDashboard/register")
+                          handleMenuItemClick("/userDashboard/register")
                         }
                       >
                         Registrarse
@@ -342,14 +198,14 @@ export default function Navbar() {
                       <button
                         className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
                         onClick={() =>
-                          handleProfileMenuClick("/userDashboard/login")
+                          handleMenuItemClick("/userDashboard/login")
                         }
                       >
-                        Iniciar sesi贸n
+                        Iniciar sesión
                       </button>
                       <button
                         className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                        onClick={() => handleProfileMenuClick("/ProfilePage")}
+                        onClick={() => handleMenuItemClick("/ProfilePage")}
                       >
                         Panel de Usuario
                       </button>

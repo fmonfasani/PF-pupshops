@@ -2,31 +2,48 @@ import { IProductDetail } from "../app/products/[id]/page";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
-export const getAllProducts = async (page: number = 1, limit: number = 10) => {
+export const getAllProducts = async (
+  page: number = 1,
+  limit: number = 10,
+  categoryId?: string
+) => {
   try {
-    const res = await fetch(`http://localhost:3001/products?page=${page}&limit=${limit}`);
+    const url = categoryId
+      ? `${BASE_URL}/products?categoryId=${categoryId}&page=${page}&limit=${limit}`
+      : `${BASE_URL}/products?page=${page}&limit=${limit}`;
+
+    const res = await fetch(url);
     if (!res.ok) {
-      throw new Error("Failed to fetch products");
+      throw new Error(`Failed to fetch products: ${res.statusText}`);
     }
+
     return await res.json();
   } catch (error) {
-    console.error("Error fetching products:", error);
-    return [];
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    console.error("Error fetching products:", errorMessage);
+    return { error: errorMessage };
   }
 };
 
-export async function fetchProductDetail(id: string): Promise<IProductDetail> {
+export const fetchProductDetail = async (
+  id: string
+): Promise<IProductDetail | null> => {
   try {
-    const response = await fetch(`http://localhost:3001/products/${id}`, {
+    const response = await fetch(`${BASE_URL}/products/${id}`, {
       cache: "no-cache",
     });
     if (!response.ok) {
-      throw new Error("Failed to fetch product details");
+      throw new Error(
+        `Failed to fetch product details: ${response.statusText}`
+      );
     }
     const product = await response.json();
     return product;
   } catch (error) {
-    console.error("Error fetching product detail:", error);
-    throw error;
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    console.error("Error fetching product detail:", errorMessage);
+    return null;
   }
-}
+};
