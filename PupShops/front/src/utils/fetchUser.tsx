@@ -95,7 +95,10 @@ export const fetchUserAppointments = async (token: string) => {
 
 
 
-
+export const checkUserEmail = async (email: string) => {
+  const response = await fetch(`http://localhost:3001/auth/check-email?email=${email}`);
+  return await response.json();
+};
 
 
 

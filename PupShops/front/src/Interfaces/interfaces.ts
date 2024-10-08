@@ -12,6 +12,7 @@ export interface IUser {
   isActive: boolean;
 }
 
+
 export interface IAdminRegisterUser extends IUserRegister {
   isAdmin: boolean;
   isActive?: boolean; 
