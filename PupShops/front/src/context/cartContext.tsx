@@ -4,7 +4,6 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { ICartContextType, IProduct } from "@/Interfaces/ICart";
 import { fetchProductsById } from "@/lib/servers/serverCart";
 import { UserContext } from "@/context/userContext";
-import { IOrder } from "../Interfaces/ICart";
 
 export const cartContext = createContext<ICartContextType>({
   cartItems: [],
@@ -95,6 +94,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const userId = user.id;
       if (!userId) throw new Error("ID de usuario no disponible");
 
+      console.log("Enviando solicitud para crear la orden...");
       const response = await fetch("http://localhost:3001/orders", {
         method: "POST",
         headers: {
@@ -115,10 +115,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const result = await response.json();
-      console.log("Resultado de la orden:", result);
+      console.log("Respuesta del backend de la orden creada:", result);
+      debugger; // Verificar el resultado de la creación de la orden
+
+      // Asegúrate de acceder correctamente al orderId
+      const orderId = result.order[0].order.id; // Aquí es donde obtienes el orderId
+      console.log("orderId obtenido:", orderId); // Agregar este log para ver el orderId
 
       return {
-        orderId: result.orderId,
+        orderId: orderId,
         finalTotal: result.finalTotal,
       };
     } catch (error) {

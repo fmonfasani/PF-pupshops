@@ -8,12 +8,12 @@ const CartBuy: React.FC = () => {
 
   const handleBuyClick = async () => {
     setLoading(true);
+    console.log("Iniciando el proceso de compra...");
+    debugger; // Verificar el inicio del proceso
     try {
-      // Proceder con la compra y almacenar los datos en localStorage
-      console.log("Iniciando el proceso de compra...");
       const result = await proceedToBuy();
-
       console.log("Resultado de proceedToBuy:", result);
+      debugger; // Verificar el resultado de proceedToBuy
 
       if (!result) {
         console.error("No se pudo proceder con la compra.");
@@ -21,31 +21,38 @@ const CartBuy: React.FC = () => {
       }
 
       const { orderId, finalTotal } = result;
+      console.log("orderId obtenido:", orderId);
+      console.log("finalTotal obtenido:", finalTotal);
+      debugger; // Verificar valores de orderId y finalTotal
 
-      // Crear el objeto con la orden y almacenarlo en el localStorage
+      if (!orderId) {
+        console.error("orderId no está definido.");
+        return;
+      }
+
       const purchasedItems = cartItems.map((item) => ({
         ...item,
         orderId,
       }));
 
       console.log("Items comprados:", purchasedItems);
+      debugger; // Verificar los items comprados
       localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
 
-      // Crear el objeto para la preferencia de pago
       const purchaseItem = {
         type: "products",
-        title: "Compra Pupshops", // Asegúrate de que esto exista en la estructura
-        orderId: orderId, // Usamos el orderId aquí
+        title: "Compra Pupshops",
+        orderId: orderId,
         quantity: purchasedItems[0].quantity,
-        unit_price: finalTotal, // Usamos el total desde la orden
+        unit_price: finalTotal,
       };
 
       console.log(
         "Objeto de compra para la preferencia de pago:",
         purchaseItem
       );
+      debugger; // Verificar el objeto purchaseItem
 
-      // Enviar solicitud para crear la preferencia de pago
       const response = await fetch("http://localhost:3001/payments/create", {
         method: "POST",
         headers: {
@@ -56,6 +63,7 @@ const CartBuy: React.FC = () => {
 
       const data = await response.json();
       console.log("Respuesta de la API:", data);
+      debugger; // Verificar la respuesta de la API
 
       if (response.ok) {
         setPaymentLink(data.init_point);
