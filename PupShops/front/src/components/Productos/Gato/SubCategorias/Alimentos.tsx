@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 
 const ITEMS_PER_PAGE = 6;
 
-
 const AlimentoGato: React.FC = () => {
   const router = useRouter();
   const { addToCart } = useContext(cartContext);
@@ -17,7 +16,7 @@ const AlimentoGato: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "56b9b258-6fcc-408e-ab95-2282ece92bfe";
+  const categoryId = "774d97cc-6b5f-4634-82ee-57647c72bfef";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 

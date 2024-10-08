@@ -91,6 +91,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const userId = user.id;
       if (!userId) throw new Error("ID de usuario no disponible");
 
+      // Agregar un console.log para verificar los datos
+      console.log("Datos enviados al backend para crear la orden:", {
+        userId,
+        products: cartItems.map((item) => ({
+          id: item.id,
+          quantity: item.quantity || 1,
+        })),
+      });
+
       const response = await fetch(`http://localhost:3001/orders`, {
         method: "POST",
         headers: {
@@ -114,6 +123,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const result = await response.json();
+      console.log("Respuesta de la orden creada:", result);
+      const orderId = result.order[0].order.id; // Aquí obtienes el orderId
+
+      console.log("Respuesta del backend al crear la orden:", result);
+
+      // Crear preferencia de pago
+      await createPaymentPreference(orderId);
+
+      // Limpias el carrito y actualizas items comprados
       const updatedPurchasedItems = cartItems.map((item) => ({
         ...item,
         orderId: result.orderId,
@@ -125,6 +143,39 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("Error al proceder a la compra:", error);
       alert("Hubo un problema al realizar la compra. Inténtalo de nuevo.");
+    }
+  };
+
+  const createPaymentPreference = async (orderId: string) => {
+    try {
+      const response = await fetch(`http://localhost:3001/payments/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "products",
+          title: "Pelota de trapo",
+          orderId,
+          quantity: 1,
+          unit_price: 10.99,
+        }),
+      });
+
+      const result = await response.json();
+
+      console.log("Respuesta del backend al crear preferencia:", result);
+
+      if (response.ok) {
+        // Redirigir al usuario a la página de pago de Mercado Pago
+        window.location.href = result.init_point;
+      } else {
+        console.error("Error al crear la preferencia de pago:", result);
+        alert("Error al crear la preferencia de pago.");
+      }
+    } catch (error) {
+      console.error("Error en la solicitud de preferencia de pago:", error);
+      alert("Hubo un problema al crear la preferencia de pago.");
     }
   };
 
