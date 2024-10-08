@@ -16,7 +16,7 @@ const PerroGeneral: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "b86b7819-cb9e-468f-9e32-c68bc4cfaec4";
+  const categoryId = "d5f42845-aafd-4c17-945c-5b2a666ea78c";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -81,8 +81,8 @@ const PerroGeneral: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-slate-50">
-      <h1 className="text-2xl text-center font-bold mb-4">Productos para Gato</h1>
+    <div className="container mx-auto mt-10 p-4 bg-slate-50">
+      <h1 className="text-2xl text-center font-bold mb-4">Productos para Perro</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
           <div

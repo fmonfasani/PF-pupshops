@@ -9,17 +9,15 @@ import Swal from "sweetalert2";
 
 const ITEMS_PER_PAGE = 6;
 
-const AlimentosPerro: React.FC = () => {
+const AccesoriosPerro: React.FC = () => {
   const router = useRouter();
   const { addToCart } = useContext(cartContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
 
-
-  const categoryId = "56b9b258-6fcc-408e-ab95-2282ece92bfe";
+  const categoryId = "05850e17-5e1d-4cdc-8355-851a2522914a";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -36,6 +34,7 @@ const AlimentosPerro: React.FC = () => {
         }
 
         const data: IProduct[] = await response.json();
+        console.log(data);
 
         const formattedData = data.map((product) => ({
           ...product,
@@ -62,32 +61,25 @@ const AlimentosPerro: React.FC = () => {
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-
   const filteredProducts = products.filter((product) => {
-    if (selectedOptions.length === 0 && selectedBrands.length === 0)
-      return true;
-
-    const matchesCategory = selectedOptions.some((option) => {
-      if (option === "seco") {
-        return product.description.includes("kg");
-      } else if (option === "húmedo") {
-        return product.name.includes("Sobres");
+    if (selectedOptions.length === 0) return true;
+    return selectedOptions.some((option) => {
+      if (option === "pechera") {
+        return product.description.includes("Pechera");
+      } else if (option === "abrigo/sweater") {
+        return (
+          product.description.includes("Abrigo") ||
+          product.description.includes("Sweater") ||
+          product.description.includes("Polera")
+        );
+      } else if (option === "collar/correa") {
+        return (
+          product.description.includes("Collar") ||
+          product.description.includes("Correa")
+        );
       }
       return false;
     });
-
-    const matchesBrand = selectedBrands.some((brand) => {
-      if (brand === "Pro Plan") {
-        return product.name.includes("Pro Plan");
-      } else if (brand === "Royal Canin") {
-        return product.name.includes("Royal");
-      } else if (brand === "Cat Chow") {
-        return product.name.includes("Cat Chow");
-      }
-      return false;
-    });
-
-    return matchesCategory || matchesBrand;
   });
 
   const currentProducts = filteredProducts.slice(startIndex, endIndex);
@@ -118,77 +110,52 @@ const AlimentosPerro: React.FC = () => {
     );
   };
 
-  const toggleBrand = (brand: string) => {
-    setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
-    );
-  };
-
   return (
     <div className="flex">
       <div className="w-1/4 p-4 bg-teal-600 text-white border-r mt-24">
         <h2 className="text-lg font-semibold mb-4">Filtros</h2>
         <div className="flex flex-col">
-          <h3 className="font-semibold mb-2">Tipos de Alimentos</h3>
           <label className="flex items-center mb-2">
             <input
               type="checkbox"
-              checked={selectedOptions.includes("seco")}
-              onChange={() => toggleOption("seco")}
+              checked={selectedOptions.includes("pechera")}
+              onChange={() => toggleOption("pechera")}
               className="mr-2"
             />
-            Alimentos Secos
+            Pecheras
           </label>
           <label className="flex items-center mb-2">
             <input
               type="checkbox"
-              checked={selectedOptions.includes("húmedo")}
-              onChange={() => toggleOption("húmedo")}
+              checked={selectedOptions.includes("abrigo/sweater")}
+              onChange={() => toggleOption("abrigo/sweater")}
               className="mr-2"
             />
-            Alimentos Húmedos
-          </label>
-          <h3 className="font-semibold mb-2">Marcas</h3>
-          <label className="flex items-center mb-2">
-            <input
-              type="checkbox"
-              checked={selectedBrands.includes("Pro Plan")}
-              onChange={() => toggleBrand("Pro Plan")}
-              className="mr-2"
-            />
-            Pro Plan
+            Abrigos
           </label>
           <label className="flex items-center mb-2">
             <input
               type="checkbox"
-              checked={selectedBrands.includes("Royal Canin")}
-              onChange={() => toggleBrand("Royal Canin")}
+              checked={selectedOptions.includes("collar/correa")}
+              onChange={() => toggleOption("collar/correa")}
               className="mr-2"
             />
-            Royal Canin
-          </label>
-          <label className="flex items-center mb-2">
-            <input
-              type="checkbox"
-              checked={selectedBrands.includes("Cat Chow")}
-              onChange={() => toggleBrand("Cat Chow")}
-              className="mr-2"
-            />
-            Cat Chow
+            Collares y Correas
           </label>
         </div>
       </div>
 
+      {/* Contenedor de productos */}
       <div className="container mx-auto p-4 mt-24 bg-slate-50 w-3/4">
         <h1 className="text-2xl text-center font-bold mb-4">
-          Alimentos para Perros
+          Accesorios para Perros
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {currentProducts.map((product) => (
             <div
               key={product.id}
               className="border p-4 rounded-lg shadow-md cursor-pointer flex flex-col justify-between h-full"
-              onClick={() => router.push("/Categorias/Alimentos/Perro")}
+              onClick={() => router.push("/Categorias/Ropa/Gato")}
             >
               <div className="flex flex-col items-center">
                 <Image
@@ -230,27 +197,22 @@ const AlimentosPerro: React.FC = () => {
                 onClick={async (e) => {
                   e.stopPropagation();
                   const currentQuantity = quantity[product.id] || 1;
+                  console.log("Adding to cart:", product.id, currentQuantity);
                   const success = await addToCart(product.id, currentQuantity);
 
                   if (success) {
                     Swal.fire({
                       title: "¡Producto Agregado!",
-
-                      text: `${currentQuantity} ${product.name} agregado(s) al carrito.`,
+                      text: `${currentQuantity} unidades de ${product.name} han sido agregadas al carrito.`,
                       icon: "success",
                       confirmButtonText: "Aceptar",
                     });
                   } else {
-                    Swal.fire({
-                      title: "Error",
-                      text: "Hubo un problema al agregar el producto al carrito. Intenta de nuevo.",
-                      icon: "error",
-                      confirmButtonText: "Aceptar",
-                    });
+                    alert("Error al agregar al carrito");
                   }
                 }}
               >
-                Agregar al Carrito
+                Agregar al carrito
               </button>
             </div>
           ))}
@@ -276,4 +238,4 @@ const AlimentosPerro: React.FC = () => {
   );
 };
 
-export default AlimentosPerro;
+export default AccesoriosPerro;

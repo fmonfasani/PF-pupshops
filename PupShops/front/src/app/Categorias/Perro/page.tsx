@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { FaHeartbeat, FaBone, FaShower } from "react-icons/fa";
-import { GiSoccerBall } from "react-icons/gi"; // Asegúrate de que GiDogBone esté disponible
+import { GiSoccerBall } from "react-icons/gi"; 
 import { RiTShirt2Line } from "react-icons/ri";
-import gatitos from "../../../../public/gatitos.png";
-import PerroGeneral from "../../../components/Productos/Perro/perro"; // Puedes cambiar el nombre del componente si es necesario
+import perritos2 from "../../../../public/perritos2.png";
+import PerroGeneral from "../../../components/Productos/Perro/perro"; 
 import Link from "next/link";
 
 export default function Perro() {
@@ -11,33 +11,33 @@ export default function Perro() {
     <div className="mt-12 flex flex-col items-center">
       <div className="mb-8">
         <Image
-          src={gatitos}
-          alt="gatitos"
+          src={perritos2}
+          alt="perritos"
           width={400}
           height={100}
-          className="object-cover"
+          className="object-cover mt-24"
         />
         <hr className="border-teal-600 border-2 w-full my-4" />
       </div>
-      <h1 className="text-2xl font-bold mb-6">Productos para Perro</h1>{" "}
-      {/* Cambiado el título */}
+      <h1 className="text-2xl font-bold mb-6">Categorias</h1>
+     
       <div className="flex justify-center gap-6">
         <Link href="/Categorias/Perro/SubCategorias/Alimento" passHref>
           <button className="flex flex-col items-center justify-center text-center hover:text-orange-400 transition">
             <span className="text-lg mb-2">Alimentos</span>
-            <FaBone className="text-teal-600 text-6xl" />{" "}
-            {/* Usando GiDogBone */}
+            <FaBone className="text-teal-600 text-6xl" />
+           
           </button>
         </Link>
 
-        <Link href="/productos/salud" passHref>
+        <Link href="/Categorias/Perro/SubCategorias/Salud" passHref>
           <button className="flex flex-col items-center justify-center text-center hover:text-orange-400 transition">
             <span className="text-lg mb-2">Salud y bienestar</span>
             <FaHeartbeat className="text-teal-600 text-6xl" />
           </button>
         </Link>
 
-        <Link href="/productos/accesorios" passHref>
+        <Link href="/Categorias/Perro/SubCategorias/Accesorios" passHref>
           <button className="flex flex-col items-center justify-center text-center hover:text-orange-400 transition">
             <span className="text-lg mb-2">Accesorios</span>
             <RiTShirt2Line className="text-teal-600 text-6xl" />
@@ -48,7 +48,7 @@ export default function Perro() {
           <button className="flex flex-col items-center justify-center text-center hover:text-orange-400 transition">
             <span className="text-lg mb-2">Juguetes</span>
             <GiSoccerBall className="text-teal-600 text-6xl" />{" "}
-            {/* Usando GiSoccerBall */}
+      
           </button>
         </Link>
 

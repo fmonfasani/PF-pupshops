@@ -15,11 +15,11 @@ export default function Gato() {
           alt="gatitos"
           width={400}
           height={100}
-          className="object-cover"
+          className="object-cover mt-24"
         />
         <hr className="border-teal-600 border-2 w-full my-4" />
       </div>
-
+      <h1 className="text-2xl font-bold mb-6">Categorias</h1>
       <div className="flex justify-center gap-6">
         <Link href="/Categorias/Gato/SubCategorias/Alimento" passHref>
           <button className="flex flex-col items-center justify-center text-center hover:text-orange-400 transition">
