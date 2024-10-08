@@ -83,7 +83,10 @@ export class OrdersRepository {
     const order = await this.ordersRepository.findOne({
       where: { id },
       relations: {
-        orderDetails: true,
+        orderDetails: {
+          
+          products:true
+        },
         user: true,
       },
     });
@@ -97,7 +100,10 @@ export class OrdersRepository {
     return await this.ordersRepository.find({
       relations: {
         user: true,
-        orderDetails: true,
+        orderDetails: {
+          
+          products:true
+        },
       },
     });
   }
@@ -106,7 +112,10 @@ export class OrdersRepository {
     const order = await this.ordersRepository.findOne({
       where: { id },
       relations: {
-        orderDetails: true,
+        orderDetails: {
+          
+          products:true
+        },
         user: true,
       },
     });
