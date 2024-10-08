@@ -16,6 +16,7 @@ import { WebhookModule } from './modules/webhook/webhook.module';
 import { PaymentsModule } from './modules/payments/payment.module';
 import { TicketsModule } from './modules/ticket/ticket.module';
 import { CuponModule } from './modules/cupones/cupones.module';
+import { ChatGateway } from './modules/chat/chat.gateway';
 
 
 @Module({
@@ -48,6 +49,6 @@ import { CuponModule } from './modules/cupones/cupones.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway],
 })
 export class AppModule {}
