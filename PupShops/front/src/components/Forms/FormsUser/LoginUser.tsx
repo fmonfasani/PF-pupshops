@@ -85,18 +85,22 @@ function LoginPage({ setToken }: ILoginClientProps) {
         <div className="rounded-lg bg-white py-8 px-4 shadow-lg lg:px-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative z-10 mt-0 bg-opacity-60 bg-white p-4 rounded-lg">
-              <h1 className="text-2xl font-bold text-center text-blue-950 ">
+              <h1 className="text-2xl font-bold text-center text-blue-950">
                 Iniciar sesión en tu cuenta
               </h1>
             </div>
-            <div>
+  
+            {/* Botón para iniciar sesión con email */}
+            <div className="text-center">
               <a
                 href="/api/auth/login"
-                className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300"
+                className="w-full md:w-2/5 mx-auto block justify-center rounded-lg bg-teal-600 text-white px-3 py-1.5 text-sm font-semibold leading-6 text-center hover:text-black shadow-sm hover:bg-orange-300"
               >
                 Iniciar sesión con tu email
               </a>
             </div>
+  
+            {/* Campo de email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email
@@ -116,6 +120,8 @@ function LoginPage({ setToken }: ILoginClientProps) {
                 {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
               </div>
             </div>
+  
+            {/* Campo de contraseña */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                 Contraseña
@@ -131,23 +137,23 @@ function LoginPage({ setToken }: ILoginClientProps) {
                   required
                   className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                 />
-                {errors.password && (
-                  <span className="text-red-500 text-sm">
-                    {errors.password}
-                  </span>
-                )}
+                {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
               </div>
             </div>
-            <div>
+  
+            {/* Botón de iniciar sesión */}
+            <div className="text-center">
               <button
                 disabled={!!errors.email}
                 type="submit"
-                className="flex w-full justify-center rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 hover:text-black shadow-sm hover:bg-orange-300"
+                className="w-full md:w-2/5 mx-auto block justify-center rounded-lg bg-teal-600 text-white px-3 py-1.5 text-sm font-semibold leading-6 text-center hover:text-black shadow-sm hover:bg-orange-300"
               >
                 Iniciar sesión
               </button>
             </div>
           </form>
+  
+          {/* Texto de registro */}
           <p className="mt-10 text-center text-sm text-gray-500">
             <ButtonForms
               text="¿No posees una cuenta? Haz clic aquí para registrarse"
@@ -156,6 +162,8 @@ function LoginPage({ setToken }: ILoginClientProps) {
           </p>
         </div>
       </div>
+  
+      {/* Notificaciones */}
       {showNotificationWelcome && (
         <NotificationRegister message={notificationMessageWelcome} />
       )}
@@ -165,9 +173,8 @@ function LoginPage({ setToken }: ILoginClientProps) {
           onClose={() => setShowErrorNotification(false)}
         />
       )}
-
     </section>
   );
-}
+}  
 
 export default LoginPage;

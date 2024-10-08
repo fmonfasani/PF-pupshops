@@ -38,7 +38,7 @@ const ProfilePage = () => {
   }, [userData, loading, router]);
 
   const handleEdit = () => {
-    // Lógica para editar datos del perfil
+    router.push('ProfilePage/edit'); 
   };
 
   const handleLogout = () => {
@@ -72,6 +72,8 @@ const ProfilePage = () => {
       </div>
     );
   }
+
+  
 
   return (
     <section className="bg-gray-100 p-6 mt-20">

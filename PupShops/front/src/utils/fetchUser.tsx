@@ -3,6 +3,8 @@ import {
   ILoginResponse,
   ILoginUser,
   IUserRegister,
+  IUserResponse,
+  IUserUpdateData,
 } from "@/Interfaces/interfaces";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -75,19 +77,8 @@ export const fetchAppointment = async (appointment: IAppointment) => {
 };
 
 
-//Modificar perfil 
-export const updateUserData = async (userId: string, data: object) => {
-  const response = await fetch(`http://localhost:3001/users/${userId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
 
-  if (!response.ok) {
-    throw new Error('Error al actualizar el perfil');
-  }
 
-  return await response.json();
-};
+
+
+

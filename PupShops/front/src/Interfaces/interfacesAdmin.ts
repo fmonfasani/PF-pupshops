@@ -44,8 +44,24 @@ export interface IUploadProductComponentProps {
 
 export interface IOrder {
   id: string;
-  date: string; 
+  date: string;
   status: string;
-  userId: string; 
+  trackingHistory: string | null;
+  user: {
+    id: string;
+    isActive: boolean;
+    name: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    country: string;
+    city: string;
+    address: string;
+  };
+  orderDetails: {
+    id: string;
+    price: string;
+    quantity: number;
+  };
 }
 

@@ -76,6 +76,11 @@ export interface IButtonPropsDelete {
   onCancel: () => void;
 }
 
+export interface DeleteUserButtonProps {
+  userId: string;
+  onDeleteSuccess: () => void; 
+}
+
 export interface ILoginClientProps {
   setToken: (token: string | null) => void;
  
@@ -89,4 +94,17 @@ export interface IAppointment {
   isDeleted:boolean;
   userId?: string;
   status?: string; 
+}
+
+export interface IUserUpdateData {
+  name: string;
+  lastname: string;
+  email: string;
+  password?: string; // Cambiar a opcional
+  confirmPassword?: string; // Cambiar a opcional
+  country: string;
+  city: string;
+  address: string;
+  phone: number;
+  isActive?: boolean; 
 }

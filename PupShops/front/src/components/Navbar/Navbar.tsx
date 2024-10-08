@@ -175,7 +175,7 @@ export default function Navbar() {
               Contacto
             </button>
 
-            {/* Bot贸n de perfil en escritorio */}
+            {/* Boton de perfil en escritorio */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
@@ -199,9 +199,9 @@ export default function Navbar() {
                       handleProfileMenuClick("/userDashboard/login")
                     }
                   >
-                    Iniciar sesi贸n
+                    Iniciar sesión
                   </button>
-                  {/* Nuevo bot贸n Panel de Usuario */}
+                  {/* Nuevo boton Panel de Usuario */}
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                     onClick={() => handleProfileMenuClick("/ProfilePage")}
@@ -345,7 +345,7 @@ export default function Navbar() {
                           handleProfileMenuClick("/userDashboard/login")
                         }
                       >
-                        Iniciar sesi贸n
+                        Iniciar sesión
                       </button>
                       <button
                         className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
