@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useContext, useState } from "react";
 import { cartContext } from "@/context/cartContext";
 
@@ -11,28 +9,43 @@ const CartBuy: React.FC = () => {
   const handleBuyClick = async () => {
     setLoading(true);
     try {
-      await proceedToBuy();
-      const storedPurchasedItems = localStorage.getItem("purchasedItems");
-      if (!storedPurchasedItems) {
-        console.error("No hay items de compra en el localStorage.");
+      // Proceder con la compra y almacenar los datos en localStorage
+      console.log("Iniciando el proceso de compra...");
+      const result = await proceedToBuy();
+
+      console.log("Resultado de proceedToBuy:", result);
+
+      if (!result) {
+        console.error("No se pudo proceder con la compra.");
         return;
       }
 
-      const purchasedItems = JSON.parse(storedPurchasedItems);
+      const { orderId, finalTotal } = result;
 
-      if (purchasedItems.length === 0) {
-        console.error("No se encontraron items comprados.");
-        return;
-      }
+      // Crear el objeto con la orden y almacenarlo en el localStorage
+      const purchasedItems = cartItems.map((item) => ({
+        ...item,
+        orderId,
+      }));
 
+      console.log("Items comprados:", purchasedItems);
+      localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
+
+      // Crear el objeto para la preferencia de pago
       const purchaseItem = {
         type: "products",
-        title: purchasedItems[0].title,
-        orderId: purchasedItems[0].orderId,
+        title: "Compra Pupshops", // Asegúrate de que esto exista en la estructura
+        orderId: orderId, // Usamos el orderId aquí
         quantity: purchasedItems[0].quantity,
-        unit_price: total,
+        unit_price: finalTotal, // Usamos el total desde la orden
       };
 
+      console.log(
+        "Objeto de compra para la preferencia de pago:",
+        purchaseItem
+      );
+
+      // Enviar solicitud para crear la preferencia de pago
       const response = await fetch("http://localhost:3001/payments/create", {
         method: "POST",
         headers: {
@@ -42,12 +55,17 @@ const CartBuy: React.FC = () => {
       });
 
       const data = await response.json();
+      console.log("Respuesta de la API:", data);
 
       if (response.ok) {
-        setPaymentLink(data.payment.init_point);
-        window.location.href = data.payment.init_point;
+        setPaymentLink(data.init_point);
+        console.log("Redirigiendo a:", data.init_point);
+        window.location.href = data.init_point;
       } else {
-        console.error("Error:", data.message);
+        console.error(
+          "Error en la creación de la preferencia de pago:",
+          data.message
+        );
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);

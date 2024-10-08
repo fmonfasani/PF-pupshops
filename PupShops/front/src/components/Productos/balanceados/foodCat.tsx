@@ -15,7 +15,7 @@ const ClothesCat: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "66ea5242-6ab4-4cbb-a92d-76599c13e654";
+  const categoryId = "774d97cc-6b5f-4634-82ee-57647c72bfef";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -35,7 +35,7 @@ const ClothesCat: React.FC = () => {
 
         const formattedData = data.map((product) => ({
           ...product,
-          price: Number(product.price)
+          price: Number(product.price),
         }));
 
         setProducts(formattedData);
@@ -74,7 +74,7 @@ const ClothesCat: React.FC = () => {
       [productId]:
         operation === "increment"
           ? (prevQuantities[productId] || 1) + 1
-          : Math.max((prevQuantities[productId] || 1) - 1, 1)
+          : Math.max((prevQuantities[productId] || 1) - 1, 1),
     }));
   };
 

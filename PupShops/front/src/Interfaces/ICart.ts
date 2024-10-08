@@ -7,7 +7,14 @@ export interface IProduct {
   imgUrl: string;
   categoryName: string;
   quantity?: number;
-  orderId?: string; 
+  orderId?: string;
+}
+
+export interface IOrder {
+  id?: string;
+  date?: string;
+  status?: string;
+  items?: IProduct[];
 }
 
 export interface ICartContextType {
@@ -17,6 +24,10 @@ export interface ICartContextType {
   removeFromCart: (productId: number) => void;
 
   total: number;
-  proceedToBuy: () => Promise<void>;
-  purchasedItems: IProduct[]; 
+  proceedToBuy: () => Promise<{
+    orderId: string;
+    finalTotal: number;
+  } | null>;
+
+  purchasedItems: IProduct[];
 }

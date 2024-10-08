@@ -4,13 +4,14 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { ICartContextType, IProduct } from "@/Interfaces/ICart";
 import { fetchProductsById } from "@/lib/servers/serverCart";
 import { UserContext } from "@/context/userContext";
+import { IOrder } from "../Interfaces/ICart";
 
 export const cartContext = createContext<ICartContextType>({
   cartItems: [],
   addToCart: async () => false,
   removeFromCart: () => {},
   total: 0,
-  proceedToBuy: async () => {},
+  proceedToBuy: async () => null,
   purchasedItems: [],
 });
 
@@ -79,7 +80,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     setCartItems(updatedCartItems);
   };
 
-  const proceedToBuy = async () => {
+  const proceedToBuy = async (): Promise<{
+    orderId: string;
+    finalTotal: number;
+  } | null> => {
     try {
       const storedAuthData = localStorage.getItem("authData");
       if (!storedAuthData)
@@ -91,7 +95,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const userId = user.id;
       if (!userId) throw new Error("ID de usuario no disponible");
 
-      const response = await fetch(`http://localhost:3001/orders`, {
+      const response = await fetch("http://localhost:3001/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,24 +111,19 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(
-          `Error en la compra: ${response.statusText} - ${errorMessage}`
-        );
+        throw new Error("Error al crear la orden.");
       }
 
       const result = await response.json();
-      const updatedPurchasedItems = cartItems.map((item) => ({
-        ...item,
-        orderId: result.orderId,
-      }));
+      console.log("Resultado de la orden:", result);
 
-      setPurchasedItems([...purchasedItems, ...updatedPurchasedItems]);
-      setCartItems([]);
-      alert("Compra realizada con éxito!");
+      return {
+        orderId: result.orderId,
+        finalTotal: result.finalTotal,
+      };
     } catch (error) {
-      console.error("Error al proceder a la compra:", error);
-      alert("Hubo un problema al realizar la compra. Inténtalo de nuevo.");
+      console.error("Error en la compra:", error);
+      return null;
     }
   };
 
