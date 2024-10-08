@@ -6,7 +6,7 @@ export const ButtonForms: React.FC<IButtonProps> = ({text, onClick, type='submit
         <button type={type}
         onClick={onClick}
         disabled={disabled}
-        className="block w-full rounded-lg bg-teal-950 hover:bg-orange-300 hover:text-black px-5 py-3 text-sm text-center font-medium text-white hover:cursor-pointer">
+        className="block w-full rounded-lg bg-gray-300 text-black hover:bg-orange-300 hover:text-black px-5 py-3 text-sm text-center font-medium  hover:cursor-pointer">
             {text}
         </button>
     )

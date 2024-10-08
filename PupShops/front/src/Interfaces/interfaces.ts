@@ -92,7 +92,7 @@ export interface IAppointment {
   appointmentTime: string; 
   serviceName: string; 
   isDeleted:boolean;
-  userId?: string;
+  userId: string;
   status?: string; 
 }
 

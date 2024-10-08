@@ -76,6 +76,23 @@ export const fetchAppointment = async (appointment: IAppointment) => {
   return data;
 };
 
+//Turnos de un usuario
+export const fetchUserAppointments = async (token: string) => {
+  const response = await fetch('http://localhost:3001/appointments/user', {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`, 
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener turnos');
+  }
+
+  return await response.json();
+};
+
 
 
 

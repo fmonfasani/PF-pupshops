@@ -154,7 +154,7 @@ function LoginPage({ setToken }: ILoginClientProps) {
           </form>
   
           {/* Texto de registro */}
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p className="mt-10 text-center text-sm">
             <ButtonForms
               text="¿No posees una cuenta? Haz clic aquí para registrarse"
               onClick={handleRegisterRedirect}
