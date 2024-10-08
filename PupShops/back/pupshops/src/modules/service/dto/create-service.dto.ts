@@ -10,16 +10,16 @@ import {
 export class CreateServiceDto {
   @IsNotEmpty()
   @IsString()
-  @Length(3, 50) // Valida que el nombre tenga entre 3 y 50 caracteres
+  @Length(3, 50)
   @ApiProperty({
     description: 'El nombre del servicio',
     example: 'peluquería',
   })
-  name: string; // Puede ser 'peluquería', 'baño', 'veterinaria', etc.
+  name: string;
 
   @IsNotEmpty()
   @IsNumber()
-  @IsPositive() // El precio debe ser un número positivo
+  @IsPositive()
   @ApiProperty({
     description: 'El precio del servicio',
     example: 100.0,
