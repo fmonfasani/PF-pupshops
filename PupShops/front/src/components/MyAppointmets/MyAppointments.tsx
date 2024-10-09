@@ -1,5 +1,5 @@
 "use client";
-import Router from "next/router";
+
 import { useEffect, useState } from "react";
 
 interface IService {
@@ -45,11 +45,11 @@ const MyAppointments = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:3001/appointments/user`,
+          `${process.env.NEXT_PUBLIC_API_URL}/appointments/user`,
           {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
@@ -143,7 +143,7 @@ const MyAppointments = () => {
                     [],
                     {
                       hour: "2-digit",
-                      minute: "2-digit"
+                      minute: "2-digit",
                     }
                   )}
                 </p>
@@ -179,7 +179,7 @@ const MyAppointments = () => {
                     [],
                     {
                       hour: "2-digit",
-                      minute: "2-digit"
+                      minute: "2-digit",
                     }
                   )}
                 </p>

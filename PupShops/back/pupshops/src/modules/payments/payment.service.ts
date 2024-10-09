@@ -159,9 +159,9 @@ export class PaymentsService {
               ? product.price.toFixed(2)
               : 'N/A';
           return `
-             Producto: ${product.description || 'Descripción no disponible'}
-             Precio: ${price} 
-             Cantidad: ${order.orderDetails.quantity}`;
+                          Producto: ${product.description || 'Descripción no disponible'}
+                          Precio: ${price} 
+                          Cantidad: ${order.orderDetails.quantity}`;
         })
         .join('\n--------------------\n');
 

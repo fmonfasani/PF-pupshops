@@ -20,6 +20,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [total, setTotal] = useState(0);
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
   const [isClient, setIsClient] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -101,20 +102,24 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       if (!userId) throw new Error("ID de usuario no disponible");
 
       console.log("Enviando solicitud para crear la orden...");
-      const response = await fetch("http://localhost:3001/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          userId,
-          products: cartItems.map((item) => ({
-            id: item.id,
-            quantity: item.quantity || 1,
-          })),
-        }),
-      });
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            userId,
+            products: cartItems.map((item) => ({
+              id: item.id,
+              quantity: item.quantity || 1,
+            })),
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Error al crear la orden.");
