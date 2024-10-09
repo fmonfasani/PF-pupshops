@@ -4,7 +4,8 @@ import React, { useContext, useState } from "react";
 import { cartContext } from "@/context/cartContext";
 
 const CartBuy: React.FC = () => {
-  const { proceedToBuy, cartItems, total } = useContext(cartContext);
+  const { proceedToBuy, cartItems, originalTotal, discountTotal } =
+    useContext(cartContext);
   const [loading, setLoading] = useState(false);
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
 
@@ -30,7 +31,7 @@ const CartBuy: React.FC = () => {
         title: purchasedItems[0].title,
         orderId: purchasedItems[0].orderId,
         quantity: purchasedItems[0].quantity,
-        unit_price: total,
+        unit_price: discountTotal,
       };
 
       const response = await fetch("http://localhost:3001/payments/create", {
@@ -59,8 +60,15 @@ const CartBuy: React.FC = () => {
   return (
     <div className="cart-buy mt-6">
       <h2 className="text-lg font-semibold text-gray-800">
-        Total: <span className="text-teal-600">${total.toFixed(2)}</span>
+        Precio original:{" "}
+        <span className="text-red-600">${originalTotal.toFixed(2)}</span>
       </h2>
+      {originalTotal > 100 && (
+        <h2 className="text-lg font-semibold text-gray-800">
+          Precio con descuento:{" "}
+          <span className="text-teal-600">${discountTotal.toFixed(2)}</span>
+        </h2>
+      )}
       <button
         onClick={handleBuyClick}
         className="mt-4 w-full bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"

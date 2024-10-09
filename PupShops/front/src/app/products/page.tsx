@@ -1,6 +1,7 @@
 import ProductsPage from "@/components/CardList/Products";
 import Image from "next/image";
 import Link from "next/link";
+import banner from "../../../public/banner.png";
 
 export default function PageProducts() {
   return (
@@ -36,7 +37,9 @@ export default function PageProducts() {
           </div>
         </Link>
       </div>
-      
+      <div className="flex items-center justify-center">
+      <Image alt="logo" src={banner} width={1200} height={300} />
+      </div>
       <ProductsPage />
     </div>
   );
