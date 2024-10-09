@@ -52,14 +52,18 @@ const CartBuy: React.FC = () => {
         purchaseItem
       );
       debugger; // Verificar el objeto purchaseItem
+      console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
 
-      const response = await fetch("http://localhost:3001/payments/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(purchaseItem),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/payments/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(purchaseItem),
+        }
+      );
 
       const data = await response.json();
       console.log("Respuesta de la API:", data);

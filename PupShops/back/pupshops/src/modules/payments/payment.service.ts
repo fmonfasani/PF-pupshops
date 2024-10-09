@@ -151,24 +151,53 @@ export class PaymentsService {
       order.status = 'paid';
 
       const userEmail = order.user.email;
-      const paymentLink =
-        paymentResponse.transaction_details.external_resource_url;
 
       const productsInfo = order.orderDetails.products
         .map((product) => {
-          return `Producto: ${product.description}, Precio: ${product.price}, Cantidad: ${order.orderDetails.quantity}`;
+          const price =
+            typeof product.price === 'number'
+              ? product.price.toFixed(2)
+              : 'N/A';
+          return `
+             Producto: ${product.description || 'Descripción no disponible'}
+             Precio: ${price} 
+             Cantidad: ${order.orderDetails.quantity}`;
         })
-        .join('\n');
+        .join('\n--------------------\n');
 
       const totalPaid = order.orderDetails.products.reduce(
         (total, product) => total + product.price * order.orderDetails.quantity,
         0,
       );
 
+      const emailBody = `
+                          ==========================================
+                                  ¡Tu pago fue procesado exitosamente!
+                          ==========================================
+
+                          Detalles del pedido:
+                          --------------------
+
+                          ${productsInfo}
+
+                          --------------------
+                          Monto total pagado: $${totalPaid.toFixed(2)}
+                          --------------------
+
+                          Orden ID: ${orderId}
+
+                          ==========================================
+                                Gracias por tu compra.
+                          ==========================================
+
+                          Saludos cordiales,
+                          El equipo de PupShops
+                          `;
+
       await this.mailPaymentsService.sendMail(
         userEmail,
         'Pago exitoso - PupShops',
-        `¡Tu pago fue procesado exitosamente!\n\nDetalles del pedido:\n${productsInfo}\nMonto total pagado: ${totalPaid}\nOrden ID: ${orderId}\nGracias por tu compra.\n\nSaludos,\nEl equipo de PupShops`, // Cuerpo del correo con productos y total
+        emailBody, // Cuerpo del correo con productos y total formateado
       );
     } else if (status === 'rejected') {
       order.status = 'payment_failed';
