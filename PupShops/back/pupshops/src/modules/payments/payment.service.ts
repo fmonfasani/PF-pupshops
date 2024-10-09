@@ -122,30 +122,39 @@ export class PaymentsService {
     }
   }
 
-  async sendPaymentSuccessEmail(userEmail: string, orderId: string) {
-    // Configura el transporter de Nodemailer
+  private async sendPaymentSuccessEmail(
+    email: string,
+    orderId: string,
+    paymentLink: string,
+  ) {
+    console.log(`Enviando correo a ${email} con Order ID: ${orderId}`);
     const transporter = nodemailer.createTransport({
-      host: 'smtp.example.com', // Cambia esto por el servidor SMTP que estés utilizando
-      port: 587, // El puerto SMTP
-      secure: false, // true para puertos 465, false para otros puertos
+      service: 'gmail',
       auth: {
-        user: 'your-email@example.com', // Tu dirección de correo electrónico
-        pass: 'your-password', // Tu contraseña de correo electrónico
+        user: 'pupshopscompany@gmail.com', // Tu correo
+        pass: 'pupshops123ABC$', // Tu contraseña (deberías usar una contraseña de aplicación)
       },
     });
 
     const mailOptions = {
-      from: '"PupShops" <your-email@example.com>', // Remitente
-      to: userEmail, // Destinatario
-      subject: 'Pago Exitoso', // Asunto del correo
-      text: `Tu pago ha sido procesado exitosamente. ID de la orden: ${orderId}`, // Texto del correo
-      html: `<b>Tu pago ha sido procesado exitosamente.</b><br>ID de la orden: ${orderId}`, // HTML del correo
+      from: 'pupshopscompany@gmail.com', // Tu correo
+      to: email, // Correo del usuario
+      subject: 'Pago Exitoso - PupShops',
+      text: `¡Tu pago fue procesado exitosamente! Aquí tienes los detalles:
+
+      Orden ID: ${orderId}
+      Enlace para realizar el pago: ${paymentLink}
+
+      Gracias por tu compra.
+
+      Saludos,
+      El equipo de PupShops`,
     };
     try {
-      await transporter.sendMail(mailOptions);
-      console.log('Correo de confirmación enviado a:', userEmail);
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Correo enviado: %s', info.messageId);
     } catch (error) {
-      console.error('Error al enviar el correo:', error);
+      console.error('Error al enviar el correo: ', error.message);
     }
   }
 

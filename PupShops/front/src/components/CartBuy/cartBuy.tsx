@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { cartContext } from "@/context/cartContext";
 
 const CartBuy: React.FC = () => {
-  const { proceedToBuy, cartItems, total } = useContext(cartContext);
+  const { proceedToBuy, cartItems, total, clearCart } = useContext(cartContext);
   const [loading, setLoading] = useState(false);
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
 
@@ -67,8 +67,12 @@ const CartBuy: React.FC = () => {
 
       if (response.ok) {
         setPaymentLink(data.init_point);
-        console.log("Redirigiendo a:", data.init_point);
-        window.location.href = data.init_point;
+        console.log("Redirigiendo a:", data.payment.init_point);
+        debugger;
+
+        clearCart();
+
+        window.location.href = data.payment.init_point;
       } else {
         console.error(
           "Error en la creación de la preferencia de pago:",
