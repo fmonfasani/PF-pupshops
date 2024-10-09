@@ -1,5 +1,5 @@
 "use client";
-
+import Image from 'next/image';
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect } from "react";
 
@@ -27,15 +27,17 @@ export default function ProfileClient() {
               Perfil de Usuario
             </h2>
             <div className="mt-32 text-center">
-              {user.picture && (
-                <div className="flex justify-center">
-                  <img
-                    className="max-w-full h-auto"
-                    src={user.picture}
-                    alt={user.name || "Usuario"}
-                  />
-                </div>
-              )}
+  {user.picture && (
+    <div className="flex justify-center">
+      <Image
+        className="max-w-full h-auto"
+        src={user.picture}
+        alt={user.name || "Usuario"}
+        width={200} 
+        height={200}
+      />
+    </div>
+  )}
               <div className="mt-2">
                 <p>
                   <strong>Nombre:</strong> {user.name || "Nombre no disponible"}

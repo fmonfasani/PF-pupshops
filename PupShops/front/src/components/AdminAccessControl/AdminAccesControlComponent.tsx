@@ -1,9 +1,8 @@
 "use client";
 import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ButtonForms, ButtonRedirectUser } from '@/components/Buttons/ButtonsForms';
+import { ButtonForms } from '@/components/Buttons/ButtonsForms';
 import { validationRegister } from '@/utils/validationRegister';
-import { IUserRegister } from '@/Interfaces/interfaces';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 import { NotificationError } from '@/components/Notifications/NotificationError';
 import { UserContext } from '@/context/userContext';
@@ -38,7 +37,6 @@ export default function RegisterUser() {
         isAdmin:false
     });
     
-    const [loading, setLoading] = useState(true);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');

@@ -4,11 +4,11 @@ import { UserContext} from '@/context/userContext';
 import { useEffect,useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
-import AdminAppointments from '@/components/AdminAppointments/AdminAppointments';
+import AdminAppointmentsComponent from '@/components/AdminAppointments/AdminAppointmentsComponent';
 
 
 
-export default function adminAppointments() {
+export default function AdminAppointments() {
   const { user,isAdmin } = useContext(UserContext);
     const router = useRouter()
 
@@ -37,7 +37,7 @@ export default function adminAppointments() {
 
     return (
       <>
-       {isAdmin && <AdminAppointments/> }
+       {isAdmin && <AdminAppointmentsComponent/> }
        {showNotification && <NotificationRegister message={notificationMessage} />}
              </>
     );

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 
 export default function RegisterPage() {
-  const [token, setToken] = useState<string | null>(null);
   const { isLogged } = useContext(UserContext);
   const [loading, setLoading] = useState(true); 
   const [showNotification, setShowNotification] = useState(false);

@@ -5,7 +5,7 @@ import { IAppointment } from '@/Interfaces/interfaces';
 import { UserContext } from '@/context/userContext';
 import { NotificationRegister } from '../Notifications/NotificationRegister';
 
-const Appointments = () => {
+const AdminAppointmentsComponent = () => {
   const { token } = useContext(UserContext) || { token: '' };
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -108,4 +108,4 @@ const Appointments = () => {
   );
 };
 
-export default Appointments;
+export default AdminAppointmentsComponent;

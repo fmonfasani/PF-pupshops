@@ -1,20 +1,21 @@
-"use client"; 
+"use client";
+
 import { UserContext } from '@/context/userContext';
 import { IUser } from '@/Interfaces/interfaces';
 import { fetchGetUsers } from '@/utils/fetchAdminCreateUser';
 import { useRouter } from 'next/navigation';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 
 export default function AdminUsersDataComponent() {
-  const { user, token } = useContext(UserContext);
+  const { token } = useContext(UserContext);
   const [users, setUsers] = useState<IUser[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); 
- 
+
   const router = useRouter();
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     if (!token) {
       setError('Token no disponible.'); 
       router.push('userDashboard/login'); 
@@ -33,16 +34,15 @@ export default function AdminUsersDataComponent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, router]); // Asegúrate de incluir token y router como dependencias
 
   useEffect(() => {
     fetchUsers();
-  }, [token]); 
+  }, [fetchUsers]); // Usa fetchUsers en las dependencias
 
   const handleUserClick = (id: string) => {
     router.push(`/adminDashboard/users/usersData/${id}`);
   };
-  
 
   const filteredUsers = users.filter(user => {
     const lowerCaseTerm = searchTerm.toLowerCase();
@@ -94,7 +94,7 @@ export default function AdminUsersDataComponent() {
                 </div>
               </div>
             </div>
-          ))}
+          ))} 
         </div>
       )}
     </div>

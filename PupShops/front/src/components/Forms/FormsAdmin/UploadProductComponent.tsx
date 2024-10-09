@@ -15,29 +15,28 @@ const categories = [
 ];
 
 const sizes = ['Pequeña', 'Mediana', 'Grande'];
-const weights = ['sin especificar','2kg', '7kg', '15kg'];
+const weights = ['sin especificar', '2kg', '7kg', '15kg'];
 
 export default function UploadProductComponent() {
-  const {user, isAdmin } = useContext(UserContext);
- 
-  if (!isAdmin) {
-    return <p className='mt-20'>No tienes permisos para cargar productos.</p>; // Si no es administrador, mostramos un mensaje
+  const { isAdmin } = useContext(UserContext);
 
+  if (!isAdmin) {
+    return <p className='mt-20'>No tienes permisos para cargar productos.</p>; // Mensaje si no es administrador
   }
-  
+
   const [dataProduct, setDataProduct] = useState<IUploadProduct>({
     name: '',
     description: '',
     price: 0,
     imgUrl: '',
     stock: 0,
-    categoryName: '', 
-    waist: '', 
+    categoryName: '',
+    waist: '',
     weight: null,
   });
 
-  const [selectedMainCategory, setSelectedMainCategory] = useState<string>(''); 
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string>(''); 
+  const [selectedMainCategory, setSelectedMainCategory] = useState<string>('');
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -54,12 +53,11 @@ export default function UploadProductComponent() {
     setDataProduct(updatedProduct);
     setErrors(validateProduct(updatedProduct));
   };
-  
 
   const handleMainCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = e.target.value;
     setSelectedMainCategory(selectedCategory);
-    setSelectedSubCategory('');  
+    setSelectedSubCategory('');
     setDataProduct(prevData => ({
       ...prevData,
       categoryName: '', 
@@ -95,27 +93,27 @@ export default function UploadProductComponent() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     const validationErrors = validateProduct(dataProduct);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-  
+
     const product: IUploadProduct = {
       ...dataProduct,
-      price: Number(dataProduct.price), 
+      price: Number(dataProduct.price),
       stock: Number(dataProduct.stock),
     };
     console.log('Producto que se está enviando:', product);
-    
+
     try {
       const success = await fetchUploadProduct(product);
       if (success) {
-        setNotificationMessage(`Carga de producto exitosa`);
+        setNotificationMessage('Carga de producto exitosa');
         setShowNotification(true);
         setTimeout(() => {
-            setShowNotification(false);
+          setShowNotification(false);
         }, 3000);
         setDataProduct({
           name: '',
@@ -123,20 +121,20 @@ export default function UploadProductComponent() {
           price: 0,
           imgUrl: '',
           stock: 0,
-          categoryName: '', 
-          waist: '', 
-          weight: null,})
+          categoryName: '',
+          waist: '',
+          weight: null,
+        });
       } else {
-        setErrors({ ...errors, general: "Error al cargar productos" });
+        setErrors({ ...errors, general: 'Error al cargar productos' });
       }
     } catch (error) {
-      console.error("Error al cargar productos:", error);
-      setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
-      setShowErrorNotification(true); 
-      setTimeout(() => setShowErrorNotification(false), 3000); 
+      console.error('Error al cargar productos:', error);
+      setErrorMessage(error instanceof Error ? error.message : 'Error desconocido.');
+      setShowErrorNotification(true);
+      setTimeout(() => setShowErrorNotification(false), 3000);
     }
   };
-  
 
   return (
     <section className="bg-gray-100 font-sans mt-9">
