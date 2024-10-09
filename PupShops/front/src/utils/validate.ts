@@ -1,8 +1,7 @@
 import { ILoginUser, IUserRegister } from "@/Interfaces/interfaces";
 
-
 export function validateLoginForm(values: ILoginUser) {
-  let errors: { email?: string; password?: string } = {};
+  const errors: { email?: string; password?: string } = {};
   let formIsValid = true;
 
   if (!values.email) {
@@ -21,9 +20,8 @@ export function validateLoginForm(values: ILoginUser) {
   return { formIsValid, errors };
 }
 
-
 export function validateRegisterForm(values: IUserRegister, existingEmails: string[]) {
-  let errors: { name?: string; email?: string; password?: string; confirmPassword?:string; address?: string; phone?: string } = {};
+  const errors: { name?: string; email?: string; password?: string; confirmPassword?: string; address?: string; phone?: string } = {};
 
   if (!values.name) {
     errors.name = "El nombre es requerido";
@@ -51,4 +49,3 @@ export function validateRegisterForm(values: IUserRegister, existingEmails: stri
 
   return errors;
 }
- 

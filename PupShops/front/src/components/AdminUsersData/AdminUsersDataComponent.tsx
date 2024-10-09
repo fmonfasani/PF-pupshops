@@ -34,11 +34,11 @@ export default function AdminUsersDataComponent() {
     } finally {
       setLoading(false);
     }
-  }, [token, router]); // Asegúrate de incluir token y router como dependencias
+  }, [token, router]); 
 
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]); // Usa fetchUsers en las dependencias
+  }, [fetchUsers]); 
 
   const handleUserClick = (id: string) => {
     router.push(`/adminDashboard/users/usersData/${id}`);

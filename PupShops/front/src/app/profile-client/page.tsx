@@ -5,15 +5,18 @@ import { useEffect } from "react";
 
 export default function ProfileClient() {
   const { user, error, isLoading } = useUser();
-
+  
   useEffect(() => {
-    if (user && user.email) {
-      const storedEmail = localStorage.getItem('userEmail');
-      if (!storedEmail) {
-        localStorage.setItem('userEmail', user.email);
+    if (typeof window !== "undefined") { 
+      if (user && user.email) {
+        const storedEmail = localStorage.getItem('userEmail');
+        if (!storedEmail) {
+          localStorage.setItem('userEmail', user.email);
+        }
       }
     }
   }, [user]);
+  
 
   if (isLoading) return <div className="mt-32">Loading...</div>;
   if (error) return <div>{error.message}</div>;

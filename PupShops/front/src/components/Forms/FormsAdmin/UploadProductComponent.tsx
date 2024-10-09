@@ -20,9 +20,7 @@ const weights = ['sin especificar', '2kg', '7kg', '15kg'];
 export default function UploadProductComponent() {
   const { isAdmin } = useContext(UserContext);
 
-  if (!isAdmin) {
-    return <p className='mt-20'>No tienes permisos para cargar productos.</p>; // Mensaje si no es administrador
-  }
+  
 
   const [dataProduct, setDataProduct] = useState<IUploadProduct>({
     name: '',
@@ -135,7 +133,9 @@ export default function UploadProductComponent() {
       setTimeout(() => setShowErrorNotification(false), 3000);
     }
   };
-
+  if (!isAdmin) {
+    return <p className='mt-20'>No tienes permisos para cargar productos.</p>; 
+  }
   return (
     <section className="bg-gray-100 font-sans mt-9">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -153,7 +153,7 @@ export default function UploadProductComponent() {
                   name='name'
                   type='text'
 
-                  value={dataProduct.id}
+                  value={dataProduct.name}
 
                   onChange={handleChange}
                   placeholder='Nombre del producto'

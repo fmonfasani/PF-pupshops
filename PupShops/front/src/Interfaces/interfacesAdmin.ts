@@ -1,4 +1,3 @@
-import { IUserRegister } from "./interfaces";
 
 export interface ICategory {
     id?: string;
@@ -65,3 +64,17 @@ export interface IOrder {
   };
 }
 
+export interface IAppointmentAdmin {
+  id: string;
+  appointmentDate: string;
+  status: string;
+  user: {
+    name: string;
+    lastname: string;
+    phone: string;
+  };
+  service: {
+    name: string;
+    price: string;
+  };
+}

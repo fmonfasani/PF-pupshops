@@ -1,9 +1,9 @@
 "use client"; 
-import { validateLoginForm } from "../../../helpers/validate";
+import { validateLoginForm } from "../../../utils/validate";
 import { useRouter } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "@/context/userContext";
-import { ButtonForms } from "@/components/Buttons/ButtonsForms";
+import {  ButtonRedirectUser } from "@/components/Buttons/ButtonsForms";
 import { NotificationError } from "@/components/Notifications/NotificationError";
 import { NotificationRegister } from "@/components/Notifications/NotificationRegister";
 import { ILoginClientProps } from "@/Interfaces/interfaces";
@@ -24,7 +24,7 @@ function LoginPage({ setToken }: ILoginClientProps) {
     const { name, value } = event.target;
     setDataUser({ ...dataUser, [name]: value });
 
-    const { formIsValid, errors } = validateLoginForm({ ...dataUser, [name]: value });
+    const { errors } = validateLoginForm({ ...dataUser, [name]: value });
 
     setErrors(errors);
   };
@@ -155,7 +155,7 @@ function LoginPage({ setToken }: ILoginClientProps) {
   
           {/* Texto de registro */}
           <p className="mt-10 text-center text-sm">
-            <ButtonForms
+            <ButtonRedirectUser
               text="¿No posees una cuenta? Haz clic aquí para registrarse"
               onClick={handleRegisterRedirect}
             />

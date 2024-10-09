@@ -1,20 +1,18 @@
 'use client';
 import { useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { IUserResponse, IUserUpdateData } from '@/Interfaces/interfaces';
 import { UserContext } from '@/context/userContext';
 
 const EditProfile = () => {
-  const router = useRouter();
-  const { user, setUser, logOut } = useContext(UserContext);
+  const { user,  logOut } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState('');
 
   useEffect(() => {
     if (!user || !user.user) {
-      logOut(); // Cerrar sesión si no hay usuario
+      logOut(); 
     } else {
-      setLoading(false); // Cargar datos si el usuario está disponible
+      setLoading(false); 
     }
   }, [user, logOut]);
 
@@ -28,7 +26,7 @@ const EditProfile = () => {
 
     const form = e.currentTarget as HTMLFormElement;
     
-    // Obtenemos solo los valores modificables
+    
     const updatedUserData: IUserUpdateData = {
       name: (form.elements.namedItem('name') as HTMLInputElement).value,
       lastname: (form.elements.namedItem('lastname') as HTMLInputElement).value,

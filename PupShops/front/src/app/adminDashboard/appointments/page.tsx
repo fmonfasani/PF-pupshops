@@ -9,7 +9,7 @@ import AdminAppointmentsComponent from '@/components/AdminAppointments/AdminAppo
 
 
 export default function AdminAppointments() {
-  const { user,isAdmin } = useContext(UserContext);
+  const { isAdmin } = useContext(UserContext);
     const router = useRouter()
 
   const [showNotification, setShowNotification] = useState(false);

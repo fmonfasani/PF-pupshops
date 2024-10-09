@@ -15,19 +15,22 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState<IUserResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const { logOut } = useContext(UserContext);
-
+  
   useEffect(() => {
-    const authData = localStorage.getItem("authData");
-    if (authData) {
-      try {
-        const parsedData = JSON.parse(authData);
-        setUserData(parsedData);
-      } catch (error) {
-        console.error("Error parsing authData", error);
+    if (typeof window !== "undefined") { 
+      const authData = localStorage.getItem("authData");
+      if (authData) {
+        try {
+          const parsedData = JSON.parse(authData);
+          setUserData(parsedData);
+        } catch (error) {
+          console.error("Error parsing authData", error);
+        }
       }
     }
-    setLoading(false);
+    setLoading(false); 
   }, []);
+  
 
   useEffect(() => {
     if (!loading && !userData) {
