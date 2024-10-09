@@ -1,34 +1,42 @@
 [
-    
-    {
+  {
     "name": "Peluquería canina",
     "price": 100
-},
-{
+  },
+  {
     "name": "Consulta",
     "price": 80
-},  {
+  },
+  {
     "name": "Baño simple canino",
     "price": 70
-},  {
+  },
+  {
     "name": "Baño y peluquería canina ",
     "price": 150
-},  {
+  },
+  {
     "name": "Peluquería felina",
     "price": 90
-},  {
+  },
+  {
     "name": "Baño simple felino",
     "price": 60
-},  {
+  },
+  {
     "name": "Baño y peluquería felina",
     "price": 140
-},  {
+  },
+  {
     "name": "Recorte de uñas",
     "price": 120
-},  {
+  },
+  {
     "name": "Masaje relajante",
     "price": 200
-}
-
-
+  },
+  {
+    "name": "Peluqueria",
+    "price": 15
+  }
 ]
