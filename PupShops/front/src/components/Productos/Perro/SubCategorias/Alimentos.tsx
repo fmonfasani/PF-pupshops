@@ -20,8 +20,6 @@ const AlimentosPerro: React.FC = () => {
 
   const categoryId = "b86b7819-cb9e-468f-9e32-c68bc4cfaec4";
 
- 
-
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
@@ -68,7 +66,6 @@ const AlimentosPerro: React.FC = () => {
     if (selectedOptions.length === 0 && selectedBrands.length === 0)
       return true;
 
-   
     const matchesCategory = selectedOptions.some((option) => {
       if (option === "seco") {
         return product.description.includes("seco");
@@ -78,7 +75,6 @@ const AlimentosPerro: React.FC = () => {
       return false;
     });
 
-    
     const matchesBrand = selectedBrands.some((brand) => {
       if (brand === "Pro Plan") {
         return product.name.includes("Pro Plan");
@@ -194,6 +190,12 @@ const AlimentosPerro: React.FC = () => {
       </div>
 
       <div className="container mx-auto p-4 mt-24 bg-slate-50 w-3/4">
+        <div className="bg-orange-300 text-black rounded-lg text-center p-2 m-2 hover:bg-orange-300 hover:text-black">
+          <span className="transition-all animate-pulse">
+            NO TE OLVIDES QUE COMPRANDO ARRIBA DE LOS $100 TENES EL 10% DE
+            DESCUENTO
+          </span>
+        </div>
         <h1 className="text-2xl text-center font-bold mb-4">
           Alimentos para Perros
         </h1>

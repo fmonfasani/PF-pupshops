@@ -82,6 +82,9 @@ const PerroGeneral: React.FC = () => {
 
   return (
     <div className="container mx-auto mt-10 p-4 bg-slate-50">
+      <div className="bg-teal-600 rounded-lg text-center p-2 m-2 hover:bg-orange-300">
+        <span>NO TE OLVIDES QUE COMPRANDO ARRIBA DE LOS $100 TENES EL 10% DE DESCUENTO</span>
+      </div>
       <h1 className="text-2xl text-center font-bold mb-4">Productos para Perro</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (

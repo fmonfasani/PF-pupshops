@@ -11,12 +11,12 @@ interface Section {
 }
 
 const sections: Section[] = [
-  { name: "Balanceados", type: "Perro" },
-  { name: "Balanceados", type: "Gato" },
-  { name: "Ropa", type: "Perro" },
-  { name: "Ropa", type: "Gato" },
-  { name: "Juguetes", type: "Perro" },
-  { name: "Juguetes", type: "Gato" },
+  { name: "Alimento", type: "Perro" },
+  { name: "Alimento", type: "Gato" },
+  { name: "Accesorios", type: "Perro" },
+  { name: "Accesorios", type: "Gato" },
+  { name: "Salud", type: "Perro" },
+  { name: "Salud", type: "Gato" },
 ];
 
 export default function SearchBar() {
@@ -28,7 +28,7 @@ export default function SearchBar() {
   const handleSearch = (term: string) => {
     const [name, type] = term.split(" ");
     if (name && type) {
-      router.push(`/Categorias/${name}/${type}`);
+      router.push(`/Categorias/${type}/SubCategorias/${name}/`);
     } else {
       alert("Producto no encontrado");
     }
@@ -54,11 +54,17 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="relative mx-4">
-      {/* Botón para abrir la barra de búsqueda en mobile */}
+    <div
+      className="relative mx-4"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => {
+        setIsOpen(false);
+        setSearchTerm(""); // Limpiar el término de búsqueda cuando se cierre
+      }}
+    >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-white transition hover:text-gray-200 md:hidden bg-teal-600 hover:bg-orange-300 hover:text-black rounded"
+        className="p-2 text-white transition md:hidden bg-teal-600 hover:bg-orange-300 hover:text-black rounded"
       >
         <MdSearch className="w-6 h-6" />
       </button>
@@ -99,7 +105,6 @@ export default function SearchBar() {
         </div>
       )}
 
-      {/* Barra de búsqueda visible permanentemente en escritorio */}
       <div className="hidden md:flex items-center">
         <input
           type="text"
