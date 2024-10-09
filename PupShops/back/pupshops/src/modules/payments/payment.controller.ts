@@ -20,11 +20,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Payment } from './entities/payment.entity';
+import { MailPaymentsService } from './mailpayments.service';
 
 @ApiTags('Payments')
 @Controller('payments')
 export class PaymentsController {
-  constructor(private readonly paymentsService: PaymentsService) {}
+  constructor(
+    private readonly paymentsService: PaymentsService,
+    private readonly mailPaymentsService: MailPaymentsService,
+  ) {}
 
   @Post('/create')
   @ApiOperation({ summary: 'Crear una preferencia de pago' })
@@ -67,6 +71,15 @@ export class PaymentsController {
     res.send('Tu pago está en proceso. Espera la confirmación.');
   }
 
+  @Post('send-email')
+  async sendEmail(
+    @Body('to') to: string,
+    @Body('subject') subject: string,
+    @Body('text') text: string,
+  ): Promise<void> {
+    return this.mailPaymentsService.sendMail(to, subject, text);
+  }
+
   @Post('/webhook')
   @ApiExcludeEndpoint()
   async handleNotification(@Body() body: any, @Res() res: Response) {
@@ -79,6 +92,7 @@ export class PaymentsController {
         if (resource) {
           const paymentId = resource.split('/').pop();
           await this.paymentsService.processPaymentNotification(paymentId);
+
           console.log('ID del pago:', paymentId);
         } else {
           console.error('Notificación de pago no contiene un recurso válido');

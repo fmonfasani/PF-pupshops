@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { Payment } from './entities/payment.entity';
 import { Orders } from '../../modules/order/entities/order.entity';
 import * as nodemailer from 'nodemailer';
-
+import { MailPaymentsService } from './mailpayments.service';
 @Injectable()
 export class PaymentsService {
   private readonly mercadoPagoPreferenceUrl =
@@ -20,14 +20,14 @@ export class PaymentsService {
     private paymentRepository: Repository<Payment>,
     @InjectRepository(Orders)
     private ordersRepository: Repository<Orders>,
+    private readonly mailPaymentsService: MailPaymentsService,
   ) {
     this.accessToken = this.configService.get<string>(
       'MERCADO_PAGO_ACCESS_TOKEN',
     );
   }
-
   //private readonly baseUrl = 'https://pupshops-backend.onrender.com';
-  private readonly baseUrl = 'https://9d63-201-231-240-116.ngrok-free.app';
+  private readonly baseUrl = 'https://3d91-190-17-115-142.ngrok-free.app';
 
   private async httpRequest(url: string, options: any) {
     try {
@@ -94,8 +94,6 @@ export class PaymentsService {
       },
     };
 
-    console.log('Preference creada:', preference); // Log de la preferencia creada
-
     try {
       const response = await fetch(this.mercadoPagoPreferenceUrl, {
         method: 'POST',
@@ -111,7 +109,7 @@ export class PaymentsService {
       }
 
       const data = await response.json();
-      console.log('Preferencia de pago creada en Mercado Pago:', data); // Log de la respuesta de Mercado Pago
+
       return { init_point: data.init_point };
     } catch (error) {
       console.error(
@@ -122,63 +120,27 @@ export class PaymentsService {
     }
   }
 
-  private async sendPaymentSuccessEmail(
-    email: string,
-    orderId: string,
-    paymentLink: string,
-  ) {
-    console.log(`Enviando correo a ${email} con Order ID: ${orderId}`);
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'pupshopscompany@gmail.com', // Tu correo
-        pass: 'pupshops123ABC$', // Tu contraseña (deberías usar una contraseña de aplicación)
-      },
-    });
-
-    const mailOptions = {
-      from: 'pupshopscompany@gmail.com', // Tu correo
-      to: email, // Correo del usuario
-      subject: 'Pago Exitoso - PupShops',
-      text: `¡Tu pago fue procesado exitosamente! Aquí tienes los detalles:
-
-      Orden ID: ${orderId}
-      Enlace para realizar el pago: ${paymentLink}
-
-      Gracias por tu compra.
-
-      Saludos,
-      El equipo de PupShops`,
-    };
-    try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log('Correo enviado: %s', info.messageId);
-    } catch (error) {
-      console.error('Error al enviar el correo: ', error.message);
-    }
-  }
-
   async getPaymentStatus(paymentId: string) {
     const url = `https://api.mercadopago.com/v1/payments/${paymentId}`;
-    console.log('Obteniendo estado del pago para ID:', paymentId); // Log del ID del pago
+
+    console.log('Obteniendo estado del pago para ID:', paymentId);
+
     const paymentResponse = await this.httpRequest(url, { method: 'GET' });
 
     if (!paymentResponse || !paymentResponse.id) {
       throw new Error('Respuesta inválida: no se encontró el ID del pago');
     }
-
     return paymentResponse;
   }
-
   async processPaymentNotification(paymentId: string) {
-    console.log('Procesando notificación de pago para ID:', paymentId); // Log del ID del pago
+    console.log('Procesando notificación de pago para ID:', paymentId);
     const paymentResponse = await this.getPaymentStatus(paymentId);
     const orderId = paymentResponse.external_reference;
     const status = paymentResponse.status;
 
     const order = await this.ordersRepository.findOne({
       where: { id: orderId },
-      relations: ['payments'],
+      relations: ['payments', 'user', 'orderDetails', 'orderDetails.products'],
     });
 
     if (!order) {
@@ -187,6 +149,27 @@ export class PaymentsService {
 
     if (status === 'approved') {
       order.status = 'paid';
+
+      const userEmail = order.user.email;
+      const paymentLink =
+        paymentResponse.transaction_details.external_resource_url;
+
+      const productsInfo = order.orderDetails.products
+        .map((product) => {
+          return `Producto: ${product.description}, Precio: ${product.price}, Cantidad: ${order.orderDetails.quantity}`;
+        })
+        .join('\n');
+
+      const totalPaid = order.orderDetails.products.reduce(
+        (total, product) => total + product.price * order.orderDetails.quantity,
+        0,
+      );
+
+      await this.mailPaymentsService.sendMail(
+        userEmail,
+        'Pago exitoso - PupShops',
+        `¡Tu pago fue procesado exitosamente!\n\nDetalles del pedido:\n${productsInfo}\nMonto total pagado: ${totalPaid}\nOrden ID: ${orderId}\nGracias por tu compra.\n\nSaludos,\nEl equipo de PupShops`, // Cuerpo del correo con productos y total
+      );
     } else if (status === 'rejected') {
       order.status = 'payment_failed';
     }
@@ -200,15 +183,10 @@ export class PaymentsService {
     await this.ordersRepository.save(order);
     await this.paymentRepository.save(payment);
 
-    console.log('Estado de pago procesado y guardado:', paymentResponse); // Log de pago procesado
     return paymentResponse;
   }
 
   async getOrderInfo(resource: string) {
-    console.log(
-      'Obteniendo información de la orden desde el recurso:',
-      resource,
-    ); // Log del recurso
     try {
       const orderResponse = await this.httpRequest(resource, {
         method: 'GET',
