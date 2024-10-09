@@ -22,6 +22,7 @@ export interface ICartContextType {
 
   addToCart: (productId: number, quantity?: number) => Promise<boolean>;
   removeFromCart: (productId: number) => void;
+  clearCart: () => void;
 
   total: number;
   proceedToBuy: () => Promise<{

@@ -12,6 +12,7 @@ export const cartContext = createContext<ICartContextType>({
   total: 0,
   proceedToBuy: async () => null,
   purchasedItems: [],
+  clearCart: () => {},
 });
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
@@ -77,6 +78,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const removeFromCart = (productId: number) => {
     const updatedCartItems = cartItems.filter((item) => item.id !== productId);
     setCartItems(updatedCartItems);
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem("cartItems");
   };
 
   const proceedToBuy = async (): Promise<{
@@ -153,6 +159,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         total,
         proceedToBuy,
         purchasedItems,
+        clearCart,
       }}
     >
       {children}
