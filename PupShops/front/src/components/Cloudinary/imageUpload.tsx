@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image'; // Importa el componente Image de Next.js
 
 interface ImageUploadProps {
   onUpload: (url: string) => void;
@@ -56,7 +57,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload }) => {
       >
         {uploading ? 'Subiendo...' : 'Subir Imagen'}
       </button>
-      {imageUrl && <img src={imageUrl} alt="Imagen subida" className="mt-2 w-full rounded-lg" />}
+      {imageUrl && (
+        <Image
+          src={imageUrl}
+          alt="Imagen subida"
+          width={500}
+          height={300} 
+          className="mt-2 rounded-lg" 
+        />
+      )}
     </div>
   );
 };

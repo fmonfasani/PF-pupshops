@@ -2,7 +2,7 @@
 import { ILoginResponse, ILoginUser, IUserRegister, IUserResponse } from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
 import { login, fetchRegisterUser } from "@/utils/fetchUser";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { fetchAdminCreateUser } from "@/utils/fetchAdminCreateUser";
 
 export const UserContext = createContext<IUserContextType>({
@@ -38,35 +38,37 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
             user: data.findUser,
           };
           localStorage.setItem("authData", JSON.stringify(userData));
-
+  
           setUser({
             succes: true,
             token: data.token,
             user: data.findUser,
           });
-
+  
           setToken(data.token);
           setIsLogged(true);
-
+  
           if (data.findUser) {
             setIsAdmin(data.findUser.isAdmin);
           } else {
             setIsAdmin(false);
           }
-
-          return true;
-        } else {
-          return false;
+  
+          return true; 
         }
+        console.error("Window object is not available");
+        return false; 
       } else {
         console.error("Login failed. User may not exist.");
-        return false;
+        return false; 
       }
     } catch (error) {
       console.error("Error during sign in:", error);
       return false;
     }
+    return false;
   };
+  
 
   const signUp = async (user: IUserRegister): Promise<boolean> => {
     try {
@@ -83,20 +85,24 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
     }
   };
-
   const signUpRegister = async (userAdmin: IUserRegister): Promise<boolean> => {
     try {
-      const storedAuthData = localStorage.getItem("authData");
-      const token = storedAuthData ? JSON.parse(storedAuthData).token : null;
+      let token: string | null = null; 
+  
+      if (typeof window !== "undefined") {
+        const storedAuthData = localStorage.getItem("authData");
+        token = storedAuthData ? JSON.parse(storedAuthData).token : null; 
+      }
+  
       if (!token) {
         console.error(
           "No se encontró un token válido para realizar el registro."
         );
         return false;
       }
-
+  
       const data = await fetchAdminCreateUser(userAdmin, token);
-
+  
       if (
         data &&
         typeof data === "string" &&
@@ -112,6 +118,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       return false;
     }
   };
+  
 
   useEffect(() => {
     if (typeof window !== "undefined") {

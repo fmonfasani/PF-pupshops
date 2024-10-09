@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   isDateValid,
-  getMinAndMaxDates
+  getMinAndMaxDates,
 } from "../../utils/validationFormAppointments";
 import { IAppointment } from "../../Interfaces/interfaces";
 import { NotificationRegister } from "../Notifications/NotificationRegister";
@@ -55,7 +55,7 @@ const AppointmentForm = () => {
       appointmentTime: selectedTime,
       serviceName: "peluqueria",
       status: "reserved",
-      isDeleted: false
+      isDeleted: false,
     };
 
     try {
@@ -63,13 +63,13 @@ const AppointmentForm = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           appointmentDate: appointment.appointmentDate,
           appointmentTime: appointment.appointmentTime,
-          serviceName: appointment.serviceName
-        })
+          serviceName: appointment.serviceName,
+        }),
       });
 
       if (response.ok) {
@@ -85,7 +85,7 @@ const AppointmentForm = () => {
         const errorData = await response.json();
         setErrors({
           ...errors,
-          general: errorData.message || "Error al sacar turno"
+          general: errorData.message || "Error al sacar turno",
         });
         setShowErrorNotification(true);
         setTimeout(() => setShowErrorNotification(false), 3000);

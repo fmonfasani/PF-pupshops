@@ -14,6 +14,7 @@ export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isDogsOpen, setIsDogsOpen] = useState(false);
   const [isCatsOpen, setIsCatsOpen] = useState(false);
+  const [isAppointmentOpen, setAppointmentOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -21,6 +22,7 @@ export default function Navbar() {
     setIsDogsOpen(false);
     setIsCatsOpen(false);
     setIsProfileOpen(false);
+    setAppointmentOpen(false);
   };
 
   const handleMenuClick = (
@@ -50,6 +52,11 @@ export default function Navbar() {
     closeAllMenus();
   };
 
+  const handleAppointmentMenuClick = (route: string) => {
+    router.push(route);
+    closeAllMenus();
+  };
+
   return (
     <header className="bg-gray-100 shadow-md mt-6 fixed top-0 left-0 w-full z-50">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -64,11 +71,8 @@ export default function Navbar() {
         </div>
         <SearchBar />
         <div className="flex items-center flex-1 justify-between space-x-12">
-          {/* Enlaces de navegaci贸n */}
-          <nav
-            aria-label="Global"
-            className="hidden md:flex gap-6 text-sm flex-1"
-          >
+          {/* Enlaces de navegación */}
+          <nav aria-label="Global" className="hidden md:flex gap-6 text-sm flex-1">
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/products")}
@@ -148,13 +152,37 @@ export default function Navbar() {
               )}
             </div>
 
+            {/* Menu Peluquería */}
+            <div className="relative group">
+              <button
+                className="text-gray-500 transition hover:text-gray-500/75"
+                onClick={() => handleMenuClick(setAppointmentOpen, isAppointmentOpen)}
+              >
+                Peluquería
+              </button>
+              {isAppointmentOpen && (
+                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() =>
+                      handleAppointmentMenuClick("/userDashboard/appointments/newAppointment")
+                    }
+                  >
+                    Nuevo turno
+                  </button>
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() =>
+                      handleAppointmentMenuClick("/userDashboard/appointments")
+                    }
+                  >
+                    Historial de turnos
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Otros enlaces */}
-            <button
-              className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/Appointments")}
-            >
-              Peluqueria
-            </button>
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/cart")}
@@ -175,7 +203,7 @@ export default function Navbar() {
               Contacto
             </button>
 
-            {/* Boton de perfil en escritorio */}
+            {/* Botón de perfil en escritorio */}
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
@@ -201,7 +229,7 @@ export default function Navbar() {
                   >
                     Iniciar sesión
                   </button>
-                  {/* Nuevo boton Panel de Usuario */}
+                  {/* Nuevo botón Panel de Usuario */}
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                     onClick={() => handleProfileMenuClick("/ProfilePage")}
@@ -235,9 +263,9 @@ export default function Navbar() {
                   Perros
                 </button>
                 {isDogsOpen && (
-                  <div className="flex flex-col pl-4 bg-gray-100 items-end">
+                  <div className="flex flex-col">
                     <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                       onClick={() =>
                         handleDogMenuClick("/Categorias/Balanceados/Perro")
                       }
@@ -245,7 +273,7 @@ export default function Navbar() {
                       Balanceados
                     </button>
                     <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                       onClick={() =>
                         handleDogMenuClick("/Categorias/Clothes/Perro")
                       }
@@ -253,7 +281,7 @@ export default function Navbar() {
                       Ropa
                     </button>
                     <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                       onClick={() =>
                         handleDogMenuClick("/Categorias/Toys/Perro")
                       }
@@ -269,9 +297,9 @@ export default function Navbar() {
                   Gatos
                 </button>
                 {isCatsOpen && (
-                  <div className="flex flex-col pl-4 bg-gray-100 items-end">
+                  <div className="flex flex-col">
                     <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                       onClick={() =>
                         handleCatMenuClick("/Categorias/Balanceados/Gato")
                       }
@@ -279,7 +307,7 @@ export default function Navbar() {
                       Balanceados
                     </button>
                     <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                       onClick={() =>
                         handleCatMenuClick("/Categorias/Clothes/Gato")
                       }
@@ -287,10 +315,8 @@ export default function Navbar() {
                       Ropa
                     </button>
                     <button
-                      className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                      onClick={() =>
-                        handleCatMenuClick("/Categorias/Toys/Gato")
-                      }
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
+                      onClick={() => handleCatMenuClick("/Categorias/Toys/Gato")}
                     >
                       Juguetes
                     </button>
@@ -298,10 +324,26 @@ export default function Navbar() {
                 )}
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                  onClick={() => router.push("/Appointments")}
+                  onClick={() => handleMenuClick(setAppointmentOpen, isAppointmentOpen)}
                 >
-                  Peluqueria
+                  Peluquería
                 </button>
+                {isAppointmentOpen && (
+                  <div className="flex flex-col">
+                    <button
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
+                      onClick={() => handleAppointmentMenuClick("/userDashboard/appointments/newAppointment")}
+                    >
+                      Nuevo turno
+                    </button>
+                    <button
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
+                      onClick={() => handleAppointmentMenuClick("/userDashboard/appointments")}
+                    >
+                      Historial de turnos
+                    </button>
+                  </div>
+                )}
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                   onClick={() => router.push("/cart")}
@@ -323,32 +365,27 @@ export default function Navbar() {
                 <div className="relative group">
                   <button
                     className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                    onClick={() =>
-                      handleMenuClick(setIsProfileOpen, isProfileOpen)
-                    }
+                    onClick={() => handleMenuClick(setIsProfileOpen, isProfileOpen)}
                   >
                     Perfil
                   </button>
                   {isProfileOpen && (
-                    <div className="flex flex-col pl-4 bg-gray-100 items-end">
+                    <div className="flex flex-col">
                       <button
-                        className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                        onClick={() =>
-                          handleProfileMenuClick("/userDashboard/register")
-                        }
+                        className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
+                        onClick={() => handleProfileMenuClick("/userDashboard/register")}
                       >
                         Registrarse
                       </button>
                       <button
-                        className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
-                        onClick={() =>
-                          handleProfileMenuClick("/userDashboard/login")
-                        }
+                        className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
+                        onClick={() => handleProfileMenuClick("/userDashboard/login")}
                       >
                         Iniciar sesión
                       </button>
+                      {/* Nuevo botón Panel de Usuario */}
                       <button
-                        className="p-2 text-gray-700 hover:bg-gray-200 w-full text-right"
+                        className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                         onClick={() => handleProfileMenuClick("/ProfilePage")}
                       >
                         Panel de Usuario

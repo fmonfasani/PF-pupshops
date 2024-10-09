@@ -6,7 +6,7 @@ import { useContext } from "react";
 
 
 const NavbarContainer = () => {
-  const { user,isAdmin } = useContext(UserContext);
+  const { isAdmin } = useContext(UserContext);
 
 
     return isAdmin ? <NavbarAdminComponent /> : <Navbar />; 

@@ -7,7 +7,6 @@ import {
 } from "@/components/Buttons/ButtonsForms";
 import { validationRegister } from "@/utils/validationRegister";
 import { IUserRegister } from "@/Interfaces/interfaces";
-import { fetchRegisterUser } from "@/utils/fetchUser";
 import { NotificationRegister } from "@/components/Notifications/NotificationRegister";
 import { NotificationError } from "@/components/Notifications/NotificationError";
 import { UserContext } from "@/context/userContext";
@@ -25,7 +24,11 @@ const isValidCountry = (country: string): country is Country => {
   return ["Argentina", "Chile", "Colombia", "México"].includes(country);
 };
 
-export default function RegisterUser() {
+interface RegisterUserProps {
+  setJustRegistered: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const RegisterUser: React.FC<RegisterUserProps> = ({ setJustRegistered }) => {
   const router = useRouter();
   const { signUp, signIn } = useContext(UserContext);
   const [userRegister, setUserRegister] = useState<IUserRegister>({
@@ -64,7 +67,7 @@ export default function RegisterUser() {
   const handleRegisterRedirect = () => {
     router.push("/userDashboard/login");
   };
-
+ 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -83,11 +86,15 @@ export default function RegisterUser() {
     try {
       const isRegistered = await signUp(user);
       if (isRegistered) {
-        console.log("Registro exitoso y usuario autenticado.");
+        setNotificationMessage("Registro exitoso");
+        setShowNotification(true);
+        setJustRegistered(true);
+        setTimeout(async () => {
+          await signIn({ email: user.email, password: user.password });
+          router.push("/home");
+        }, 2000);
       } else {
-        setGeneralError(
-          "Registro inválido. Por favor, revisa los datos ingresados."
-        );
+        setGeneralError("Registro inválido. Por favor, revisa los datos ingresados.");
       }
     } catch (error) {
       setErrorMessage(
@@ -97,6 +104,8 @@ export default function RegisterUser() {
       setTimeout(() => setShowErrorNotification(false), 3000);
     }
   };
+  
+  
 
   return (
     <section className="bg-gray-100 p-4 mt-16">
@@ -310,3 +319,5 @@ export default function RegisterUser() {
     </section>
   );
 }
+
+export default RegisterUser;

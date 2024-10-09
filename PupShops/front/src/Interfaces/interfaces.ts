@@ -12,6 +12,7 @@ export interface IUser {
   isActive: boolean;
 }
 
+
 export interface IAdminRegisterUser extends IUserRegister {
   isAdmin: boolean;
   isActive?: boolean; 
@@ -87,11 +88,11 @@ export interface ILoginClientProps {
 }
 
 export interface IAppointment {
-  id: string; 
+  id?: string; 
   appointmentDate: string; 
   appointmentTime: string; 
   serviceName: string; 
-  isDeleted:boolean;
+  isDeleted?:boolean;
   userId?: string;
   status?: string; 
 }

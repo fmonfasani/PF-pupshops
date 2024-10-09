@@ -1,8 +1,7 @@
 import { IAdminRegisterUser } from "@/Interfaces/interfaces";
 
-
-export const validationAdminCreateUSer = (adminRegisterUser: IAdminRegisterUser) => {
-  let errors: { [key: string]: string } = {};
+export const validationAdminCreateUser = (adminRegisterUser: IAdminRegisterUser) => {
+  const errors: { [key: string]: string } = {}; 
 
   // Validar nombre
   if (!adminRegisterUser.name) {
@@ -22,6 +21,8 @@ export const validationAdminCreateUSer = (adminRegisterUser: IAdminRegisterUser)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!adminRegisterUser.email) {
     errors.email = "Debes ingresar un correo electrónico";
+  } else if (!emailRegex.test(adminRegisterUser.email)) {
+    errors.email = "El correo electrónico no es válido";
   }
 
   // Validar contraseña
@@ -32,13 +33,12 @@ export const validationAdminCreateUSer = (adminRegisterUser: IAdminRegisterUser)
     errors.password = "La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial";
   }
 
-// Validar confirmar contraseña
-if (!adminRegisterUser.confirmPassword) {
-  errors.confirmPassword = "Debes confirmar la contraseña";
-} else if (adminRegisterUser.confirmPassword !== adminRegisterUser.password) {
-  errors.confirmPassword = "Las contraseñas no coinciden";
-}
-
+  // Validar confirmar contraseña
+  if (!adminRegisterUser.confirmPassword) {
+    errors.confirmPassword = "Debes confirmar la contraseña";
+  } else if (adminRegisterUser.confirmPassword !== adminRegisterUser.password) {
+    errors.confirmPassword = "Las contraseñas no coinciden";
+  }
 
   // Validar dirección
   if (!adminRegisterUser.address) {
@@ -47,20 +47,17 @@ if (!adminRegisterUser.confirmPassword) {
     errors.address = "La dirección debe tener hasta 80 caracteres";
   }
 
-  
-// Validar teléfono
-if (!adminRegisterUser.phone) {
-  errors.phone = "Debes ingresar un número de teléfono";
-} else {
-  const phoneString = adminRegisterUser.phone.toString();
-  if (phoneString.length < 10) {
-    errors.phone = "El número de teléfono debe tener al menos 10 dígitos.";
-  } else if (phoneString.length > 15) {
-    errors.phone = "El número de teléfono no puede tener más de 15 dígitos.";
+  // Validar teléfono
+  if (!adminRegisterUser.phone) {
+    errors.phone = "Debes ingresar un número de teléfono";
+  } else {
+    const phoneString = adminRegisterUser.phone.toString();
+    if (phoneString.length < 10) {
+      errors.phone = "El número de teléfono debe tener al menos 10 dígitos.";
+    } else if (phoneString.length > 15) {
+      errors.phone = "El número de teléfono no puede tener más de 15 dígitos.";
+    }
   }
-}
-
-
 
   // Validar país
   if (!adminRegisterUser.country) {
@@ -76,11 +73,10 @@ if (!adminRegisterUser.phone) {
     errors.city = "La ciudad debe tener hasta 20 caracteres";
   }
 
-    // Validar checkbox (aceptar términos)
-    if (!adminRegisterUser.isAdmin) {
-        errors.isChecked = "Debe aceptar los términos y condiciones";
-      }
-    
-      return errors;
-    
+  // Validar checkbox (aceptar términos)
+  if (!adminRegisterUser.isAdmin) {
+    errors.isChecked = "Debe aceptar los términos y condiciones";
+  }
+
+  return errors;
 };
