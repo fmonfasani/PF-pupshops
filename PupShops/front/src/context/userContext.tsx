@@ -1,5 +1,10 @@
 "use client";
-import { ILoginResponse, ILoginUser, IUserRegister, IUserResponse } from "@/Interfaces/interfaces";
+import {
+  ILoginResponse,
+  ILoginUser,
+  IUserRegister,
+  IUserResponse,
+} from "@/Interfaces/interfaces";
 import { IUserContextType } from "@/Interfaces/interfaces";
 import { login, fetchRegisterUser } from "@/utils/fetchUser";
 import { createContext, useEffect, useState } from "react";
@@ -38,29 +43,29 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
             user: data.findUser,
           };
           localStorage.setItem("authData", JSON.stringify(userData));
-  
+
           setUser({
             succes: true,
             token: data.token,
             user: data.findUser,
           });
-  
+
           setToken(data.token);
           setIsLogged(true);
-  
+
           if (data.findUser) {
             setIsAdmin(data.findUser.isAdmin);
           } else {
             setIsAdmin(false);
           }
-  
-          return true; 
+
+          return true;
         }
         console.error("Window object is not available");
-        return false; 
+        return false;
       } else {
         console.error("Login failed. User may not exist.");
-        return false; 
+        return false;
       }
     } catch (error) {
       console.error("Error during sign in:", error);
@@ -68,7 +73,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
     return false;
   };
-  
 
   const signUp = async (user: IUserRegister): Promise<boolean> => {
     try {
@@ -80,29 +84,33 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error(`Registration failed: ${JSON.stringify(data)}`);
       return false;
     } catch (error) {
-      console.error(`Error during sign up: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      throw new Error(error instanceof Error ? error.message : 'Error desconocido');
-
+      console.error(
+        `Error during sign up: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+      throw new Error(
+        error instanceof Error ? error.message : "Error desconocido"
+      );
     }
   };
+
   const signUpRegister = async (userAdmin: IUserRegister): Promise<boolean> => {
     try {
-      let token: string | null = null; 
-  
+      let token: string | null = null;
+
       if (typeof window !== "undefined") {
         const storedAuthData = localStorage.getItem("authData");
-        token = storedAuthData ? JSON.parse(storedAuthData).token : null; 
+        token = storedAuthData ? JSON.parse(storedAuthData).token : null;
       }
-  
+
       if (!token) {
         console.error(
           "No se encontró un token válido para realizar el registro."
         );
         return false;
       }
-  
+
       const data = await fetchAdminCreateUser(userAdmin, token);
-  
+
       if (
         data &&
         typeof data === "string" &&
@@ -118,7 +126,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       return false;
     }
   };
-  
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -148,10 +155,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logOut = () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("authData");
+      localStorage.removeItem("authData"); // Eliminar datos de autenticación
+      localStorage.removeItem("cartItems"); // Limpiar los ítems del carrito
+      localStorage.removeItem("purchasedItems"); // Limpiar los ítems comprados
       setUser(null);
       setToken(null);
       setIsLogged(false);
+      setIsAdmin(false); // Asegúrate de limpiar el estado de admin también
     }
   };
 

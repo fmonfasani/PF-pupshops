@@ -95,6 +95,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const userId = user.id;
       if (!userId) throw new Error("ID de usuario no disponible");
 
+      // Crear una nueva orden
       const response = await fetch(`http://localhost:3001/orders`, {
         method: "POST",
         headers: {
@@ -123,6 +124,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         orderId: result.orderId,
       }));
 
+      // Limpiar los ítems del carrito después de la compra
       setPurchasedItems([...purchasedItems, ...updatedPurchasedItems]);
       setCartItems([]);
       alert("Compra realizada con éxito!");

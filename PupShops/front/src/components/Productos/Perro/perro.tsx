@@ -16,7 +16,7 @@ const PerroGeneral: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "d5f42845-aafd-4c17-945c-5b2a666ea78c";
+  const categoryId = "41b02d49-a636-4044-ae1d-11b815d4e57f";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 

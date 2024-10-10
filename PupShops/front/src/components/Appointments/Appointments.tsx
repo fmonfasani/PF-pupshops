@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   isDateValid,
-  getMinAndMaxDates
+  getMinAndMaxDates,
 } from "../../utils/validationFormAppointments";
 import { IAppointment } from "../../Interfaces/interfaces";
 import { NotificationRegister } from "../Notifications/NotificationRegister";
@@ -55,7 +55,7 @@ const AppointmentForm = () => {
       appointmentTime: selectedTime,
       serviceName: "peluqueria",
       status: "reserved",
-      isDeleted: false
+      isDeleted: false,
     };
 
     try {
@@ -65,13 +65,13 @@ const AppointmentForm = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization:` Bearer ${token}`
+            Authorization: ` Bearer ${token}`,
           },
           body: JSON.stringify({
             appointmentDate: appointment.appointmentDate,
             appointmentTime: appointment.appointmentTime,
-            serviceName: appointment.serviceName
-          })
+            serviceName: appointment.serviceName,
+          }),
         }
       );
 
@@ -88,7 +88,7 @@ const AppointmentForm = () => {
         const errorData = await response.json();
         setErrors({
           ...errors,
-          general: errorData.message || "Error al sacar turno"
+          general: errorData.message || "Error al sacar turno",
         });
         setShowErrorNotification(true);
         setTimeout(() => setShowErrorNotification(false), 3000);
@@ -102,72 +102,74 @@ const AppointmentForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg space-y-6 border border-gray-200"
-    >
-      <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
-        Reservar Turno
-      </h2>
-      <div className="flex flex-col">
-        <label htmlFor="date" className="font-medium text-gray-700 mb-2">
-          Día:
-        </label>
-        <input
-          type="date"
-          id="date"
-          value={selectedDate}
-          onChange={handleDateChange}
-          required
-          className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          min={minDate}
-          max={maxDate}
-        />
-      </div>
-      <div className="flex flex-col ">
-        <label htmlFor="time" className="font-medium text-gray-700 mb-2">
-          Horario:
-        </label>
-        <select
-          id="time"
-          value={selectedTime}
-          onChange={handleTimeChange}
-          required
-          className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-        >
-          <option value="" disabled>
-            Seleccionar horario
-          </option>
-          {generateTimeSlots().map((time) => (
-            <option key={time} value={time}>
-              {time}
-            </option>
-          ))}
-        </select>
-      </div>
-      <button
-        type="submit"
-        className="block w-full rounded-lg bg-teal-600 hover:bg-orange-300 px-5 py-3 text-sm text-center font-medium text-white hover:cursor-pointer"
+    <div className="mt-32">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg space-y-6 border border-gray-200"
       >
-        Reservar Turno
-      </button>
-      {showNotification && (
-        <NotificationRegister message={notificationMessage} />
-      )}
-      {showErrorNotification && (
-        <NotificationError
-          message={errors.general || "Error al sacar turno"}
-          onClose={() => setShowErrorNotification(false)}
-        />
-      )}
+        <h2 className="text-2xl  font-bold text-gray-800 text-center mb-4">
+          Reservar Turno
+        </h2>
+        <div className="flex flex-col">
+          <label htmlFor="date" className="font-medium text-gray-700 mb-2">
+            Día:
+          </label>
+          <input
+            type="date"
+            id="date"
+            value={selectedDate}
+            onChange={handleDateChange}
+            required
+            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            min={minDate}
+            max={maxDate}
+          />
+        </div>
+        <div className="flex flex-col ">
+          <label htmlFor="time" className="font-medium text-gray-700 mb-2">
+            Horario:
+          </label>
+          <select
+            id="time"
+            value={selectedTime}
+            onChange={handleTimeChange}
+            required
+            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          >
+            <option value="" disabled>
+              Seleccionar horario
+            </option>
+            {generateTimeSlots().map((time) => (
+              <option key={time} value={time}>
+                {time}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button
+          type="submit"
+          className="block w-full rounded-lg bg-teal-600 hover:bg-orange-300 px-5 py-3 text-sm text-center font-medium text-white hover:cursor-pointer"
+        >
+          Reservar Turno
+        </button>
+        {showNotification && (
+          <NotificationRegister message={notificationMessage} />
+        )}
+        {showErrorNotification && (
+          <NotificationError
+            message={errors.general || "Error al sacar turno"}
+            onClose={() => setShowErrorNotification(false)}
+          />
+        )}
 
-      
-      <Link href="/userDashboard/appointments">
-        <p className="block w-full rounded-lg bg-orange-300 hover:bg-orange-500 px-5 py-3 text-sm text-center font-medium text-white hover:cursor-pointer mt-4">
-          Ver mis Turnos
-        </p>
-      </Link>
-    </form>
+        {/* Aquí está el botón que enlaza a MyAppointments */}
+        <Link href="/userDashboard/appointments">
+          <p className="block w-full rounded-lg bg-orange-300 hover:bg-orange-500 px-5 py-3 text-sm text-center font-medium text-white hover:cursor-pointer mt-4">
+            Ver mis Turnos
+          </p>
+        </Link>
+      </form>
+    </div>
   );
 };
 

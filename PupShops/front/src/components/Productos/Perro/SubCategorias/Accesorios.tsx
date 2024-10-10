@@ -17,7 +17,7 @@ const AccesoriosPerro: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
-  const categoryId = "05850e17-5e1d-4cdc-8355-851a2522914a";
+  const categoryId = "e6f1aa85-f099-49ad-9416-2d5842a2074f";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -42,10 +42,13 @@ const AccesoriosPerro: React.FC = () => {
         }));
 
         setProducts(formattedData);
-        const initialQuantity = formattedData.reduce((acc, product) => {
-          acc[product.id] = 1;
-          return acc;
-        }, {} as { [key: number]: number });
+        const initialQuantity = formattedData.reduce(
+          (acc, product) => {
+            acc[product.id] = 1;
+            return acc;
+          },
+          {} as { [key: number]: number }
+        );
         setQuantity(initialQuantity);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
@@ -147,6 +150,12 @@ const AccesoriosPerro: React.FC = () => {
 
       {/* Contenedor de productos */}
       <div className="container mx-auto p-4 mt-24 bg-slate-50 w-3/4">
+        <div className="bg-orange-300 text-black rounded-lg text-center p-2 m-2 hover:bg-orange-300 hover:text-black">
+          <span className="transition-all animate-pulse">
+            NO TE OLVIDES QUE COMPRANDO ARRIBA DE LOS $100 TENES EL 10% DE
+            DESCUENTO
+          </span>
+        </div>
         <h1 className="text-2xl text-center font-bold mb-4">
           Accesorios para Perros
         </h1>

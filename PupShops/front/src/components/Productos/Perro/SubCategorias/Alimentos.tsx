@@ -18,7 +18,7 @@ const AlimentosPerro: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
 
-  const categoryId = "b86b7819-cb9e-468f-9e32-c68bc4cfaec4";
+  const categoryId = "6e6a7744-ab62-446a-944e-5b51ab4c2b13";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 

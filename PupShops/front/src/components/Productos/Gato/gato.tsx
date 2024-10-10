@@ -16,7 +16,7 @@ const GatoGeneral: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "d5f42845-aafd-4c17-945c-5b2a666ea78c";
+  const categoryId = "66769fa3-de08-461e-b5f0-a4e83a3f65e1";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -41,10 +41,13 @@ const GatoGeneral: React.FC = () => {
         }));
 
         setProducts(formattedData);
-        const initialQuantity = formattedData.reduce((acc, product) => {
-          acc[product.id] = 1;
-          return acc;
-        }, {} as { [key: number]: number });
+        const initialQuantity = formattedData.reduce(
+          (acc, product) => {
+            acc[product.id] = 1;
+            return acc;
+          },
+          {} as { [key: number]: number }
+        );
         setQuantity(initialQuantity);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
@@ -82,7 +85,15 @@ const GatoGeneral: React.FC = () => {
 
   return (
     <div className="container mx-auto mt-10 p-4 bg-slate-50">
-      <h1 className="text-2xl text-center font-bold mb-4">Productos para Gato</h1>
+      <div className="bg-orange-300 text-black rounded-lg text-center p-2 m-2 hover:bg-orange-300 hover:text-black">
+        <span className="transition-all animate-pulse">
+          NO TE OLVIDES QUE COMPRANDO ARRIBA DE LOS $100 TENES EL 10% DE
+          DESCUENTO
+        </span>
+      </div>
+      <h1 className="text-2xl text-center font-bold mb-4">
+        Productos para Gato
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
           <div

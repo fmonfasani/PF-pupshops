@@ -18,8 +18,7 @@ const AlimentosPerro: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
 
-
-  const categoryId = "56b9b258-6fcc-408e-ab95-2282ece92bfe";
+  const categoryId = "0cf33d0d-16fd-4ffa-a530-114866791c93";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -43,10 +42,13 @@ const AlimentosPerro: React.FC = () => {
         }));
 
         setProducts(formattedData);
-        const initialQuantity = formattedData.reduce((acc, product) => {
-          acc[product.id] = 1;
-          return acc;
-        }, {} as { [key: number]: number });
+        const initialQuantity = formattedData.reduce(
+          (acc, product) => {
+            acc[product.id] = 1;
+            return acc;
+          },
+          {} as { [key: number]: number }
+        );
         setQuantity(initialQuantity);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
@@ -180,8 +182,14 @@ const AlimentosPerro: React.FC = () => {
       </div>
 
       <div className="container mx-auto p-4 mt-24 bg-slate-50 w-3/4">
+        <div className="bg-orange-300 text-black rounded-lg text-center p-2 m-2 hover:bg-orange-300 hover:text-black">
+          <span className="transition-all animate-pulse">
+            NO TE OLVIDES QUE COMPRANDO ARRIBA DE LOS $100 TENES EL 10% DE
+            DESCUENTO
+          </span>
+        </div>
         <h1 className="text-2xl text-center font-bold mb-4">
-          Alimentos para Perros
+          Alimentos para Gatos
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {currentProducts.map((product) => (

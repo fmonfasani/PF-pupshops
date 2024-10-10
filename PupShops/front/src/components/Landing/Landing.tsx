@@ -31,7 +31,7 @@ export default function Landing() {
             </Link>
 
             <Link
-              href="/Appointments"
+              href="/userDashboard/appointments/newAppointment"
               className="block w-full rounded-full bg-teal-600 px-12 py-3 text-sm font-medium text-grey-200 shadow hover:bg-orange-300 focus:outline-none focus:ring focus:ring-pink-300 sm:w-auto transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
             >
               Turnos Peluqueria
