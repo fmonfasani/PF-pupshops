@@ -4,7 +4,7 @@ import { fetchAppointments, deleteAppointment } from '@/utils/fetchAdminAppointm
 import { IAppointmentAdmin } from '@/Interfaces/interfacesAdmin';
 import { UserContext } from '@/context/userContext';
 import { NotificationRegister } from '../Notifications/NotificationRegister';
-import {isSameDay } from 'date-fns';
+import {isSameDay} from 'date-fns'
 
 const AdminAppointmentsComponent = () => {
   const { token } = useContext(UserContext) || { token: '' };
