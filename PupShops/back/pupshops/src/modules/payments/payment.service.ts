@@ -27,11 +27,10 @@ export class PaymentsService {
     this.accessToken = this.configService.get<string>(
       'MERCADO_PAGO_ACCESS_TOKEN',
     );
-  }
-  //private readonly baseUrl = 'https://pupshops-backend.onrender.com';
+  } 
 
-  private readonly baseUrl = 'https://pupshops-backend.onrender.com';
-  private readonly basengrokUrl = 'https://b4cf-201-231-240-116.ngrok-free.app'; // solo en desarrollo
+  //private readonly baseUrl = 'https://pupshops-backend.onrender.com';
+  private readonly baseUrl = 'https://7fb0-190-17-115-142.ngrok-free.app'; 
 
   private async httpRequest(url: string, options: any) {
     try {
@@ -74,13 +73,12 @@ export class PaymentsService {
     const preference = {
       items: [
         {
-          title: title,
+          title: 'Pupshops',
           quantity: quantity,
           currency_id: 'ARS',
           unit_price: unit_price,
-          id: type === 'service' ? 'service_1234' : 'product_1234',
-          imgUrl: 'https://via.placeholder.com/150',
-          description: 'pelota para perro',
+          id: type === 'service' ? 'service_1234' : 'product_1234',         
+          
         },
       ],
       external_reference: orderId,
@@ -89,7 +87,7 @@ export class PaymentsService {
         failure: `${this.baseUrl}/payments/failure`,
         pending: `${this.baseUrl}/payments/pending`,
       },
-      notification_url: `${this.baseUrl}/payments/webhook`, //cambiar en modo produccion
+      notification_url: `${this.baseUrl}/payments/webhook`, 
       auto_return: 'approved',
       payment_methods: {
         installments: 6,
