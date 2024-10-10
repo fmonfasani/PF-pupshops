@@ -17,6 +17,9 @@ import { PaymentsModule } from './modules/payments/payment.module';
 import { TicketsModule } from './modules/ticket/ticket.module';
 import { CuponModule } from './modules/cupones/cupones.module';
 import { ChatGateway } from './modules/chat/chat.gateway';
+import { ChatService } from './modules/chat/chat.service';
+import { ChatController } from './modules/chat/chat.controller';
+import { ChatModule } from './modules/chat/chat.module';
 
 
 @Module({
@@ -30,6 +33,7 @@ import { ChatGateway } from './modules/chat/chat.gateway';
       useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
     PaymentsModule,
+    ChatModule,
     WebhookModule,
     AppointmentModule,
     CategoriesModule,
@@ -49,6 +53,6 @@ import { ChatGateway } from './modules/chat/chat.gateway';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway],
+  providers: [AppService],
 })
 export class AppModule {}
