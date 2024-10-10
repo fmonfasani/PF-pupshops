@@ -10,10 +10,13 @@ export const cartContext = createContext<ICartContextType>({
   addToCart: async () => false,
   removeFromCart: () => {},
   total: 0,
+
+  proceedToBuy: async () => null,
   originalTotal: 0,
   discountTotal: 0,
-  proceedToBuy: async () => {},
+
   purchasedItems: [],
+  clearCart: () => {},
 });
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
@@ -23,6 +26,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [isClient, setIsClient] = useState(false);
   const [originalTotal, setOriginalTotal] = useState(0);
   const [discountTotal, setDiscountTotal] = useState(0);
+
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -83,7 +87,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     setCartItems(updatedCartItems);
   };
 
-  const proceedToBuy = async () => {
+  const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem("cartItems");
+  };
+
+  const proceedToBuy = async (): Promise<{
+    orderId: string;
+    finalTotal: number;
+  } | null> => {
     try {
       const storedAuthData = localStorage.getItem("authData");
       if (!storedAuthData)
@@ -95,40 +107,45 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const userId = user.id;
       if (!userId) throw new Error("ID de usuario no disponible");
 
-      const response = await fetch(`http://localhost:3001/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          userId,
-          products: cartItems.map((item) => ({
-            id: item.id,
-            quantity: item.quantity || 1,
-          })),
-        }),
-      });
+      console.log("Enviando solicitud para crear la orden...");
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            userId,
+            products: cartItems.map((item) => ({
+              id: item.id,
+              quantity: item.quantity || 1,
+            })),
+          }),
+        }
+      );
 
       if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(
-          `Error en la compra: ${response.statusText} - ${errorMessage}`
-        );
+        throw new Error("Error al crear la orden.");
       }
 
       const result = await response.json();
-      const updatedPurchasedItems = cartItems.map((item) => ({
-        ...item,
-        orderId: result.orderId,
-      }));
+      console.log("Respuesta del backend de la orden creada:", result);
+      debugger; // Verificar el resultado de la creación de la orden
 
-      setPurchasedItems([...purchasedItems, ...updatedPurchasedItems]);
-      setCartItems([]);
-      alert("Compra realizada con éxito!");
+      // Asegúrate de acceder correctamente al orderId
+      const orderId = result.order[0].order.id; // Aquí es donde obtienes el orderId
+      console.log("orderId obtenido:", orderId); // Agregar este log para ver el orderId
+
+      return {
+        orderId: orderId,
+        finalTotal: result.finalTotal,
+      };
     } catch (error) {
-      console.error("Error al proceder a la compra:", error);
-      alert("Hubo un problema al realizar la compra. Inténtalo de nuevo.");
+      console.error("Error en la compra:", error);
+      return null;
     }
   };
 
@@ -163,6 +180,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         total: discountTotal,
         proceedToBuy,
         purchasedItems,
+        clearCart,
         originalTotal,
         discountTotal,
       }}

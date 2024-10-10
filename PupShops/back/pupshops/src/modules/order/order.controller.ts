@@ -23,16 +23,16 @@ import { CreateOrderDto } from './dto/order.dto';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-
   @Post()
   @UseGuards(AuthGuard)
   async create(@Req() request: any, @Body() createOrderDto: CreateOrderDto) {
     console.log('Datos de la solicitud:', createOrderDto);
-  
+
     const userId = request.user.id;
     const { products, couponCode } = createOrderDto;
-  
-    return await this.orderService.create(userId, products, couponCode);    }
+
+    return await this.orderService.create(userId, products, couponCode);
+  }
 
   @Get()
   @UseGuards(AuthGuard)
@@ -65,5 +65,5 @@ export class OrderController {
   @Roles(Role.Admin)
   async remove(@Param('id') id: string) {
     return await this.orderService.remove(id);
-  }
+  }
 }

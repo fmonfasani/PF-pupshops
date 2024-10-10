@@ -9,8 +9,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PaymentsService } from './payment.service';
-import { OrderService } from '../order/order.service';
-import { MailPaymentService } from './mailpayment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Response } from 'express';
 import {
@@ -22,47 +20,19 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Payment } from './entities/payment.entity';
+import { MailPaymentsService } from './mailpayments.service';
 
 @ApiTags('Payments')
 @Controller('payments')
 export class PaymentsController {
   constructor(
     private readonly paymentsService: PaymentsService,
-    private readonly ordersService: OrderService,
-    private readonly mailService: MailPaymentService,
+    private readonly mailPaymentsService: MailPaymentsService,
   ) {}
 
-  // Obtener pagos de un usuario
-  @Get('/user/:userId/payments')
-  @ApiOperation({ summary: 'Obtener los pagos realizados por un usuario' })
-  @ApiParam({
-    name: 'userId',
-    description: 'El ID del usuario',
-    example: '8d56d89e-6d58-4f0b-aeed-2a838fbc54b5',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Lista de pagos realizados por el usuario',
-    type: [Payment],
-  })
-  @ApiResponse({
-    status: 404,
-    description:
-      'No se encontraron pagos para el usuario con el ID proporcionado',
-  })
-  async getUserPayments(@Param('userId') userId: string) {
-    const payments = await this.paymentsService.getPaymentsByUser(userId);
-    if (!payments || payments.length === 0) {
-      throw new NotFoundException(
-        `No se encontraron pagos para el usuario con ID ${userId}`,
-      );
-    }
-    return payments;
-  }
-
-  // Preferencia de pago
   @Post('/create')
   @ApiOperation({ summary: 'Crear una preferencia de pago' })
+  @ApiBody({ type: CreatePaymentDto })
   async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
     try {
       const payment =
@@ -79,66 +49,37 @@ export class PaymentsController {
     }
   }
 
-  // Notificaciones de Mercado Pago
   @Get('success')
   @ApiExcludeEndpoint()
-  async handleSuccess(@Query() query, @Res() res: Response) {
+  handleSuccess(@Query() query, @Res() res: Response) {
     const { payment_id, status, external_reference } = query;
     console.log('Pago exitoso:', { payment_id, status, external_reference });
-
-    try {
-      const order = await this.ordersService.findOne(external_reference);
-      const userEmail = order.user.email;
-      const subject = 'Confirmación de tu compra';
-      const text = `Gracias por tu compra. El pago con ID ${payment_id} ha sido completado con éxito.`;
-      await this.mailService.sendMail(userEmail, subject, text);
-
-      res.send('Pago completado con éxito. ¡Gracias!');
-    } catch (error) {
-      console.error('Error procesando el pago exitoso:', error.message);
-      res.status(500).send('Error procesando el pago.');
-    }
+    res.send('Pago completado con éxito. ¡Gracias!');
   }
 
   @Get('failure')
   @ApiExcludeEndpoint()
-  async handleFailure(@Query() query, @Res() res: Response) {
+  handleFailure(@Query() query, @Res() res: Response) {
     console.log('Pago fallido:', query);
-
-    try {
-      const userEmail = query.email || 'usuario@ejemplo.com';
-      const subject = 'Pago fallido';
-      const text = `Hubo un problema con tu pago. Por favor, inténtalo nuevamente.`;
-
-      await this.mailService.sendMail(userEmail, subject, text);
-
-      res.send('Hubo un error con tu pago. Intenta nuevamente.');
-    } catch (error) {
-      console.error('Error procesando el pago fallido:', error.message);
-      res.status(500).send('Error procesando el pago fallido.');
-    }
+    res.send('Hubo un error con tu pago. Intenta nuevamente.');
   }
 
   @Get('pending')
   @ApiExcludeEndpoint()
-  async handlePending(@Query() query, @Res() res: Response) {
+  handlePending(@Query() query, @Res() res: Response) {
     console.log('Pago pendiente:', query);
-
-    try {
-      const userEmail = query.email || 'usuario@ejemplo.com';
-      const subject = 'Pago pendiente';
-      const text = `Tu pago está en proceso. Te notificaremos cuando se haya completado.`;
-
-      await this.mailService.sendMail(userEmail, subject, text);
-
-      res.send('Tu pago está en proceso. Espera la confirmación.');
-    } catch (error) {
-      console.error('Error procesando el pago pendiente:', error.message);
-      res.status(500).send('Error procesando el pago pendiente.');
-    }
+    res.send('Tu pago está en proceso. Espera la confirmación.');
   }
 
-  // Webhook de las notificaciones de Mercado Pago
+  @Post('send-email')
+  async sendEmail(
+    @Body('to') to: string,
+    @Body('subject') subject: string,
+    @Body('text') text: string,
+  ): Promise<void> {
+    return this.mailPaymentsService.sendMail(to, subject, text);
+  }
+
   @Post('/webhook')
   @ApiExcludeEndpoint()
   async handleNotification(@Body() body: any, @Res() res: Response) {
@@ -149,8 +90,9 @@ export class PaymentsController {
     try {
       if (topic === 'payment') {
         if (resource) {
-          const paymentId = resource.split('/').pop(); // Extraer el ID del pago
+          const paymentId = resource.split('/').pop();
           await this.paymentsService.processPaymentNotification(paymentId);
+
           console.log('ID del pago:', paymentId);
         } else {
           console.error('Notificación de pago no contiene un recurso válido');

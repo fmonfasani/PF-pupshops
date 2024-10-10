@@ -68,7 +68,6 @@ export class AppointmentsController {
   }
 
   @Get()
-  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   @ApiOperation({ summary: 'Obtener todos los turnos' })
   @ApiResponse({

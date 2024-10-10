@@ -8,7 +8,6 @@ export class WebhookController {
   @ApiExcludeEndpoint()
   handleWebhook(@Body() body: any) {
     console.log('Webhook recibido:', body);
-
     return { received: true };
   }
 }
