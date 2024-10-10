@@ -16,7 +16,7 @@ const GatoGeneral: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const categoryId = "cb738664-5d89-44f8-8b2f-b029e35d9dc2";
+  const categoryId = "d5f42845-aafd-4c17-945c-5b2a666ea78c";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 

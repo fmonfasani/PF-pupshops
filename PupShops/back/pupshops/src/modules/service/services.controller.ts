@@ -21,7 +21,7 @@ import { Roles } from '../auth/roles/roles.decorator';
 
 @ApiTags('Services')
 @ApiBearerAuth()
-@UseGuards(AuthGuard,RolesGuard)
+
 @Controller('services')
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
@@ -38,8 +38,7 @@ export class ServicesController {
     return this.servicesService.addServicesSeeder();
   }
   @Get()
-  @ApiBearerAuth()
-@UseGuards(AuthGuard,RolesGuard)
+ 
   findAll() {
     return this.servicesService.findAll();
   }

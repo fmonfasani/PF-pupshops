@@ -12,10 +12,12 @@ export default function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isAppointmentOpen, setAppointmentOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const closeAllMenus = () => {
+    setAppointmentOpen(false);
     setIsProfileOpen(false);
   };
 
@@ -32,6 +34,11 @@ export default function Navbar() {
   };
 
   const handleProfileMenuClick = (route: string) => {
+    router.push(route);
+    closeAllMenus();
+  };
+
+  const handleAppointmentMenuClick = (route: string) => {
     router.push(route);
     closeAllMenus();
   };
@@ -59,12 +66,40 @@ export default function Navbar() {
             >
               Productos
             </button>
-            <button
-              className="text-gray-500 transition hover:text-gray-500/75"
-              onClick={() => router.push("/Appointments")}
-            >
-              Peluqueria
-            </button>
+            {/* Menu Peluquería */}
+            <div className="relative group">
+              <button
+                className="text-gray-500 transition hover:text-gray-500/75"
+                onClick={() =>
+                  handleMenuClick(setAppointmentOpen, isAppointmentOpen)
+                }
+              >
+                Peluquería
+              </button>
+              {isAppointmentOpen && (
+                <div className="absolute mt-2 w-48 bg-white shadow-lg rounded-lg">
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() =>
+                      handleAppointmentMenuClick(
+                        "/userDashboard/appointments/newAppointment"
+                      )
+                    }
+                  >
+                    Nuevo turno
+                  </button>
+                  <button
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={() =>
+                      handleAppointmentMenuClick("/userDashboard/appointments")
+                    }
+                  >
+                    Historial de turnos
+                  </button>
+                </div>
+              )}
+            </div>
+
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/cart")}
@@ -135,10 +170,37 @@ export default function Navbar() {
                 </button>
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
-                  onClick={() => router.push("/Appointments")}
+                  onClick={() =>
+                    handleMenuClick(setAppointmentOpen, isAppointmentOpen)
+                  }
                 >
-                  Peluqueria
+                  Peluquería
                 </button>
+                {isAppointmentOpen && (
+                  <div className="flex flex-col">
+                    <button
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
+                      onClick={() =>
+                        handleAppointmentMenuClick(
+                          "/userDashboard/appointments/newAppointment"
+                        )
+                      }
+                    >
+                      Nuevo turno
+                    </button>
+                    <button
+                      className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
+                      onClick={() =>
+                        handleAppointmentMenuClick(
+                          "/userDashboard/appointments"
+                        )
+                      }
+                    >
+                      Historial de turnos
+                    </button>
+                  </div>
+                )}
+
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                   onClick={() => router.push("/cart")}
