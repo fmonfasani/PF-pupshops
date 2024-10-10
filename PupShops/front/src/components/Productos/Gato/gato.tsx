@@ -16,11 +16,7 @@ const GatoGeneral: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-<<<<<<< HEAD:PupShops/front/src/components/Productos/balanceados/foodCat.tsx
-  const categoryId = "774d97cc-6b5f-4634-82ee-57647c72bfef";
-=======
-  const categoryId = "cb738664-5d89-44f8-8b2f-b029e35d9dc2";
->>>>>>> develop:PupShops/front/src/components/Productos/Gato/gato.tsx
+  const categoryId = "53986e05-4789-4af1-a3a7-a3766842f3a2";
 
   const [quantity, setQuantity] = useState<{ [key: number]: number }>({});
 
@@ -86,7 +82,9 @@ const GatoGeneral: React.FC = () => {
 
   return (
     <div className="container mx-auto mt-10 p-4 bg-slate-50">
-      <h1 className="text-2xl text-center font-bold mb-4">Productos para Gato</h1>
+      <h1 className="text-2xl text-center font-bold mb-4">
+        Productos para Gato
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
           <div
