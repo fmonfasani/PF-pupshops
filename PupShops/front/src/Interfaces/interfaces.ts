@@ -12,6 +12,7 @@ export interface IUser {
   isActive: boolean;
 }
 
+
 export interface IAdminRegisterUser extends IUserRegister {
   isAdmin: boolean;
   isActive?: boolean; 
@@ -76,17 +77,35 @@ export interface IButtonPropsDelete {
   onCancel: () => void;
 }
 
+export interface DeleteUserButtonProps {
+  userId: string;
+  onDeleteSuccess: () => void; 
+}
+
 export interface ILoginClientProps {
   setToken: (token: string | null) => void;
  
 }
 
 export interface IAppointment {
-  id: string; 
+  id?: string; 
   appointmentDate: string; 
   appointmentTime: string; 
   serviceName: string; 
-  isDeleted:boolean;
+  isDeleted?:boolean;
   userId?: string;
   status?: string; 
+}
+
+export interface IUserUpdateData {
+  name: string;
+  lastname: string;
+  email: string;
+  password?: string; // Cambiar a opcional
+  confirmPassword?: string; // Cambiar a opcional
+  country: string;
+  city: string;
+  address: string;
+  phone: number;
+  isActive?: boolean; 
 }

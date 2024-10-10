@@ -21,7 +21,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+
   title: "Pups PetShop",
+
 };
 
 export default function RootLayout({

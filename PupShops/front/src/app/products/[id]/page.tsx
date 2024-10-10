@@ -1,6 +1,8 @@
 "use client";
 import { fetchProductDetail } from "@/helpers/product.helper";
 import React, { useEffect, useState } from "react";
+import Image from 'next/image';
+
 
 export interface IProductDetail {
   id: string;
@@ -46,7 +48,14 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
   return (
     <div className="mt-28 mb-24">
       <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-12">
-        <img src={imgUrl} alt={name} className="h-48 w-full object-cover" />
+      <Image 
+  src={imgUrl} 
+  alt={name} 
+  width={500} 
+  height={300} 
+  className="h-48 w-full object-cover" 
+/>
+
         <div className="py-6 px-8">
           <h2 className="text-teal-600 font-bold text-xl mb-2 hover:text-purple-800 hover:cursor-pointer">
             {name}

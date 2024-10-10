@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   isDateValid,
   getMinAndMaxDates,
@@ -8,8 +8,11 @@ import {
 import { IAppointment } from "@/Interfaces/interfaces";
 import { NotificationRegister } from "../Notifications/NotificationRegister";
 import { NotificationError } from "../Notifications/NotificationError";
+import { fetchAppointment } from "@/utils/fetchUser";
+import { UserContext } from "@/context/userContext";
 
 const AppointmentForm = () => {
+  const {token} = useContext(UserContext);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [showNotification, setShowNotification] = useState(false);
@@ -47,43 +50,53 @@ const AppointmentForm = () => {
     console.log(
       `Día seleccionado: ${selectedDate}, Horario seleccionado: ${selectedTime}`
     );
+  
     const appointment: IAppointment = {
-      id:"",
-      userId:"",
-      appointmentDate: selectedDate, // La fecha seleccionada por el usuario
-      appointmentTime: selectedTime, // La hora seleccionada por el usuario
+      appointmentDate: selectedDate,
+      appointmentTime: selectedTime,
       serviceName: "Peluquería",
-      status: "reserved", // Estado predeterminado
-      isDeleted: false, // Valor predeterminado
     };
-
-    const success = true;
-    //await fetchAppointment(appointment)
-    if (success) {
-      setNotificationMessage(
-        `Turno registrado. Dia: ${appointment.appointmentDate}, Hora: ${appointment.appointmentTime}`
-      );
-      setShowNotification(true);
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 5000);
-      setSelectedDate("");
-      setSelectedTime("");
-    } else {
-      setErrors({ ...errors, general: "Error al sacar turno" });
+  
+ 
+    if (!token) {
+      console.error("No se encontró un token de autenticación.");
+      setErrors({ ...errors, general: "No se encontró un token de autenticación." });
+      setShowErrorNotification(true);
+      return; 
     }
-    /* catch (error) {
+  
+    try {
+      const success = await fetchAppointment(appointment, token);
+      
+      if (success) {
+        setNotificationMessage(
+          `Turno registrado. Día: ${appointment.appointmentDate}, Hora: ${appointment.appointmentTime}`
+        );
+        setShowNotification(true);
+        setTimeout(() => {
+          setShowNotification(false);
+        }, 5000);
+        
+       
+        setSelectedDate("");
+        setSelectedTime("");
+      } else {
+        setErrors({ ...errors, general: "Error al sacar turno" });
+        setShowErrorNotification(true);
+      }
+    } catch (error) {
       console.error("Error durante el registro:", error);
-      setErrorMessage(error instanceof Error ? error.message : "Error desconocido."); 
-      setShowErrorNotification(true); 
-      setTimeout(() => setShowErrorNotification(false), 3000); 
-  }*/
+      setErrors({ ...errors, general: "Error durante el registro" });
+      setShowErrorNotification(true);
+      setTimeout(() => setShowErrorNotification(false), 3000);
+    }
   };
+  
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg space-y-6 border border-gray-200"
+      className="max-w-lg mx-auto mt-32 p-6 bg-white shadow-lg rounded-lg space-y-6 border border-gray-200"
     >
       <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
         Reservar Turno

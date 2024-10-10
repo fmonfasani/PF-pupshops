@@ -11,12 +11,12 @@ import { Cupon } from '../cupones/cupones.entity';
 import { CuponService } from '../cupones/cupones.service';
 
 @Module({
-
   imports: [
-    TypeOrmModule.forFeature([Orders, OrderDetails, Products, User,Cupon]),
+    TypeOrmModule.forFeature([Orders, OrderDetails, Products, User, Cupon]),
   ],
-  providers: [OrdersRepository, OrderService,CuponService], 
+  providers: [OrdersRepository, OrderService, CuponService],
 
   controllers: [OrderController],
+  exports: [OrderService],
 })
 export class OrderModule {}
