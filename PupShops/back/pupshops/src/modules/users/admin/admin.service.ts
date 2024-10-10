@@ -17,7 +17,7 @@ export class AdminService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async getUsers(page: number, limit: number) {
+  /* async getUsers(page: number, limit: number) {
     try {
       let users = await this.usersRepository.find();
       const start = (page - 1) * limit;
@@ -28,8 +28,17 @@ export class AdminService {
     } catch (error) {
       throw new BadRequestException('Error al obtener usuarios');
     }
-  }
-
+  } */
+    async getUsers() {
+      try {
+        let users = await this.usersRepository.find();
+       
+  
+       return users
+      } catch (error) {
+        throw new BadRequestException('Error al obtener usuarios');
+      }
+    } 
   async getUserByEmail(email: string): Promise<User> {
     try {
       console.log('Buscando usuario con email:', email);

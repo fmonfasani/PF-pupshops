@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 import React, { useContext, useEffect, useState } from 'react';
 import LoginPage from '@/components/Forms/FormsUser/LoginUser';
 import { UserContext } from '@/context/userContext';
@@ -6,32 +6,40 @@ import { useRouter } from 'next/navigation';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
 
 export default function Login() {
-  const [token, setToken] = useState<string | null>(null);
-  const { isLogged } = useContext(UserContext);
+    const { isLogged, setToken } = useContext(UserContext);
+  const [loading, setLoading] = useState(true); 
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
   const router = useRouter();
 
   useEffect(() => {
     if (isLogged) {
-      setNotificationMessage(`Ya has iniciado sesión`);
+      setNotificationMessage(`Has iniciado sesión`);
       setShowNotification(true);
-      setTimeout(() => {
+      setLoading(false);
+      const notificationTimeout = setTimeout(() => {
         setShowNotification(false);
         router.push("/home");
       }, 3000);
+
+      return () => clearTimeout(notificationTimeout);
+    } else {
+      setLoading(false);
     }
   }, [isLogged, router]);
 
-  // No se renderiza el componente de login si el usuario está logueado
-  if (isLogged) {
-    return null; 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
   }
 
   return (
     <div>
-      <LoginPage setToken={setToken}/>
-      {showNotification && <NotificationRegister message={notificationMessage} />}
+      {!isLogged &&  <LoginPage setToken={setToken}/>}   
+      {showNotification && <NotificationRegister message={notificationMessage} />} 
     </div>
   );
 }

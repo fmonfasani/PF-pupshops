@@ -1,31 +1,70 @@
 import { IAppointment } from "@/Interfaces/interfaces";
+import { IAppointmentAdmin } from "@/Interfaces/interfacesAdmin";
 
-// Obtener los turnos
-export const fetchAppointments = async (): Promise<IAppointment[]> => {
-    const res = await fetch("http://localhost:3001/appointments");
-    if (!res.ok) {
-      throw new Error("Failed to fetch appointments");
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export const fetchAppointments = async (token: string) => {
+  try {
+    const response = await fetch(`${API_URL}/appointments`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener los turnos');
     }
-    return res.json();
+
+    const appointments: IAppointmentAdmin[] = await response.json();
+    return appointments;
+  } catch (error) {
+    console.error('Error en fetchAppointments:', error);
+    throw error;
   }
-  
+};
 
-  export const fetchUserAppointments = async (): Promise<{ 
-    scheduledAppointments: IAppointment[], 
-    historicalAppointments: IAppointment[] 
-  }> => {
-    const res = await fetch("http://localhost:3001/appointments/user"); // Ruta para obtener turnos del usuario
-  
-    if (!res.ok) {
-      throw new Error("Failed to fetch user appointments");
+export const fetchUserAppointments = async (userId: number, token: string) => {
+  try {
+    const response = await fetch(`${API_URL}/appointments/user/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener los turnos del usuario');
     }
-  
-    const data = await res.json();
-  
-    // Validamos que los datos tengan la estructura esperada
-    if (!data.scheduledAppointments || !data.historicalAppointments) {
-      throw new Error("Unexpected data format");
-    }
-  
-    return data;
-  };
+
+    const userAppointments: IAppointment[] = await response.json();
+    return {
+      scheduledAppointments: userAppointments.filter((appt: IAppointment) => appt.status === 'reserved'),
+      historicalAppointments: userAppointments.filter((appt: IAppointment) => appt.status !== 'reserved')
+    };
+  } catch (error) {
+    console.error('Error en fetchUserAppointments:', error);
+    throw error;
+  }
+};
+
+//Eliminar turno 
+export const deleteAppointment = async (token: string, id: string) => {
+  const response = await fetch(`${API_URL}/appointments/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (response.status === 204) {
+    return;
+  }
+
+  if (!response.ok) {
+    throw new Error('Error al eliminar el turno'); 
+  }
+}; 

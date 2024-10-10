@@ -4,58 +4,53 @@ import React, { useContext, useState } from "react";
 import { cartContext } from "@/context/cartContext";
 
 const CartBuy: React.FC = () => {
-  const { proceedToBuy, total } = useContext(cartContext);
+  const { proceedToBuy, cartItems, total } = useContext(cartContext);
   const [loading, setLoading] = useState(false);
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
 
   const handleBuyClick = async () => {
     setLoading(true);
     try {
-      // Recuperar purchasedItems del localStorage
-      const storedItems = localStorage.getItem("purchasedItems");
-      if (!storedItems) {
+      await proceedToBuy();
+      const storedPurchasedItems = localStorage.getItem("purchasedItems");
+      if (!storedPurchasedItems) {
         console.error("No hay items de compra en el localStorage.");
-        setLoading(false);
         return;
       }
 
-      // Convertir la cadena JSON a un array de objetos
-      const purchasedItems = JSON.parse(storedItems);
+      const purchasedItems = JSON.parse(storedPurchasedItems);
 
-      // Aquí asumimos que solo necesitas el primer item para crear el purchaseItem
-      // Puedes ajustar esto según tu lógica
+      if (purchasedItems.length === 0) {
+        console.error("No se encontraron items comprados.");
+        return;
+      }
+
       const purchaseItem = {
         type: "products",
-        title: purchasedItems[0].title, // Usa el título del primer producto
-        orderId: purchasedItems[0].orderId, // Usa el orderId del primer producto
-        quantity: purchasedItems[0].quantity, // Usa la cantidad del primer producto
-        unit_price: total // Aquí usamos el total
+        title: purchasedItems[0].title,
+        orderId: purchasedItems[0].orderId,
+        quantity: purchasedItems[0].quantity,
+        unit_price: total,
       };
 
-      // Enviar la solicitud POST al backend
       const response = await fetch("http://localhost:3001/payments/create", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(purchaseItem)
+        body: JSON.stringify(purchaseItem),
       });
 
       const data = await response.json();
 
-      // Verificar si la respuesta fue exitosa
       if (response.ok) {
-        // Guardar el link de pago para redirigir
         setPaymentLink(data.payment.init_point);
-        // Redirigir al usuario a la página de pago de Mercado Pago
         window.location.href = data.payment.init_point;
       } else {
         console.error("Error:", data.message);
-        // Manejo de errores (puedes mostrar un mensaje al usuario)
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
-      // Manejo de errores (puedes mostrar un mensaje al usuario)
     } finally {
       setLoading(false);
     }
@@ -63,8 +58,6 @@ const CartBuy: React.FC = () => {
 
   return (
     <div className="cart-buy mt-6">
-
-
       <h2 className="text-lg font-semibold text-gray-800">
         Total: <span className="text-teal-600">${total.toFixed(2)}</span>
       </h2>
@@ -75,13 +68,12 @@ const CartBuy: React.FC = () => {
       >
         {loading ? "Procesando..." : "Comprar"}
       </button>
-      {/* Botón de Mercado Pago */}
       {paymentLink && (
         <a
           href={paymentLink}
           className="mt-4 w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-300 ease-in-out focus:outline-none focus:ring focus:ring-orange-300 flex items-center justify-center"
         >
-          Redirigiendote a Mercado Pago
+          Redirigiéndote a Mercado Pago
         </a>
       )}
     </div>

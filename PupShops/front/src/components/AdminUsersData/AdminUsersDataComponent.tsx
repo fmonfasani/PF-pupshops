@@ -1,87 +1,49 @@
-"use client"; // Asegúrate de que esta línea esté al principio del archivo
+"use client";
 
-import {  UserContext } from '@/context/userContext';
+import { UserContext } from '@/context/userContext';
 import { IUser } from '@/Interfaces/interfaces';
 import { fetchGetUsers } from '@/utils/fetchAdminCreateUser';
 import { useRouter } from 'next/navigation';
-import React, { useContext, useEffect, useState } from 'react';
-
-// Array ficticio de usuarios
-const mockUsers = [
-  {
-    id: 1,
-    name: "Juan",
-    lastname: "Pérez",
-    email: "juan.perez@example.com",
-    country: "Argentina",
-    city: "Buenos Aires",
-    phone: 123456789,
-    address: "Av. Libertador 1234",
-    isAdmin: true,
-    isActive:true
-  },
-  {
-    id: 2,
-    name: "María",
-    lastname: "Gómez",
-    email: "maria.gomez@example.com",
-    country: "Chile",
-    city: "Santiago",
-    phone: 987654321,
-    address: "Calle San Martín 567",
-    isAdmin: false,
-    isActive:true
-  },
-  {
-    id: 3,
-    name: "Carlos",
-    lastname: "Fernández",
-    email: "carlos.fernandez@example.com",
-    country: "México",
-    city: "Ciudad de México",
-    phone: 456789123,
-    address: "Calle Reforma 890",
-    isAdmin: false,
-    isActive:true
-  },
-  {
-    id: 4,
-    name: "Lucía",
-    lastname: "Rodríguez",
-    email: "lucia.rodriguez@example.com",
-    country: "España",
-    city: "Madrid",
-    phone: 321654987,
-    address: "Calle Gran Vía 234",
-    isAdmin: true,
-    isActive:true
-  },
-  {
-    id: 5,
-    name: "Sofía",
-    lastname: "Martínez",
-    email: "sofia.martinez@example.com",
-    country: "Colombia",
-    city: "Bogotá",
-    phone: 654321789,
-    address: "Carrera 7 456",
-    isAdmin: false,
-    isActive:true
-  },
-];
-
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 
 export default function AdminUsersDataComponent() {
-  const { user } = useContext(UserContext);
-  const [users, setUsers] = useState<IUser[]>(mockUsers); // Inicializa con mockUsers
-    const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda
-  const token = user?.token; // Token del contexto
- 
+  const { token } = useContext(UserContext);
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); 
+
   const router = useRouter();
 
+  const fetchUsers = useCallback(async () => {
+    if (!token) {
+      setError('Token no disponible.'); 
+      router.push('userDashboard/login'); 
+      return; 
+    }
 
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const fetchedUsers = await fetchGetUsers(token); 
+      setUsers(fetchedUsers);
+    } catch (err) {
+      console.error('Error fetching users:', err);
+      setError('Error al obtener usuarios.'); 
+    } finally {
+      setLoading(false);
+    }
+  }, [token, router]); 
 
-  // Filtra los usuarios según el término de búsqueda
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]); 
+
+  const handleUserClick = (id: string) => {
+    router.push(`/adminDashboard/users/usersData/${id}`);
+  };
+
   const filteredUsers = users.filter(user => {
     const lowerCaseTerm = searchTerm.toLowerCase();
     return (
@@ -91,12 +53,9 @@ export default function AdminUsersDataComponent() {
     );
   });
 
-
-
-
   return (
-    <div className="bg-pink-100/80 py-12 px-4 sm:px-6 lg:px-8 mt-36">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+    <div className="bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 mt-36">
+      <h1 className="text-3xl font-bold text-center text-blue-950 mb-8">
         Usuarios Registrados
       </h1>
       <input
@@ -106,14 +65,19 @@ export default function AdminUsersDataComponent() {
         onChange={(e) => setSearchTerm(e.target.value)}
         className="mb-4 p-2 border border-gray-300 rounded w-full max-w-md mx-auto"
       />
-      {filteredUsers.length === 0 ? (
+      {loading ? (
+        <p className="text-center text-gray-600 text-lg">Cargando usuarios...</p>
+      ) : error ? (
+        <p className="text-center text-red-600 text-lg">{error}</p>
+      ) : filteredUsers.length === 0 ? (
         <p className="text-center text-gray-600 text-lg">No hay usuarios registrados.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredUsers.map(user => (
+           {filteredUsers.map(user => (
             <div
               key={user.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 flex flex-col"
+              className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 flex flex-col cursor-pointer"
+              onClick={() => handleUserClick(user.id.toString())}
             >
               <div className="p-4 flex-grow flex flex-col justify-between">
                 <div>
@@ -130,7 +94,7 @@ export default function AdminUsersDataComponent() {
                 </div>
               </div>
             </div>
-          ))}
+          ))} 
         </div>
       )}
     </div>

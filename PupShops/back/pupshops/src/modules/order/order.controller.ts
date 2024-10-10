@@ -8,9 +8,9 @@ import {
   Delete,
   UseGuards,
   Req,
-  NotFoundException,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
+import { UpdateOrderDto } from './dto/update-order.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../auth/roles/roles.enum';
@@ -26,7 +26,6 @@ export class OrderController {
 
   @Post()
   @UseGuards(AuthGuard)
-
   async create(@Req() request: any, @Body() createOrderDto: CreateOrderDto) {
     console.log('Datos de la solicitud:', createOrderDto);
   
@@ -34,7 +33,6 @@ export class OrderController {
     const { products, couponCode } = createOrderDto;
   
     return await this.orderService.create(userId, products, couponCode);    }
-
 
   @Get()
   @UseGuards(AuthGuard)
@@ -50,16 +48,15 @@ export class OrderController {
   @Get(':id')
   @UseGuards(AuthGuard)
   async findOne(@Param('id') id: string) {
-    const order = await this.orderService.findOne(id);
-    if (!order) {
-      throw new NotFoundException('Order not found');
-    }
-    return order;
+    return await this.orderService.findOne(id);
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  async update(@Param('id') id: string, @Body() updateOrderDto: any) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
     return await this.orderService.update(id, updateOrderDto);
   }
 
@@ -68,5 +65,5 @@ export class OrderController {
   @Roles(Role.Admin)
   async remove(@Param('id') id: string) {
     return await this.orderService.remove(id);
-  }
+  }
 }
