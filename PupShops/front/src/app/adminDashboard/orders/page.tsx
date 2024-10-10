@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import React, { useContext } from 'react'
 import { UserContext } from '@/context/userContext';
 import { useEffect,useState } from 'react';
@@ -17,7 +17,7 @@ export default function AdminOrders() {
   //Ruta privada
   useEffect(() => {
     if (!isAdmin) {
-      setNotificationMessage(`Debes ser administrador para ver ordenes`);
+      setNotificationMessage('Debes ser administrador para ver ordenes');
       setShowNotification(true);
       setLoading(false)
 
@@ -44,5 +44,3 @@ export default function AdminOrders() {
              </>
     );
   }
-
- 

@@ -16,7 +16,7 @@ export default function AdminUsersData() {
   // Ruta privada
   useEffect(() => {
     if (!isAdmin) {
-      setNotificationMessage(`Debes ser administrador para ver datos`);
+      setNotificationMessage('Debes ser administrador para ver datos');
       setShowNotification(true);
       setLoading(false);
 

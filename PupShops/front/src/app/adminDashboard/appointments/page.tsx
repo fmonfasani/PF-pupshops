@@ -4,12 +4,12 @@ import { UserContext} from '@/context/userContext';
 import { useEffect,useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { NotificationRegister } from '@/components/Notifications/NotificationRegister';
-import AdminAppointments from '@/components/AdminAppointments/AdminAppointments';
+import AdminAppointmentsComponent from '@/components/AdminAppointments/AdminAppointments';
 
 
 
-export default function adminAppointments() {
-  const { user,isAdmin } = useContext(UserContext);
+export default function AdminAppointments() {
+  const { isAdmin } = useContext(UserContext);
     const router = useRouter()
 
   const [showNotification, setShowNotification] = useState(false);
@@ -19,10 +19,10 @@ export default function adminAppointments() {
   //Ruta privada
   useEffect(() => {
     if (!isAdmin) {
-      setNotificationMessage(`Debes ser administrador para ver turnos`);
+      setNotificationMessage("Debes ser administrador para ver turnos");
       setShowNotification(true);
        router.push("/home");
-              
+
      } else {
       setLoading(false); 
     }
@@ -37,10 +37,8 @@ export default function adminAppointments() {
 
     return (
       <>
-       {isAdmin && <AdminAppointments/> }
+       {isAdmin && <AdminAppointmentsComponent/> }
        {showNotification && <NotificationRegister message={notificationMessage} />}
              </>
     );
   }
-
- 

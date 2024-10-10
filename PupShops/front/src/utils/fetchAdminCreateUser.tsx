@@ -1,4 +1,3 @@
-import { IUser, IUserResponse } from "@/Interfaces/interfaces";
 import { IUserRegister } from "@/Interfaces/interfaces";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -6,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 //Crear usuario como administrador
 export const fetchAdminCreateUser = async (userData: IUserRegister, token: string) => {
   try {
-      const response = await fetch('http://localhost:3001/admin/users/register', {
+      const response = await fetch(`${API_URL}/admin/users/register`, {
           method: 'POST',
           headers: {
               'Authorization': `Bearer ${token}`,
@@ -35,8 +34,8 @@ export const fetchAdminCreateUser = async (userData: IUserRegister, token: strin
 
 
 //Ver usuarios registrados
-export const fetchGetUsers = async (token:string, page = 1, limit = 8) => {
-  const response = await fetch(`http://localhost:3001/admin/users`, {
+export const fetchGetUsers = async (token:string) => {
+  const response = await fetch(`${API_URL}/admin/users`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -55,7 +54,7 @@ export const fetchGetUsers = async (token:string, page = 1, limit = 8) => {
 
 //Ver usuario por Id
 export const fetchUserById = async (id: string, token: string) => {
-  const res = await fetch(`http://localhost:3001/admin/users/${id}`, {
+  const res = await fetch(`${API_URL}/admin/users/${id}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`, 
@@ -72,7 +71,7 @@ export const fetchUserById = async (id: string, token: string) => {
 
 // Eliminar usuario
 export const deleteUser = async (id: string, token: string) => {
-  const res = await fetch(`http://localhost:3001/admin/users/${id}`, {
+  const res = await fetch(`${API_URL}/admin/users/${id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`, 

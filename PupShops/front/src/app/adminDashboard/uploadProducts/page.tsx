@@ -19,7 +19,7 @@ export default function UploadProducts() {
   //Ruta privada
   useEffect(() => {
     if (!isAdmin) {
-      setNotificationMessage(`Debes ser administrador para poder cargar productos`);
+      setNotificationMessage('Debes ser administrador para poder cargar productos');
       setShowNotification(true);
       setLoading(false)
 
@@ -46,5 +46,3 @@ export default function UploadProducts() {
              </>
     );
   }
-
- 
