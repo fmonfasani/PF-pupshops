@@ -38,13 +38,23 @@ export class AuthController {
     }
   }
 
-  @Get('/auth0/login')
-  getAuth0Protected(@Req() req: Request) {
+/*   @Get('/auth0/login')
+  async getAuth0Protected(@Req() req: Request) {
     try {
-      console.log(req.oidc);
-      return JSON.stringify(req.oidc.user);
+      const auth0Token = req.headers.authorization?.split(' ')[1];
+      const userData = await this.authService.validateAuth0Token(auth0Token);
+      return userData;
     } catch (error) {
-      throw new InternalServerErrorException('Error en la autenticación de Auth0');
+      throw new InternalServerErrorException('Error en la autenticación de Auth0',error);
     }
+  }*/
+ @Get('/auth0/login')
+ getAuth0Protected(@Req() req: Request) {
+   console.log('Requerimiento OIDC:', req.oidc);
+   if (!req.oidc || !req.oidc.user) {
+     throw new InternalServerErrorException('No se encontró información del usuario');
+    }
+    return JSON.stringify(req.oidc.user);
   }
-}
+} 
+  

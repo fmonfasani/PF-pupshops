@@ -11,7 +11,7 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
  
-  async getEmailLogin(email: string): Promise<User> {
+  async getEmailLogin(email: string): Promise<User|Partial<User>> {
     const user = await this.usersRepository.findOneBy({ email });
     if(!user){console.log("Usuario no encontrado/Mail disponible");
     }

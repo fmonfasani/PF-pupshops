@@ -5,6 +5,8 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './loginUserDto';
 import { Role } from './roles/roles.enum';
+import axios from 'axios';
+import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -84,6 +86,37 @@ export class AuthService {
       return { success: 'Usuario logeado correctamente', token, findUser };
     } catch (error) {
       throw new BadRequestException('Error en el proceso de autenticación');
+    }
+  }
+  async validateAuth0Token(token: string): Promise<any> {
+    try {
+      const auth0Response = await axios.get(
+        `${process.env.AUTH0_DOMAIN}/userinfo`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const auth0User = auth0Response.data;
+
+      let user = await this.usersService.getEmailLogin(auth0User.email);
+      if (!user) {
+        const createUserDto = new CreateUserDto();
+        createUserDto.email = auth0User.email;
+        createUserDto.name = auth0User.given_name;
+        createUserDto.lastname = auth0User.family_name;
+        createUserDto.password = ''; 
+
+        user = await this.usersService.createUser(createUserDto);
+      }
+
+      const payload: JwtPayload = {
+        sub: user.id,
+        email: user.email,
+        roles: [user.isAdmin ? Role.Admin : Role.User],
+      };
+
+      const jwtToken = this.jwtService.sign(payload);
+      return { user, jwtToken };
+    } catch (error) {
+      throw new InternalServerErrorException('Error al validar el token de Auth0');
     }
   }
 }

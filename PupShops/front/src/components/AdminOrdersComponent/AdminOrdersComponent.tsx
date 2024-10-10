@@ -84,6 +84,7 @@ export default function AdminOrdersComponent() {
                   <h2 className="text-xl font-semibold text-teal-600 mb-2 text-center">
                     Orden ID:
                   </h2>
+
                   <p className="text-gray-600 mb-1 text-sm text-left"><strong>{order.id}</strong></p>
                   <p className="text-gray-600 mb-1 text-sm text-left"><strong>Fecha: </strong>{new Date(order.date).toLocaleDateString()}</p>
                   <p className="text-gray-600 mb-1 text-sm text-left"><strong>Estado: </strong> {order.status}</p>
@@ -98,6 +99,7 @@ export default function AdminOrdersComponent() {
                   <h3 className="text-lg font-semibold text-teal-600 mb-2 text-center">Detalles de la Orden</h3>
                   <p className="text-gray-600 mb-1 text-sm text-left"><strong>Precio: </strong>${order.orderDetails.price}</p>
                   <p className="text-gray-600 mb-1 text-sm text-left"><strong>Cantidad: </strong>{order.orderDetails.quantity}</p>
+
                 </div>
               </div>
             </div>

@@ -10,7 +10,11 @@ export const cartContext = createContext<ICartContextType>({
   addToCart: async () => false,
   removeFromCart: () => {},
   total: 0,
+
   proceedToBuy: async () => null,
+  originalTotal: 0,
+  discountTotal: 0,
+
   purchasedItems: [],
   clearCart: () => {},
 });
@@ -20,7 +24,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [total, setTotal] = useState(0);
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
   const [isClient, setIsClient] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [originalTotal, setOriginalTotal] = useState(0);
+  const [discountTotal, setDiscountTotal] = useState(0);
+
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -144,11 +150,21 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const calculateTotal = () => {
-    const newTotal = cartItems.reduce(
+    const sum = cartItems.reduce(
       (acc, item) => acc + (item.price * (item.quantity || 1) || 0),
       0
     );
-    setTotal(newTotal);
+
+    setOriginalTotal(sum);
+
+    if (sum > 100) {
+      const discount = sum * 0.1;
+      setDiscountTotal(sum - discount);
+    } else {
+      setDiscountTotal(sum);
+    }
+
+    setTotal(sum);
   };
 
   useEffect(() => {
@@ -161,10 +177,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         cartItems,
         addToCart,
         removeFromCart,
-        total,
+        total: discountTotal,
         proceedToBuy,
         purchasedItems,
         clearCart,
+        originalTotal,
+        discountTotal,
       }}
     >
       {children}

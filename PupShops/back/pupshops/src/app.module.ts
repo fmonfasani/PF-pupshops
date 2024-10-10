@@ -17,7 +17,6 @@ import { PaymentsModule } from './modules/payments/payment.module';
 import { TicketsModule } from './modules/ticket/ticket.module';
 import { CuponModule } from './modules/cupones/cupones.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +27,7 @@ import { CuponModule } from './modules/cupones/cupones.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
+
     PaymentsModule,
     WebhookModule,
     AppointmentModule,

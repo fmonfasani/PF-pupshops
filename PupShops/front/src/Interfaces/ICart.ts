@@ -1,6 +1,7 @@
 export interface IProduct {
   id: number;
   name: string;
+  originalTotal: number;
   description: string;
   price: number;
   stock: number;
@@ -8,13 +9,6 @@ export interface IProduct {
   categoryName: string;
   quantity?: number;
   orderId?: string;
-}
-
-export interface IOrder {
-  id?: string;
-  date?: string;
-  status?: string;
-  items?: IProduct[];
 }
 
 export interface ICartContextType {
@@ -25,6 +19,8 @@ export interface ICartContextType {
   clearCart: () => void;
 
   total: number;
+  originalTotal: number;
+  discountTotal: number;
   proceedToBuy: () => Promise<{
     orderId: string;
     finalTotal: number;

@@ -2,7 +2,15 @@ import React, { useContext, useState } from "react";
 import { cartContext } from "@/context/cartContext";
 
 const CartBuy: React.FC = () => {
-  const { proceedToBuy, cartItems, total, clearCart } = useContext(cartContext);
+  const {
+    proceedToBuy,
+    cartItems,
+    total,
+    clearCart,
+    discountTotal,
+    originalTotal,
+  } = useContext(cartContext);
+
   const [loading, setLoading] = useState(false);
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
 
@@ -44,7 +52,7 @@ const CartBuy: React.FC = () => {
         title: "Compra Pupshops",
         orderId: orderId,
         quantity: purchasedItems[0].quantity,
-        unit_price: finalTotal,
+        unit_price: discountTotal,
       };
 
       console.log(
@@ -93,8 +101,15 @@ const CartBuy: React.FC = () => {
   return (
     <div className="cart-buy mt-6">
       <h2 className="text-lg font-semibold text-gray-800">
-        Total: <span className="text-teal-600">${total.toFixed(2)}</span>
+        Precio original:{" "}
+        <span className="text-red-600">${originalTotal.toFixed(2)}</span>
       </h2>
+      {originalTotal > 100 && (
+        <h2 className="text-lg font-semibold text-gray-800">
+          Precio con descuento:{" "}
+          <span className="text-teal-600">${discountTotal.toFixed(2)}</span>
+        </h2>
+      )}
       <button
         onClick={handleBuyClick}
         className="mt-4 w-full bg-teal-600 text-white py-2 rounded-md hover:bg-orange-300 hover:text-black transition"
