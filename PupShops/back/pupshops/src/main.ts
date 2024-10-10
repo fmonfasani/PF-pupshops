@@ -11,7 +11,13 @@ async function bootstrap() {
   
   
   app.use(auth(auth0config));
-
+  app.use((req, res, next) => {
+    res.cookie('_auth_verification', 'valor', {
+      sameSite: 'None', 
+      secure: true, 
+    });
+    next();
+  });
  
   app.enableCors({
     origin: '*', 
