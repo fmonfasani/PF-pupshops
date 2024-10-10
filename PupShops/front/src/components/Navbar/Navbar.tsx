@@ -12,15 +12,15 @@ export default function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   const [isDogsOpen, setIsDogsOpen] = useState(false);
   const [isCatsOpen, setIsCatsOpen] = useState(false);
   const [isAppointmentOpen, setAppointmentOpen] = useState(false);
 
+
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const closeAllMenus = () => {
-    setIsDogsOpen(false);
-    setIsCatsOpen(false);
     setIsProfileOpen(false);
     setAppointmentOpen(false);
   };
@@ -37,16 +37,6 @@ export default function Navbar() {
     }
   };
 
-  const handleDogMenuClick = (route: string) => {
-    router.push(route);
-    closeAllMenus();
-  };
-
-  const handleCatMenuClick = (route: string) => {
-    router.push(route);
-    closeAllMenus();
-  };
-
   const handleProfileMenuClick = (route: string) => {
     router.push(route);
     closeAllMenus();
@@ -60,7 +50,6 @@ export default function Navbar() {
   return (
     <header className="bg-gray-100 shadow-md mt-6 fixed top-0 left-0 w-full z-50">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
         <div
           onClick={() => router.push("/")}
           className="block text-teal-600 cursor-pointer"
@@ -71,14 +60,19 @@ export default function Navbar() {
         </div>
         <SearchBar />
         <div className="flex items-center flex-1 justify-between space-x-12">
-          {/* Enlaces de navegación */}
-          <nav aria-label="Global" className="hidden md:flex gap-6 text-sm flex-1">
+
+          <nav
+            aria-label="Global"
+            className="hidden md:flex gap-6 text-sm flex-1"
+          >
+
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/products")}
             >
               Productos
             </button>
+
 
             {/* Menu Perros */}
             <div className="relative group">
@@ -183,13 +177,13 @@ export default function Navbar() {
             </div>
 
             {/* Otros enlaces */}
+
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/cart")}
             >
               Carrito
             </button>
-
             <button
               className="text-gray-500 transition hover:text-gray-500/75"
               onClick={() => router.push("/aboutUs")}
@@ -203,7 +197,9 @@ export default function Navbar() {
               Contacto
             </button>
 
+
             {/* Botón de perfil en escritorio */}
+
             <div className="relative group">
               <button
                 className="text-gray-500 transition hover:text-gray-500/75"
@@ -227,9 +223,10 @@ export default function Navbar() {
                       handleProfileMenuClick("/userDashboard/login")
                     }
                   >
-                    Iniciar sesión
+
+                    Iniciar sesion
                   </button>
-                  {/* Nuevo botón Panel de Usuario */}
+
                   <button
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                     onClick={() => handleProfileMenuClick("/ProfilePage")}
@@ -242,7 +239,6 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* Menu hamburguesa para mobile */}
         <div className="md:hidden">
           <button onClick={toggleMenu}>
             <GiHamburgerMenu className="text-gray-500" />
@@ -258,6 +254,7 @@ export default function Navbar() {
                 </button>
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
+
                   onClick={() => handleMenuClick(setIsDogsOpen, isDogsOpen)}
                 >
                   Perros
@@ -325,6 +322,7 @@ export default function Navbar() {
                 <button
                   className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                   onClick={() => handleMenuClick(setAppointmentOpen, isAppointmentOpen)}
+
                 >
                   Peluquería
                 </button>
@@ -381,7 +379,9 @@ export default function Navbar() {
                         className="flex justify-end w-full p-2 text-gray-700 hover:bg-gray-200"
                         onClick={() => handleProfileMenuClick("/userDashboard/login")}
                       >
-                        Iniciar sesión
+
+                        Iniciar sesion
+
                       </button>
                       {/* Nuevo botón Panel de Usuario */}
                       <button

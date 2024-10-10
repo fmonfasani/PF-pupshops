@@ -131,9 +131,10 @@ const ProductsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen text-center items-center justify-center bg-gray-100">
+      <h1 className="bg-teal-600 p-1 m-2  text-center text-cyan-50 rounded-xl hover:bg-orange-300 hover:text-black transition">Todos Nuestros Productos</h1>
       <div className="container mx-auto py-10">
-        <div className="flex justify-end mb-8 mt-16">
+        <div className="flex justify-end mb-8 mt-6">
           <label htmlFor="sort" className="mr-3 text-lg font-bold text-teal-600 mt-2">
             Ordenar por:
           </label>
@@ -217,7 +218,7 @@ const ProductsPage = () => {
         <ol className="flex justify-center gap-1 text-xs font-medium mt-10">
           <li>
             <a
-              href="#"
+              
               onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
               className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900"
             >
@@ -243,7 +244,7 @@ const ProductsPage = () => {
           ))}
           <li>
             <a
-              href="#"
+              
               onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
               className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900"
             >

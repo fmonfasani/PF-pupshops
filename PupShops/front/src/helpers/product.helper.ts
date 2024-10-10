@@ -2,13 +2,16 @@ import { IProductDetail } from "../app/products/[id]/page";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
-export const getAllProducts = async (page: number = 1, limit: number = 10) => {
+export const getAllProducts = async () => {
   try {
-    const res = await fetch(`http://localhost:3001/products?page=${page}&limit=${limit}`);
+    const res = await fetch(`http://localhost:3001/products`);
+    console.log("Raw response:", res); 
     if (!res.ok) {
       throw new Error("Failed to fetch products");
     }
-    return await res.json();
+    const products = await res.json();
+    console.log("Products:", products); 
+    return products;
   } catch (error) {
     console.error("Error fetching products:", error);
     return [];

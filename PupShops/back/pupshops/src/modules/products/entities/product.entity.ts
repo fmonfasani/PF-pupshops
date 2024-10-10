@@ -18,10 +18,10 @@ export class Products {
 
   @Column({
     type: 'varchar',
-    length: 50,
-    unique: true,
+    length: 500,
+    unique: false,
 
-    nullable: true,
+    nullable: false,
   })
   name: string;
 
