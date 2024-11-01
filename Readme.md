@@ -6,7 +6,7 @@
 🗓️ y disfruta de un dashboard que está on point!
 📊✨ La UI/UX es tan smooth que no vas a querer salir. 😎
 
-🌟 Features que la rompen
+🌟 Features 
 
 Productos y Servicios Next Level: Todo lo que tu mascota necesita y más. 🐕🐈🎁
 Agenda de Turnos Easy Peasy: Reserva en un toque, sin estrés. 🙌
